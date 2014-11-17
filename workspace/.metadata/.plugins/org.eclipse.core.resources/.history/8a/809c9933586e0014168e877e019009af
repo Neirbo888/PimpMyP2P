@@ -1,0 +1,9 @@
+
+public class Pair implements Thread {
+  private String name;
+  
+  Pair()
+  {
+	  
+  }
+}
