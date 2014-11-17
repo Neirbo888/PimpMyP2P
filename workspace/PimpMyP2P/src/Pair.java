@@ -12,9 +12,10 @@ public class Pair extends Thread {
   private RSAPublicKeySpec _keyPublic;
   private RSAPrivateKey _keyPrivate;
   
+  
   Pair()
   {
-    
+    _address = "3";
   }
   
   public void run()
