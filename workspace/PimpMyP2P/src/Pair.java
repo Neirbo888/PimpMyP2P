@@ -15,7 +15,7 @@ public class Pair extends Thread {
   
   Pair()
   {
-    _address = "3";
+	  
   }
   
   public void run()
