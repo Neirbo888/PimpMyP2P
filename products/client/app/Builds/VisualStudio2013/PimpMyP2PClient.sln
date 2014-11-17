@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2013
+Project("{610FC45D-6D87-FE22-B5C8-901A4408FF07}") = "PimpMyP2PClient", "PimpMyP2PClient.vcxproj", "{AAB3BE5A-D56F-7DB2-CAC4-51766FDA6130}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAB3BE5A-D56F-7DB2-CAC4-51766FDA6130}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AAB3BE5A-D56F-7DB2-CAC4-51766FDA6130}.Debug|Win32.Build.0 = Debug|Win32
+		{AAB3BE5A-D56F-7DB2-CAC4-51766FDA6130}.Release|Win32.ActiveCfg = Release|Win32
+		{AAB3BE5A-D56F-7DB2-CAC4-51766FDA6130}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
