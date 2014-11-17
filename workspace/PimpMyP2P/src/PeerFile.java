@@ -4,7 +4,7 @@ import java.util.ArrayList;
 ///@class: PeerFile
 ///@brief: Keep track of a file and all the peers that possess it
 public class PeerFile {
-	
+
 	///@brief: Constructor
 	PeerFile(String filename)
 	{
@@ -22,22 +22,25 @@ public class PeerFile {
 	{
 		_peers.add(address);
 	}
-	
+
 	///@brief: Remove the given IP from the Peer list
 	public void removePeer(Inet4Address address)
 	{
 		_peers.remove(address);
 	}
-	
+
 	///@brief: Return true if the given keyword seems similar with this PeerFile
 	public boolean isSimilarToKeyword(String keyword)
 	{
 		String[] words = keyword.split(" ");
 		for (String w : words)
 		{
-			if(_filename.contains(w))
+			if(w.length()>2)
 			{
-				return(true);
+				if(_filename.contains(w))
+				{
+					return(true);
+				}	
 			}
 		}
 		return false;
