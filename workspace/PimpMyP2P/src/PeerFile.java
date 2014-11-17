@@ -32,6 +32,14 @@ public class PeerFile {
 	///@brief: Return true if the given keyword seems similar with this PeerFile
 	public boolean isSimilarToKeyword(String keyword)
 	{
+		String[] words = keyword.split(" ");
+		for (String w : words)
+		{
+			if(_filename.contains(w))
+			{
+				return(true);
+			}
+		}
 		return false;
 	}
 
