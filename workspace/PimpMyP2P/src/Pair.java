@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class Pair extends Thread {
   private Socket _socket;
   private String _address;
+  private File _downloadFolder;
+  private String _trackerIp;
   private ArrayList<File> _availableFiles = new ArrayList<File>();
   private RSAPublicKeySpec _keyPublic;
   private RSAPrivateKey _keyPrivate;
@@ -37,4 +39,11 @@ public class Pair extends Thread {
   {
 	  
   }
+  
+  public void sendAvailableFilesListToTracker(String trackerIp)
+  {
+	  
+  }
+  
+  
 }
