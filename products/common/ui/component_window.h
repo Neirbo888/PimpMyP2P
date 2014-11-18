@@ -8,7 +8,7 @@
 /// @brief  A top level window able to hold a component and show it
 /// @author Adrien Tisseraud
 class ComponentWindow
-: public TopLevelWindow
+: public DocumentWindow
 {
  public:
   /// @brief Constructor
@@ -18,25 +18,14 @@ class ComponentWindow
   /// @brief Destructor
   ~ComponentWindow();
   
-  /// @brief Paint routine
-  void paint(juce::Graphics &g);
-  
-  /// @brief Resize routine placing the window at the centre of its parent
-  void resized();
-  
   /// @brief Component getter
   juce::Component* getAssociatedComponent() { return _component; }
   
-  /// @brief Mouse callback
-  void mouseDown(const juce::MouseEvent& event);
-  
-  /// @brief Show the window
-  void showWindow();
-  
-  /// @brief Hide the window
-  void hideWindow();
+  /// @brief Close button callback
+  void closeButtonPressed();
   
  protected:
+  /// @brief
   juce::Colour _base_colour;
   
  private:

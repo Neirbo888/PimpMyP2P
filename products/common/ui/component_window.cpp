@@ -1,16 +1,21 @@
 #include "products/common/ui/component_window.h"
 
-ComponentWindow::ComponentWindow(Component* associatedComponent, bool closeOnClick)
-: TopLevelWindow("No title",false),
+ComponentWindow::ComponentWindow(Component* associatedComponent,
+                                 bool closeOnClick)
+: DocumentWindow("",Colours::lightgrey,DocumentWindow::closeButton,true),
   _component(associatedComponent)
 {
+  // Use native title bar from OS
+  setUsingNativeTitleBar(true);
+  
   _base_colour = juce::Colour (0xffb82c2f);
   
-  if (closeOnClick)
-    _component->addMouseListener(this, true);
+  setContentOwned(_component, true);
   
-  addAndMakeVisible(_component);
-  setSize(100, 100);
+  setSize(_component->getWidth(),
+          _component->getHeight());
+
+  this->setVisible(true);
 }
 
 ComponentWindow::~ComponentWindow()
@@ -18,38 +23,7 @@ ComponentWindow::~ComponentWindow()
   _component = nullptr;
 }
 
-void ComponentWindow::paint(juce::Graphics &g)
+void ComponentWindow::closeButtonPressed()
 {
-  g.fillAll (Colours::white);
-}
-
-void ComponentWindow::resized()
-{
-  if (getParentComponent() != nullptr) {
-    Point<int> center = getParentComponent()->getLocalBounds().getCentre();
-    if (_component != nullptr)
-      setBounds(_component->getLocalBounds());
-    setCentrePosition(center.getX(), center.getY());
-  }
-}
-
-void ComponentWindow::mouseDown(const juce::MouseEvent& event)
-{
-  if (event.eventComponent == _component)
-    hideWindow();
-}
-
-void ComponentWindow::showWindow()
-{
-  if (_component != nullptr)
-  {
-    resized();
-    setVisible(true);
-  }
-}
-
-void ComponentWindow::hideWindow()
-{
-  if (isVisible())
-    setVisible(false);
+  JUCEApplication::quit();
 }

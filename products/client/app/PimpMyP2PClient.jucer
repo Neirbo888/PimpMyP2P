@@ -10,9 +10,18 @@
               file="../../common/ui/component_window.cpp"/>
         <FILE id="muspdb" name="component_window.h" compile="0" resource="0"
               file="../../common/ui/component_window.h"/>
+        <FILE id="yAK97f" name="look_and_feel.cpp" compile="1" resource="0"
+              file="../../common/ui/look_and_feel.cpp"/>
+        <FILE id="rfAnsm" name="look_and_feel.h" compile="0" resource="0" file="../../common/ui/look_and_feel.h"/>
       </GROUP>
     </GROUP>
     <GROUP id="{2180BE95-80E2-70B3-4B94-1D2BF660BB67}" name="src">
+      <GROUP id="{069829C3-D4C3-B0DF-72E1-B9D6372401FB}" name="core">
+        <FILE id="UyzVax" name="client_processor.cpp" compile="1" resource="0"
+              file="../src/core/client_processor.cpp"/>
+        <FILE id="nH6pyk" name="client_processor.h" compile="0" resource="0"
+              file="../src/core/client_processor.h"/>
+      </GROUP>
       <GROUP id="{DFF2D703-C812-BAB3-E775-676229174117}" name="ui">
         <FILE id="vrxhTX" name="main_window.cpp" compile="1" resource="0" file="../src/ui/main_window.cpp"/>
         <FILE id="eHJw8e" name="main_window.h" compile="0" resource="0" file="../src/ui/main_window.h"/>
