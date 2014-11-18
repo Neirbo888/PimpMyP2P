@@ -23,11 +23,15 @@ public:
   
   /// @brief Set the share directory
   void setSharedFolder(juce::File folder);
+
+  /// @brief Scan the share directory to retrieve file list
+  void scanSharedFolder();
   
 private:
   ScopedPointer<ComponentWindow> _window; ///< Window displaying the GUI
-  File _sharedFolder;
+  juce::File _sharedFolder;
   juce::Component* _component; ///< The proper gui
+  std::vector<juce::File> _files;
 };
 
 
