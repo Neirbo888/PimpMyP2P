@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="qcHgwJ" name="TcpSender" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.tartofraise.TcpSender" includeBinaryInAppConfig="1"
+              jucerVersion="3.1.0" companyName="Tartofraise" companyWebsite="http://tartofrai.se">
+  <MAINGROUP id="h0A73J" name="TcpSender">
+    <GROUP id="{7B8206E6-721A-4478-2AE4-696095E849F9}" name="common">
+      <GROUP id="{446E6389-151F-58A1-9430-7586BADA25CB}" name="ui">
+        <FILE id="CWmayv" name="component_window.cpp" compile="1" resource="0"
+              file="../../common/ui/component_window.cpp"/>
+        <FILE id="muspdb" name="component_window.h" compile="0" resource="0"
+              file="../../common/ui/component_window.h"/>
+        <FILE id="yAK97f" name="look_and_feel.cpp" compile="1" resource="0"
+              file="../../common/ui/look_and_feel.cpp"/>
+        <FILE id="rfAnsm" name="look_and_feel.h" compile="0" resource="0" file="../../common/ui/look_and_feel.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{2180BE95-80E2-70B3-4B94-1D2BF660BB67}" name="src">
+      <GROUP id="{069829C3-D4C3-B0DF-72E1-B9D6372401FB}" name="core">
+        <FILE id="Al8J0D" name="tcpsender_processor.cpp" compile="1" resource="0"
+              file="../src/core/tcpsender_processor.cpp"/>
+        <FILE id="op1SFD" name="tcpsender_processor.h" compile="0" resource="0"
+              file="../src/core/tcpsender_processor.h"/>
+      </GROUP>
+      <GROUP id="{DFF2D703-C812-BAB3-E775-676229174117}" name="ui">
+        <FILE id="vrxhTX" name="main_window.cpp" compile="1" resource="0" file="../src/ui/main_window.cpp"/>
+        <FILE id="eHJw8e" name="main_window.h" compile="0" resource="0" file="../src/ui/main_window.h"/>
+      </GROUP>
+      <FILE id="kcgIp3" name="Main.cpp" compile="1" resource="0" file="../src/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="../projects/osx/">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" binaryPath="../bin/osx/"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" binaryPath="bin/osx"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2013 targetFolder="../projects/win32">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       binaryPath="../bin/win32/"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       binaryPath="../bin/win32"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </VS2013>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
