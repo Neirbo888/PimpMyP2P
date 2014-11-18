@@ -2,6 +2,7 @@
 #define PIMP_PROCESSOR_H_INCLUDED
 
 #include "JuceHeader.h"
+#include "peer_file.h"
 
 /// Forward declarations
 class ComponentWindow;
@@ -20,10 +21,26 @@ public:
   
   /// @brief ActionListener callback
   void actionListenerCallback (const String& message);
+
+  /// @brief register a new client
+  void registerNewClient(IPAddress address);
+
+  /// @brief unregister a client
+  void unregisterClient(IPAddress address);
+
+  /// @brief look for a file in the file cache using a keword
+  std::vector<PeerFile> lookForFileFromKeyword(String keyword, bool refreshList);
+
+  /// @brief refresh the file cache
+  void refreshFileCache();
   
 private:
   ScopedPointer<ComponentWindow> _window; ///< Window displaying the GUI
   juce::Component* _component; ///< The proper gui
+
+  IPAddress _address;
+  std::vector<IPAddress> _clientList;
+  std::vector<PeerFile> _fileCache;
 };
 
 

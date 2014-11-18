@@ -27,3 +27,33 @@ void PimpServerProcessor::actionListenerCallback(const String& message)
 {
   
 }
+
+void PimpServerProcessor::registerNewClient(IPAddress address)
+{
+
+}
+
+void PimpServerProcessor::unregisterClient(IPAddress address)
+{
+
+}
+
+std::vector<PeerFile> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
+{
+	std::vector<PeerFile> result;
+	bool isFileInserted;
+
+	for (int i = 0; i <= _fileCache.size; i++)
+	{
+		if (_fileCache[i].isSimilarTo(keyword) && isFileInserted == false)
+		{
+			result.push_back(_fileCache.at(i));
+		}
+	}
+	return result;
+}
+
+void PimpServerProcessor::refreshFileCache()
+{
+
+}
