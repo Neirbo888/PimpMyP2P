@@ -28,7 +28,7 @@ public:
   void unregisterClient(IPAddress address);
 
   /// @brief look for a file in the file cache using a keword
-  std::vector<juce::File> lookForFileFromKeyword(String keyword, bool refreshList);
+  std::vector<juce::PeerFile> lookForFileFromKeyword(String keyword, bool refreshList);
 
   /// @brief refresh the file cache
   void refreshFileCache();
@@ -39,7 +39,7 @@ private:
 
   IPAddress _address;
   std::vector<IPAddress> _clientList;
-  std::vector<juce::File> _fileCache;
+  std::vector<juce::PeerFile> _fileCache;
 };
 
 

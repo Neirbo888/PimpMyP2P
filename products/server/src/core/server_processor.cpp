@@ -38,9 +38,9 @@ void PimpServerProcessor::unregisterClient(IPAddress address)
 
 }
 
-std::vector<juce::File> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
+std::vector<juce::PeerFile> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
 {
-	std::vector<juce::File> result;
+	std::vector<juce::PeerFile> result;
 	bool isFileInserted;
 
 	StringArray keywords;
@@ -73,13 +73,14 @@ std::vector<juce::File> PimpServerProcessor::lookForFileFromKeyword(String keywo
 			for (int k = 0; k <= keywords.size; k++)
 			{
 				if (fileName[j] == keywords[k] && isFileInserted == false)
-				{
+				)
 					result.push_back(_fileCache.at(i));
 					isFileInserted = true;
 				}
 			}
 		}
 	}
+	return result;
 }
 
 void PimpServerProcessor::refreshFileCache()
