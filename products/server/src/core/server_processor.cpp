@@ -38,46 +38,16 @@ void PimpServerProcessor::unregisterClient(IPAddress address)
 
 }
 
-std::vector<juce::PeerFile> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
+std::vector<PeerFile> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
 {
-	std::vector<juce::PeerFile> result;
+	std::vector<PeerFile> result;
 	bool isFileInserted;
-
-	StringArray keywords;
-	keywords.addTokens(keyword, " _-", "");
-	// Remove keywords shorter than 3 characters
-	for (int i = 0; i <= keywords.size; i++)
-	{
-		if (keywords[i].length < 3)
-		{
-			keywords.remove(i);
-		}
-	}
 
 	for (int i = 0; i <= _fileCache.size; i++)
 	{
-		isFileInserted = false;
-		StringArray fileName;
-		fileName.addTokens(_fileCache.at(i).getFileNameWithoutExtension()," _-","");
-		// Remove words shorter than 3 characters
-		for (int j = 0; j <= fileName.size; j++)
+		if (_fileCache[i].isSimilarTo(keyword) && isFileInserted == false)
 		{
-			if (fileName[j].length < 3)
-			{
-				fileName.remove(j);
-			}
-		}
-
-		for (int j = 0; j <= fileName.size; j++)
-		{
-			for (int k = 0; k <= keywords.size; k++)
-			{
-				if (fileName[j] == keywords[k] && isFileInserted == false)
-				)
-					result.push_back(_fileCache.at(i));
-					isFileInserted = true;
-				}
-			}
+			result.push_back(_fileCache.at(i));
 		}
 	}
 	return result;
