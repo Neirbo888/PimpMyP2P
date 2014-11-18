@@ -30,12 +30,18 @@ void PimpServerProcessor::actionListenerCallback(const String& message)
 
 void PimpServerProcessor::registerNewClient(IPAddress address)
 {
-
+	_clientList.push_back(address);
 }
 
 void PimpServerProcessor::unregisterClient(IPAddress address)
 {
-
+	for (std::vector<IPAddress>::iterator iter = _clientList.begin(); iter != _clientList.end(); iter++)
+	{
+		if (*iter == address)
+		{
+			_clientList.erase(iter)
+		}
+	}
 }
 
 std::vector<PeerFile> PimpServerProcessor::lookForFileFromKeyword(String keyword, bool refreshList)
