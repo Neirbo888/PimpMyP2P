@@ -16,6 +16,7 @@ PimpClientProcessor::PimpClientProcessor()
 {
   _component = new MainWindow(this);
   _window = new ComponentWindow(_component);
+
 }
 
 PimpClientProcessor::~PimpClientProcessor()
@@ -36,3 +37,16 @@ void PimpClientProcessor::setSharedFolder(juce::File folder)
     // Maybe set a new state machine transition here
   }
 }
+
+void PimpClientProcessor::scanSharedFolder()
+{
+	juce::Array<juce::File> found_files;
+	if (_sharedFolder.findChildFiles(found_files, juce::File::findFiles, false, "*"))
+	{
+		for (juce::File* file = found_files.begin(); file != found_files.end();file++)
+		{
+			_files.push_back(juce::File(file->getFullPathName));
+		}
+	}
+}
+
