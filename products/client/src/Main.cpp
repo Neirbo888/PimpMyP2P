@@ -9,7 +9,7 @@
  */
 
 #include "JuceHeader.h"
-#include "products/common/ui/component_window.h"
+#include "products/client/src/core/client_processor.h"
 
 
 
@@ -17,17 +17,16 @@
 class PimpMyP2PClientApplication  : public JUCEApplication
 {
 public:
-  //==============================================================================
   PimpMyP2PClientApplication() {}
   
-  const String getApplicationName() override       { return ProjectInfo::projectName; }
-  const String getApplicationVersion() override    { return ProjectInfo::versionString; }
-  bool moreThanOneInstanceAllowed() override       { return true; }
+  const String getApplicationName() override { return ProjectInfo::projectName; }
+  const String getApplicationVersion() override { return ProjectInfo::versionString; }
+  bool moreThanOneInstanceAllowed() override { return true; }
   
   //==============================================================================
   void initialise (const String& commandLine) override
   {
-    
+    _pimpClient = new PimpClientProcessor();
   }
   
   void shutdown() override
@@ -51,7 +50,7 @@ public:
   }
   
 private:
-  ScopedPointer<ComponentWindow> w;
+  ScopedPointer<PimpClientProcessor> _pimpClient;
 };
 
 //==============================================================================
