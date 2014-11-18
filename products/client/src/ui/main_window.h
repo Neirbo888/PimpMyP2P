@@ -17,11 +17,14 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_8CA98E33ED13BCE0__
-#define __JUCE_HEADER_8CA98E33ED13BCE0__
+#ifndef __JUCE_HEADER_1200E0CE2CF00B59__
+#define __JUCE_HEADER_1200E0CE2CF00B59__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
+#include "products/common/ui/look_and_feel.h"
+
+class PimpClientProcessor;
 //[/Headers]
 
 
@@ -34,12 +37,13 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class main_window  : public Component
+class MainWindow  : public Component,
+                    public ButtonListener
 {
 public:
     //==============================================================================
-    main_window ();
-    ~main_window();
+    MainWindow (PimpClientProcessor* processor);
+    ~MainWindow();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -47,21 +51,28 @@ public:
 
     void paint (Graphics& g);
     void resized();
+    void buttonClicked (Button* buttonThatWasClicked);
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    PimpLookAndFeel _lookAndFeel;
+    PimpClientProcessor* _processor;
     //[/UserVariables]
 
     //==============================================================================
+    ScopedPointer<Label> _labelSearchField;
+    ScopedPointer<TextEditor> _editorSearchField;
+    ScopedPointer<TextButton> _buttonSetDownloadFolder;
+    ScopedPointer<TextButton> _buttonSearch;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (main_window)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_8CA98E33ED13BCE0__
+#endif   // __JUCE_HEADER_1200E0CE2CF00B59__
