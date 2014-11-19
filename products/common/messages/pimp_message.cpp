@@ -24,6 +24,11 @@ PimpMessage::~PimpMessage()
   _message = nullptr;
 }
 
+const juce::String PimpMessage::getXmlString() const
+{
+  return _message->createDocument(juce::String::empty);
+}
+
 const bool PimpMessage::isCommand(PimpMessage::CommandType cmd) const
 {
   XmlElement *command = _message->getChildByName("Command");
@@ -48,21 +53,23 @@ void PimpMessage::setCommand(PimpMessage::CommandType cmd)
   }
 }
 
-const bool PimpMessage::hasFilename() const
+const bool PimpMessage::hasPeerFile() const
 {
-  XmlElement *file = _message->getChildByName("File");
+  XmlElement *file = _message->getChildByName("PeerFile");
   if (file)
     return file->hasAttribute("Name");
   return false;
 }
 
-const juce::String PimpMessage::getFilename() const
+const PeerFile PimpMessage::getPeerFile() const
 {
   XmlElement *file = _message->getChildByName("File");
   if (file)
     if (file->hasAttribute("Name"))
-      return file->getStringAttribute("Name");
-  return juce::String::empty;
+    {
+      
+    }
+  return PeerFile::emptyPeerFile();
 }
 
 const bool PimpMessage::hasByteRange() const
@@ -87,22 +94,71 @@ const juce::Range<int> PimpMessage::getByteRange() const
   return juce::Range<int>::emptyRange(0);
 }
 
-void PimpMessage::createSendRequest(juce::String filename)
+const bool PimpMessage::hasKeywordsArray() const
+{
+  XmlElement *keywordsArray = _message->getChildByName("KeywordsArray");
+  if (keywordsArray) return true;
+  return false;
+}
+
+const juce::StringArray PimpMessage::getKeywordsArray() const
+{
+  juce::StringArray keywordsArray;
+  XmlElement *keywordsArrayXml = _message->getChildByName("KeywordsArray");
+  if (keywordsArrayXml)
+  {
+    
+  }
+  return keywordsArray;
+}
+
+void PimpMessage::createPeerGetFile(PeerFile file)
 {
   XmlElement* commandXml = new XmlElement("Command");
   commandXml->setAttribute("Value", juce::String(kPeerGetFile));
   _message->addChildElement(commandXml);
   
-  XmlElement* fileXml = new XmlElement("File");
-  fileXml->setAttribute("Name", filename);
+  XmlElement* fileXml = new XmlElement("PeerFile");
+  
+  XmlElement *dummyName = new XmlElement("Name");
+  dummyName->setAttribute("Value", file.getFile().getFileName());
+  fileXml->addChildElement(dummyName);
+  
+  XmlElement *dummyMD5 = new XmlElement("MD5");
+  dummyMD5->setAttribute("Value",file.getMD5().toHexString());
+  fileXml->addChildElement(dummyMD5);
+  
   _message->addChildElement(fileXml);
 }
 
-void PimpMessage::createSendRequest(juce::String filename,
+void PimpMessage::createPeerGetFile(PeerFile file,
                                     juce::Range<int> byteRange)
 {
-  createSendRequest(filename);
-  XmlElement *fileXml = _message->getChildByName("File");
-  fileXml->setAttribute("Start", byteRange.getStart());
-  fileXml->setAttribute("End", byteRange.getEnd());
+  createPeerGetFile(file);
+  XmlElement *fileXml = _message->getChildByName("PeerFile");
+  
+  XmlElement *dummyStart = new XmlElement("Start");
+  dummyStart->setAttribute("Value", byteRange.getStart());
+  fileXml->addChildElement(dummyStart);
+  
+  XmlElement *dummyEnd = new XmlElement("Start");
+  dummyEnd->setAttribute("Value", byteRange.getEnd());
+  fileXml->addChildElement(dummyEnd);
+}
+
+void PimpMessage::createPeerSearch(juce::StringArray keywords)
+{
+  XmlElement* commandXml = new XmlElement("Command");
+  commandXml->setAttribute("Value", juce::String(kPeerSearch));
+  _message->addChildElement(commandXml);
+  
+  XmlElement *keywordsArrayXml = new XmlElement("KeywordsArray");
+  for (juce::String* string = keywords.begin();
+       string != keywords.end(); string++)
+  {
+    XmlElement *dummyKeyword = new XmlElement("Keyword");
+    dummyKeyword->setAttribute("Value", *string);
+    keywordsArrayXml->addChildElement(dummyKeyword);
+  }
+  _message->addChildElement(keywordsArrayXml);
 }

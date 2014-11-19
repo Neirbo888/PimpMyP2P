@@ -2,6 +2,7 @@
 #define PIMP_MESSAGE_H_INCLUDED
 
 #include "JuceHeader.h"
+#include "products/common/files/peer_file.h"
 
 /// @class PimpMessage
 /// @brief Complex messages generator
@@ -18,6 +19,7 @@ public:
     kPeerSignIn, ///< A peer wants to sign in the tracker
     kPeerSignOut, ///< A peer is signing out from the tracker
     kPeerFileList, ///< A peer sends its file list
+    kPeerSearch, ///< A peer sends a search to the tracker
     kTrackerSearchResult, ///< The tracker sends the result of a search
     kReady, ///< Distant host is ready
     kError, ///< Error
@@ -33,7 +35,8 @@ public:
   /// @brief Destructor
   ~PimpMessage();
   
-  const juce::String getXmlString() { return _message->createDocument(juce::String::empty); }
+  /// @brief Returns an XML formatted string containing this PimpMessage
+  const juce::String getXmlString() const;
   
   /// @brief True if the given command is the same as the current PimpMessage
   const bool isCommand(CommandType cmd) const;
@@ -41,26 +44,43 @@ public:
   /// @brief Sets the command of this PimpMessage
   void setCommand(CommandType cmd);
   
-  /// @brief Creates a send request for a peer to send a file
-  void createSendRequest(juce::String filename);
+  /// @brief True if this PimpMessage has a PeerFile attribute
+  const bool hasPeerFile() const;
   
-  /// @brief Creates a send request for a peer to send a part of a file
-  void createSendRequest(juce::String filename,
-                         juce::Range<int> byteRange);
+  /// @brief Will return the name of the file or juce::String::empty if there's
+  /// either no file name defined or even no File attribute at all
+  const PeerFile getPeerFile() const;
   
-  /// @brief True if this PeerGetFile has a filename
-  const bool hasFilename() const;
-  
-  /// @brief If command is a PeerGetFile, will return the name of the file requested or juce::String::empty if not
-  const juce::String getFilename() const;
-  
-  /// @brief True if this PeerGetFile has a byte range
+  /// @brief True if this PimpMessage has a File attribute with a byte range
+  /// defined
   const bool hasByteRange() const;
   
-  /// @brief If command is a PeerGetFile, will return the range of the file requested or juce::Range::empty if not
+  /// @brief Will return the range of the file or juce::Range::empty if there's
+  /// either no range defined or even no File attribute at all
   const juce::Range<int> getByteRange() const;
-
-  //PimpMessage(const PimpMessage &);
+  
+  /// @brief True if this PimpMessage has a keywords array
+  const bool hasKeywordsArray() const;
+  
+  /// @brief Will return a StringArray filled with all the keywords if the
+  /// message has a KeywordsArray attribute, if not the StringArray will be
+  /// empty
+  const juce::StringArray getKeywordsArray() const;
+  
+  /// @brief Creates a PeerGetFile request to download a file from another peer
+  /// @param {PeerFile} file - File to download
+  void createPeerGetFile(PeerFile file);
+  
+  /// @brief Creates a PeerGetFile request to download a file part from another
+  /// peer
+  /// @param {PeerFile} file - File to download
+  /// @param {juce::Range<int>} byteRange - Range of the part to download
+  void createPeerGetFile(PeerFile file,
+                         juce::Range<int> byteRange);
+  
+  /// @brief Creates a search request for the tracker
+  /// @param {juce::StringArray} keywords - Array containing all the keywords
+  void createPeerSearch(juce::StringArray keywords);
   
 private:
   PimpMessage();
