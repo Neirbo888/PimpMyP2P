@@ -3,3 +3,4 @@ JuceLibraryCode
 bin
 products/server/projects
 products/client/projects
+products/tcp_sender/projects
