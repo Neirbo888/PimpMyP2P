@@ -25,11 +25,11 @@ class ComponentWindow
   void closeButtonPressed();
   
  protected:
-  /// @brief
+  /// @brief Base color for the UI
   juce::Colour _base_colour;
   
  private:
-  ScopedPointer<Component> _component;
+  juce::Component* _component;
 };
 
 #endif  // __audiogaming_component_window__

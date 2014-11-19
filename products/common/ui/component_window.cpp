@@ -11,17 +11,11 @@ ComponentWindow::ComponentWindow(Component* associatedComponent,
   _base_colour = juce::Colour (0xffb82c2f);
   
   setContentOwned(_component, true);
-  
-  setSize(_component->getWidth(),
-          _component->getHeight());
 
   this->setVisible(true);
 }
 
-ComponentWindow::~ComponentWindow()
-{
-  _component = nullptr;
-}
+ComponentWindow::~ComponentWindow() {}
 
 void ComponentWindow::closeButtonPressed()
 {
