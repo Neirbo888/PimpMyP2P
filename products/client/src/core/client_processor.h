@@ -2,6 +2,7 @@
 #define PIMP_PROCESSOR_H_INCLUDED
 
 #include "JuceHeader.h"
+#include "products/common/messages/pimp_message.h"
 
 /// Forward declarations
 class ComponentWindow;
@@ -10,6 +11,7 @@ class ComponentWindow;
 /// @brief Heart of the pimp client
 class PimpClientProcessor
 : public juce::ActionListener,
+  public juce::ActionBroadcaster,
   public juce::Thread
 {
 public:
@@ -34,13 +36,21 @@ public:
   /// @brief Stop the receiver thread
   void stop();
   
+  /// @brief Handler for sending files to a client
+  void handleSendRequest(const PimpMessage& request, StreamingSocket* socket);
+  
+  /// @brief Send a PeerGetFile request to a peer
+  void sendPeerGetFile(juce::IPAddress destination, juce::String filename);
+  
 private:
+  IPAddress _address; ///< Local ip address
+  juce::Component* _component; ///< The proper gui
   ScopedPointer<ComponentWindow> _window; ///< Window displaying the GUI
   juce::File _sharedFolder;
   bool _connected;
-  juce::Component* _component; ///< The proper gui
-  juce::StreamingSocket _socket;
+  juce::StreamingSocket _socket; ///< TCP socket
   std::vector<juce::File> _files;
+  
 };
 
 
