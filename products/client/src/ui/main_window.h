@@ -24,7 +24,7 @@
 #include "JuceHeader.h"
 #include "products/common/ui/look_and_feel.h"
 
-class PimpClientProcessor;
+class PeerProcessor;
 //[/Headers]
 
 
@@ -42,7 +42,7 @@ class MainWindow  : public Component,
 {
 public:
     //==============================================================================
-    MainWindow (PimpClientProcessor* processor);
+    MainWindow (PeerProcessor* processor);
     ~MainWindow();
 
     //==============================================================================
@@ -58,7 +58,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     PimpLookAndFeel _lookAndFeel;
-    PimpClientProcessor* _processor;
+    PeerProcessor* _processor;
     //[/UserVariables]
 
     //==============================================================================

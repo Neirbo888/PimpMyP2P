@@ -18,7 +18,8 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "products/client/src/core/client_processor.h"
+#include "products/client/src/core/peer_processor.h"
+#include "products/client/src/core/peer_file_manager.h"
 //[/Headers]
 
 #include "main_window.h"
@@ -28,7 +29,7 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-MainWindow::MainWindow (PimpClientProcessor* processor)
+MainWindow::MainWindow (PeerProcessor* processor)
     : _processor(processor)
 {
     addAndMakeVisible (_labelSearchField = new Label ("Search Field Label",
@@ -67,6 +68,7 @@ MainWindow::MainWindow (PimpClientProcessor* processor)
 
 
     //[Constructor] You can add your own custom stuff here..
+  setName("PimpMyMainWindow");
     //[/Constructor]
 }
 
@@ -119,7 +121,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         if (chooser.browseForDirectory())
         {
           juce::File outputDir = chooser.getResult();
-          _processor->setSharedFolder(outputDir);
+          _processor->getFileManager()->setSharedFolder(outputDir);
         }
         //[/UserButtonCode__buttonSetDownloadFolder]
     }
@@ -149,7 +151,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component" constructorParams="PimpClientProcessor* processor"
+                 parentClasses="public Component" constructorParams="PeerProcessor* processor"
                  variableInitialisers="_processor(processor)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="300"
                  initialHeight="500">

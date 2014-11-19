@@ -9,7 +9,7 @@
  */
 
 #include "JuceHeader.h"
-#include "products/client/src/core/client_processor.h"
+#include "products/client/src/core/peer_processor.h"
 
 
 
@@ -26,7 +26,7 @@ public:
   //==============================================================================
   void initialise (const String& commandLine) override
   {
-    _pimpClient = new PimpClientProcessor();
+    _peerProcessor = new PeerProcessor();
   }
   
   void shutdown() override
@@ -50,7 +50,7 @@ public:
   }
   
 private:
-  ScopedPointer<PimpClientProcessor> _pimpClient;
+  ScopedPointer<PeerProcessor> _peerProcessor;
 };
 
 //==============================================================================
