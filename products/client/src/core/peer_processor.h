@@ -44,7 +44,9 @@ public:
   void sendPeerGetFile(PeerFile file);
   
   /// @brief Sends a PeerSearch request to the tracker
-  void sendTrackerSearch(juce::StringArray keyword);
+  /// @param {juce::String} keystring - KeyString that will be sent to the
+  /// tracker
+  void sendTrackerSearch(const juce::String keystring);
   
   /// @brief Set the shared folder
   /// @param {juce::File} folder - The new shared folder

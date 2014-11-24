@@ -128,8 +128,36 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
   }
 }
 
-void PeerProcessor::sendTrackerSearch(juce::StringArray keywords)
+void PeerProcessor::sendTrackerSearch(const juce::String keystring)
 {
   PimpMessage request (_address);
-  request.createPeerSearch(keywords);
+  request.createPeerSearch(keystring);
+  
+  // Create a new socket to connect to our distant host
+  ScopedPointer<StreamingSocket> socket = new StreamingSocket();
+  socket->connect(_tracker.toString(), 4807);
+  
+  if (!socket->isConnected())
+    Logger::writeToLog("Can't connect to distant host");
+  else
+  {
+    request.sendToSocket(socket);
+    
+    // Normally we should receive an acknowledge
+    char inBuffer[4096];
+    socket->read(inBuffer,4096,false);
+    PimpMessage acknowledge (inBuffer);
+    juce::String xmlResult;
+    if (acknowledge.isCommand(PimpMessage::kOk))
+    {
+      int bytesRead;
+      do
+      {
+        int bytesRead = socket->read(inBuffer,4096,false);
+        xmlResult += inBuffer;
+      } while (bytesRead == 4096);
+    }
+    PimpMessage results (xmlResult.toStdString());
+    //_component->publishResults(results.getSearchResults());
+  }
 }
