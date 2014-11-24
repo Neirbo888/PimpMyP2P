@@ -302,3 +302,28 @@ juce::Font PimpLookAndFeel::getComboBoxFont (ComboBox& box)
 {
     return Font ("Helvetica", 11.00f, Font::plain);
 }
+
+void PimpLookAndFeel::drawTableHeaderBackground (Graphics& g,
+                                                 TableHeaderComponent& header)
+{
+  g.fillAll (juce::Colour(0xfff0f2f2));
+  
+  g.setColour (Colour (0xfff0f2f2).darker());
+  
+  for (int i = header.getNumColumns (true) - 1; --i >= 0;)
+    g.fillRect (header.getColumnPosition (i).removeFromRight (1));
+}
+
+void PimpLookAndFeel::drawTableHeaderColumn (Graphics& g, const String& columnName,
+                                             int columnId, int width,
+                                             int height, bool isMouseOver,
+                                             bool isMouseDown, int columnFlags)
+{
+  Rectangle<int> area (width, height);
+  area.reduce (4, 0);
+  
+  g.setColour (juce::Colour(0xff595f66));
+  g.setFont (Font ("Helvetica", 11.00f, Font::bold));
+  g.drawFittedText (columnName, area, Justification::centredLeft, 1);
+}
+

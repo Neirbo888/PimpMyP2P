@@ -48,6 +48,14 @@ class PimpLookAndFeel
   
   virtual juce::Font getComboBoxFont (ComboBox& box);
   
+  virtual void drawTableHeaderBackground (Graphics& g,
+                                          TableHeaderComponent& header);
+  
+  virtual void drawTableHeaderColumn (Graphics& g, const String& columnName,
+                                      int columnId, int width,
+                                      int height, bool isMouseOver,
+                                      bool isMouseDown, int columnFlags);
+  
  private:
   class SliderLabelComp;
 };
