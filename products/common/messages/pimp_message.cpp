@@ -132,17 +132,34 @@ const juce::Array<PeerFile> PimpMessage::getSearchResults() const
   auto searchResultsXml = _message->getChildByName("SearchResults");
   if (searchResultsXml)
   {
-    for (int i = 0; i < searchResultsXml->getNumChildElements(); i++)
+    for (int fileIndex = 0;
+         fileIndex < searchResultsXml->getNumChildElements();
+         fileIndex++)
     {
-      auto file = _message->getChildElement(i);
+      auto file = searchResultsXml->getChildElement(fileIndex);
       if (file)
-        if (file->hasAttribute("Name") &&
-            file->hasAttribute("MD5") &&
-            file->hasAttribute("Size") &&
-            file->hasAttribute("PeerList"))
+      {
+        auto nameXml = file->getChildByName("Name");
+        auto sizeXml = file->getChildByName("Size");
+        auto md5Xml = file->getChildByName("MD5");
+        auto peersXml = file->getChildByName("PeersList");
+        if (nameXml && sizeXml && md5Xml && peersXml)
         {
-          auto nameXml = file->getChildByName("Name");
+          juce::Array<juce::IPAddress> peersList;
+          for (int peerIndex = 0;
+               peerIndex < peersXml->getNumChildElements();
+               peerIndex++)
+          {
+            auto dummyPeer = peersXml->getChildElement(peerIndex);
+            juce::IPAddress dummyIP (dummyPeer->getStringAttribute("Value"));
+            peersList.add(juce::IPAddress(dummyIP));
+          }
+          result.add(PeerFile(nameXml->getStringAttribute("Value"),
+                              md5Xml->getStringAttribute("Value"),
+                              sizeXml->getIntAttribute("Value"),
+                              peersList));
         }
+      }
     }
   }
   return result;
