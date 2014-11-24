@@ -30,7 +30,7 @@ public:
   ~PeerFileManager();
   
   /// @brief Set the current shared folder
-  void setSharedFolder(juce::File folder);
+  void setSharedFolder(const juce::File& folder);
   
   /// @brief Return an array containing all the available files
   const juce::Array<PeerFile>& getAvailableFiles() const { return _availableFiles; }
@@ -41,10 +41,16 @@ public:
   /// @brief File manager run method
   void run();
 private:
-  PeerProcessor *_owner; ///< Peer processor owning this manager
-  juce::File _sharedFolder; ///< Shared folder containing shared files
-  juce::Array<PeerFile> _availableFiles;  ///< List of available shared files
-  juce::CriticalSection _mutex; ///< Mutex to lock access to the available files
+  /// @brief Peer processor owning this manager
+  PeerProcessor *_owner;
+  /// @brief Folder containing all the available files
+  juce::File _sharedFolder;
+  /// @brief Folder where incomplete transfer are stored
+  juce::File _incompleteFolder;
+  /// @brief List of available shared files
+  juce::Array<PeerFile> _availableFiles;
+  /// @brief Mutex to lock access to the available files
+  juce::CriticalSection _mutex;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerFileManager)
 };

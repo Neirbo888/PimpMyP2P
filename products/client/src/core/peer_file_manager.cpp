@@ -24,7 +24,7 @@ PeerFileManager::~PeerFileManager()
   stopThread(2000);
 }
 
-void PeerFileManager::setSharedFolder(juce::File folder)
+void PeerFileManager::setSharedFolder(const juce::File& folder)
 {
   if (folder.exists())
     _sharedFolder = folder;
