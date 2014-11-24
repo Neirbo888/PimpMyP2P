@@ -32,6 +32,9 @@ public:
   /// @see MessageHandler::spawnNewJob
   void spawnNewJob(StreamingSocket* socket);
   
+  /// @brief Get the file handler
+  const TrackerFileManager& getFileManager() { return _fileManager; }
+  
 private:
   /// @brief Owner's file manager
   const TrackerFileManager& _fileManager;
