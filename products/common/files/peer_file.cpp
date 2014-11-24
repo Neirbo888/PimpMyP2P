@@ -30,11 +30,13 @@ PeerFile::PeerFile(const juce::File& file)
   }
 }
 
-PeerFile::PeerFile(juce::String filename, juce::String md5, int size)
+PeerFile::PeerFile(juce::String filename, juce::String md5, int size,
+                   juce::Array<juce::IPAddress> peers)
 : _file(juce::File::nonexistent),
   _filename(filename),
   _md5(md5),
   _size(size),
+  _peers(peers),
   _isLocal(false) {}
 
 PeerFile::PeerFile(const PeerFile & otherFile)
@@ -42,15 +44,8 @@ PeerFile::PeerFile(const PeerFile & otherFile)
   _filename(otherFile.getFilename()),
   _md5(otherFile.getMD5()),
   _size(otherFile.getSize()),
-  _isLocal(otherFile.isLocal()),
-  _peers(otherFile.getPeersAddresses()) {}
-
-PeerFile::PeerFile()
-: _file(juce::File(juce::File::nonexistent)),
-  _filename(juce::String::empty),
-  _md5(juce::String::empty),
-  _size(0),
-  _isLocal(false) {}
+  _peers(otherFile.getPeersAddresses()),
+  _isLocal(otherFile.isLocal()) {}
 
 PeerFile::~PeerFile() {}
 

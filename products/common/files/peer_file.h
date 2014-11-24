@@ -27,7 +27,11 @@ public:
   /// @param {juce::String} filename - Name of the file
   /// @param {juce::String} md5 - MD5 hash for this file
   /// @param {int} size - Size in bytes
-  PeerFile(juce::String filename, juce::String md5, int size);
+  /// @param {juce::Array<juce::IPAddress>} peers - Peers possessing this file
+  PeerFile(juce::String filename = juce::String::empty,
+           juce::String md5 = juce::String::empty,
+           int size = 0,
+           juce::Array<juce::IPAddress> peers = juce::Array<juce::IPAddress>());
   
   /// @brief Constructs a PeerFile as a copy of another one
   /// @param {PeerFile} otherFile - PeerFile that will be copied
@@ -77,9 +81,6 @@ public:
   void removePeer(juce::IPAddress peer);
 
 private:
-  /// @brief Private default constructor
-  PeerFile();
-  
   /// @brief File associated
   juce::File _file;
   /// @brief Name of the file
@@ -88,10 +89,10 @@ private:
   juce::String _md5;
   /// @brief Size of the file
   int _size;
-  /// @brief Define is the file is local or distant
-  bool _isLocal;
   /// @brief List of Peers possessing this file
   juce::Array<juce::IPAddress> _peers;
+  /// @brief Define is the file is local or distant
+  bool _isLocal;
 };
 
 
