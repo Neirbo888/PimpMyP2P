@@ -59,13 +59,19 @@ public:
   /// either no range defined or even no File attribute at all
   const juce::Range<int> getByteRange() const;
   
-  /// @brief True if this PimpMessage has a keywords array
-  const bool hasKeywordsArray() const;
+  /// @brief True if this PimpMessage has a SearchString
+  const bool hasSearchString() const;
   
-  /// @brief Will return a StringArray filled with all the keywords if the
-  /// message has a KeywordsArray attribute, if not the StringArray will be
-  /// empty
-  const juce::StringArray getKeywordsArray() const;
+  /// @brief Will return the search that was input if the message has a
+  /// SearchString attribute, if not the String will be empty
+  const juce::String getSearchString() const;
+  
+  /// @brief True if this PimpMessage has a SearchResults
+  const bool hasSearchResults() const;
+  
+  /// @brief Will return a list of PeerFile if the message has a SearchResults
+  /// attribute, if not the list will be empty
+  const juce::Array<PeerFile> getSearchResults() const;
   
   /// @brief Send the current PimpMessage to the given socket
   /// @param {juce::StreamingSocket*} socket - Socket where the message will be
@@ -85,11 +91,16 @@ public:
   
   /// @brief Creates a search request for the tracker
   /// @param {juce::StringArray} keywords - Array containing all the keywords
-  void createPeerSearch(juce::StringArray keywords);
+  void createPeerSearch(const juce::String keystring);
   
   /// @brief Creates an error message
   /// @param {juce::String} message - Error message string
-  void createErrorMessage(juce::String message);
+  void createErrorMessage(const juce::String message);
+  
+  /// @brief Create a tracker search result message based on the given PeerFile
+  /// list
+  /// @param {juce::Array<PeerFile>} peerFiles - Files that has been found
+  void createTrackerSearchResult(const juce::Array<PeerFile>& files);
   
 private:
   /// @brief Default constructor is private
