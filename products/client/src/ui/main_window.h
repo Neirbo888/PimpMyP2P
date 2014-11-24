@@ -25,6 +25,7 @@
 #include "products/common/ui/look_and_feel.h"
 
 class PeerProcessor;
+class PimpTable;
 //[/Headers]
 
 
@@ -37,7 +38,8 @@ class PeerProcessor;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MainWindow  : public Component,
+class MainWindow  : public juce::Component,
+                    public juce::ChangeListener,
                     public ButtonListener
 {
 public:
@@ -47,6 +49,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    void changeListenerCallback(juce::ChangeBroadcaster *source);
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -66,6 +69,7 @@ private:
     ScopedPointer<TextEditor> _editorSearchField;
     ScopedPointer<TextButton> _buttonSetDownloadFolder;
     ScopedPointer<TextButton> _buttonSearch;
+    ScopedPointer<PimpTable> _pimpTable;
 
 
     //==============================================================================

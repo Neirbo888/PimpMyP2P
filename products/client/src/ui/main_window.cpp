@@ -20,6 +20,7 @@
 //[Headers] You can add your own extra header files here...
 #include "products/client/src/core/peer_processor.h"
 #include "products/client/src/core/peer_file_manager.h"
+#include "products/client/src/ui/pimp_table.h"
 //[/Headers]
 
 #include "main_window.h"
@@ -57,6 +58,8 @@ MainWindow::MainWindow (PeerProcessor* processor)
     addAndMakeVisible (_buttonSearch = new TextButton ("Search Button"));
     _buttonSearch->setButtonText (TRANS("Search"));
     _buttonSearch->addListener (this);
+    addAndMakeVisible (_pimpTable = new PimpTable (this));
+    _pimpTable->setName ("Pimp Table");
 
 
     //[UserPreSize]
@@ -64,7 +67,7 @@ MainWindow::MainWindow (PeerProcessor* processor)
   LookAndFeel::setDefaultLookAndFeel(&_lookAndFeel);
     //[/UserPreSize]
 
-    setSize (300, 500);
+    setSize (600, 400);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -81,6 +84,7 @@ MainWindow::~MainWindow()
     _editorSearchField = nullptr;
     _buttonSetDownloadFolder = nullptr;
     _buttonSearch = nullptr;
+    _pimpTable = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -101,10 +105,11 @@ void MainWindow::paint (Graphics& g)
 
 void MainWindow::resized()
 {
-    _labelSearchField->setBounds (216, 144, 60, 24);
-    _editorSearchField->setBounds (8, 467, 200, 24);
-    _buttonSetDownloadFolder->setBounds (196, 8, 96, 24);
-    _buttonSearch->setBounds (220, 467, 72, 24);
+    _labelSearchField->setBounds (8, 8, 60, 24);
+    _editorSearchField->setBounds (getWidth() - 96 - proportionOfWidth (0.4000f), getHeight() - 8 - 24, proportionOfWidth (0.4000f), 24);
+    _buttonSetDownloadFolder->setBounds (getWidth() - 8 - 96, 8, 96, 24);
+    _buttonSearch->setBounds (getWidth() - 8 - 80, getHeight() - 8 - 24, 80, 24);
+    _pimpTable->setBounds (8, 40, getWidth() - 16, getHeight() - 80);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -121,7 +126,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
         if (chooser.browseForDirectory())
         {
           juce::File outputDir = chooser.getResult();
-          _processor->getFileManager()->setSharedFolder(outputDir);
+          _processor->setSharedFolder(outputDir);
         }
         //[/UserButtonCode__buttonSetDownloadFolder]
     }
@@ -138,6 +143,13 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+void MainWindow::changeListenerCallback(juce::ChangeBroadcaster *source)
+{
+  if (source == _pimpTable)
+  {
+    _processor->sendPeerGetFile(_pimpTable->getSelectedFile());
+  }
+}
 //[/MiscUserCode]
 
 
@@ -151,26 +163,29 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component" constructorParams="PeerProcessor* processor"
-                 variableInitialisers="_processor(processor)" snapPixels="8" snapActive="1"
-                 snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="300"
-                 initialHeight="500">
+                 parentClasses="public juce::Component, public juce::ChangeListener"
+                 constructorParams="PeerProcessor* processor" variableInitialisers="_processor(processor)"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
+                 fixedSize="1" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffdcdcdc"/>
   <LABEL name="Search Field Label" id="d25be79670612cf1" memberName="_labelSearchField"
-         virtualName="" explicitFocusOrder="0" pos="216 144 60 24" textCol="ff595f66"
+         virtualName="" explicitFocusOrder="0" pos="8 8 60 24" textCol="ff595f66"
          edTextCol="ff000000" edBkgCol="0" labelText="Search :" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Helvetica"
          fontsize="11" bold="0" italic="0" justification="34"/>
   <TEXTEDITOR name="Search Field Editor" id="67e851ba8745bfe6" memberName="_editorSearchField"
-              virtualName="" explicitFocusOrder="0" pos="8 467 200 24" initialText=""
+              virtualName="" explicitFocusOrder="0" pos="96Rr 8Rr 40% 24" initialText=""
               multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="0"
               caret="0" popupmenu="0"/>
   <TEXTBUTTON name="Set Download Folder Button" id="a74c01732164b671" memberName="_buttonSetDownloadFolder"
-              virtualName="" explicitFocusOrder="0" pos="196 8 96 24" buttonText="Folder"
+              virtualName="" explicitFocusOrder="0" pos="8Rr 8 96 24" buttonText="Folder"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="Search Button" id="718de0990a41ea4e" memberName="_buttonSearch"
-              virtualName="" explicitFocusOrder="0" pos="220 467 72 24" buttonText="Search"
+              virtualName="" explicitFocusOrder="0" pos="8Rr 8Rr 80 24" buttonText="Search"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <GENERICCOMPONENT name="Pimp Table" id="8d2da6dba96a2b23" memberName="_pimpTable"
+                    virtualName="" explicitFocusOrder="0" pos="8 40 16M 80M" class="PimpTable"
+                    params="this"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA
