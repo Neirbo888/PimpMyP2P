@@ -63,19 +63,22 @@ const bool PimpMessage::hasPeerFile() const
   return false;
 }
 
-/// @todo: This should not work
 const PeerFile PimpMessage::getPeerFile() const
 {
   auto file = _message->getChildByName("PeerFile");
   if (file)
-    if (file->hasAttribute("Name") &&
-        file->hasAttribute("MD5") &&
-        file->hasAttribute("Size"))
+  {
+    auto nameXml = file->getChildByName("Name");
+    auto sizeXml = file->getChildByName("Size");
+    auto md5Xml = file->getChildByName("MD5");
+    if (!nameXml || !sizeXml || !md5Xml)
+      return PeerFile::emptyPeerFile();
     {
-      return PeerFile(file->getStringAttribute("Name"),
-                      file->getStringAttribute("MD5"),
-                      file->getIntAttribute("Size"));
+      return PeerFile(nameXml->getStringAttribute("Value"),
+                      md5Xml->getStringAttribute("Value"),
+                      sizeXml->getIntAttribute("Value"));
     }
+  }
   return PeerFile::emptyPeerFile();
 }
 
