@@ -21,7 +21,7 @@ public:
     kPeerFileList, ///< A peer sends its file list
     kPeerSearch, ///< A peer sends a search to the tracker
     kTrackerSearchResult, ///< The tracker sends the result of a search
-    kReady, ///< Distant host is ready
+    kOk, ///< Confirmation
     kError, ///< Error
     kMaxCount
   };
@@ -82,10 +82,16 @@ public:
   /// @param {juce::StringArray} keywords - Array containing all the keywords
   void createPeerSearch(juce::StringArray keywords);
   
+  /// @brief Creates an error message
+  /// @param {juce::String} message - Error message string
+  void createErrorMessage(juce::String message);
+  
 private:
+  /// @brief Default constructor is private
   PimpMessage();
   
-  ScopedPointer<XmlElement> _message;
+  /// @brief The content of a PimpMessage is stored in a XmlElement
+  juce::ScopedPointer<juce::XmlElement> _message;
 };
 
 
