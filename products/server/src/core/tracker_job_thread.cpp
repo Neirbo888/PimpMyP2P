@@ -61,6 +61,26 @@ void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
 {
   // Create an acknowledge
   PimpMessage acknowledge (_owner->getLocalIp());
-  acknowledge.setCommand(PimpMessage::kOk);
-  acknowledge.sendToSocket(_socket);
+  
+  juce::String searchString;
+  if (request.hasSearchString())
+  {
+    searchString = request.getSearchString();
+  
+    // Send our peer that we've received his request and will be processing
+    acknowledge.setCommand(PimpMessage::kOk);
+    acknowledge.sendToSocket(_socket);
+    
+    juce::Array<PeerFile> searchResults;
+    searchResults = _owner->getFileManager().getSimilarFiles(searchString);
+    
+    PimpMessage resultMessage (_owner->getLocalIp());
+    resultMessage.createTrackerSearchResult(searchResults);
+    resultMessage.sendToSocket(_socket);
+  }
+  else
+  {
+    acknowledge.createErrorMessage("Can't find searchstring");
+    acknowledge.sendToSocket(_socket);
+  }
 }
