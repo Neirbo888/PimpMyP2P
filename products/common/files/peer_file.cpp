@@ -83,3 +83,17 @@ void PeerFile::removePeer(juce::IPAddress peer)
   if (index >= 0)
     _peers.remove(index);
 }
+
+std::ostream & operator<<(std::ostream & ofs, PeerFile const & p)
+{
+  juce::String string;
+  string = "<File>\n\tName:" + p.getFilename() + "\n" + "\tMD5:" + p.getMD5() +
+  "\n" + "\tSize:" + juce::String(p.getSize()) + "\n\tPeers:\n";
+  for (juce::IPAddress peer : p.getPeersAddresses())
+  {
+    string = string + "\t\t" + peer.toString() + "\n";
+  }
+  string += "</file>\n";
+  ofs << string;
+  return ofs;
+}

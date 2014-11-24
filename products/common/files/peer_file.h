@@ -79,6 +79,8 @@ public:
   
   /// @brief Remove an IPAddress from the Peers list
   void removePeer(juce::IPAddress peer);
+  
+  friend std::ostream& operator<<(std::ostream &os, const PeerFile& n);
 
 private:
   /// @brief File associated
