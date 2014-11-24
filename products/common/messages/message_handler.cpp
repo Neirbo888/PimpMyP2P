@@ -22,27 +22,18 @@ MessageHandler::~MessageHandler()
 
 void MessageHandler::handleAsyncUpdate()
 {
-  juce::Array<juce::Thread*> newThreadsArray;
-  for (juce::Thread** thread = _threads.begin(); thread != _threads.end();
-       thread++)
-  {
-    if ((*thread)->isThreadRunning())
-      newThreadsArray.add(*thread);
-    else
-      deleteAndZero(*thread);
-  }
-  _threads.clear();
-  _threads = newThreadsArray;
+  for (int i = _threads.size(); --i >= 0;)
+    if (!_threads.getReference(i)->isThreadRunning())
+      _threads.remove(i);
 }
 
 void MessageHandler::clear()
 {
-  for (juce::Thread** thread = _threads.begin(); thread != _threads.end();
-       thread++)
+  for (auto thread : _threads)
   {
-    (*thread)->signalThreadShouldExit();
-    (*thread)->stopThread(2000);
-    deleteAndZero(*thread);
+    thread->signalThreadShouldExit();
+    thread->stopThread(2000);
+    deleteAndZero(thread);
   }
   _threads.clear();
 }

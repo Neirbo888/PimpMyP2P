@@ -28,6 +28,7 @@ public:
   
   /// @brief The SocketThread calls this method each time a TCP request is
   /// received, this causes a new thread to be spawned to handle the request
+  /// @param {StreaminSocket*} socket - Socket that will be used in this thread
   virtual void spawnNewJob(StreamingSocket* socket) = 0;
   
   /// @brief Return the local IP
@@ -40,8 +41,11 @@ protected:
   /// @brief Construct a MessageHandler with the local IPAdress
   MessageHandler(juce::IPAddress local);
   
-  juce::Array<juce::Thread*> _threads; ///< Running threads spawned by this handler
-  juce::IPAddress _local; ///< Local ip address
+  /// @brief Running threads spawned by this handler
+  juce::Array<juce::Thread*> _threads;
+  
+  /// @brief Local ip address
+  juce::IPAddress _local;
   
 private:
   /// @brief Default constructor is private
