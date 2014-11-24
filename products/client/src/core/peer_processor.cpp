@@ -61,7 +61,8 @@ void PeerProcessor::stop()
 
 void PeerProcessor::run()
 {
-  while(!threadShouldExit()) {}
+  while(!threadShouldExit())
+    this->wait(100000);
   Logger::writeToLog("Closing PeerProcessor thread");
 }
 
