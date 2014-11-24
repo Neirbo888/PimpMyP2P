@@ -42,8 +42,10 @@ public:
   void handleSendRequest(const PimpMessage& request);
   
 private:
-  PeerMessageHandler *_owner; ///< Handler that has spawned this thread
-  ScopedPointer<StreamingSocket> _socket; ///< TCP socket
+  /// @brief Handler that has spawned this thread
+  PeerMessageHandler *_owner;
+  /// @brief TCP socket
+  ScopedPointer<StreamingSocket> _socket;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerJobThread)
 };
