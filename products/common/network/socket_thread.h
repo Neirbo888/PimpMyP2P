@@ -23,6 +23,7 @@ class SocketThread
 public:
   /// @brief Constructor
   /// {int} port - Listening port
+  /// {MessageHandler} messageHandler - Handles the connections received
   SocketThread(int port, MessageHandler* messageHandler);
   
   /// @brief Destructor
@@ -38,9 +39,16 @@ public:
   const bool isConnected() const { return _connected; }
   
 private:
+  /// @brief The MessageHandler used for spawning thread each time a connection
+  /// has been made. This can be either a peer or tracker MessageHandler
   MessageHandler* _messageHandler;
-  ScopedPointer<StreamingSocket> _socket;
-  bool _connected; ///< Must be true
+  
+  /// @brief Socket declared in listen mode, every time a connection is made,
+  /// it creates a new socket and give it to the MessageHandler
+  juce::ScopedPointer<juce::StreamingSocket> _socket;
+  
+  /// @brief This must be true
+  bool _connected;
 };
 
 
