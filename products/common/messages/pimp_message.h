@@ -67,6 +67,11 @@ public:
   /// empty
   const juce::StringArray getKeywordsArray() const;
   
+  /// @brief Send the current PimpMessage to the given socket
+  /// @param {juce::StreamingSocket*} socket - Socket where the message will be
+  /// sent
+  void sendToSocket(juce::StreamingSocket* socket);
+  
   /// @brief Creates a PeerGetFile request to download a file from another peer
   /// @param {PeerFile} file - File to download
   void createPeerGetFile(PeerFile file);

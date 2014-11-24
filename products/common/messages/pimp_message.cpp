@@ -118,6 +118,15 @@ const juce::StringArray PimpMessage::getKeywordsArray() const
   return keywordsArray;
 }
 
+void PimpMessage::sendToSocket(juce::StreamingSocket *socket)
+{
+  if (socket && socket->isConnected())
+  {
+    std::string out = getXmlString().toStdString();
+    socket->write(out.c_str(), out.length());
+  }
+}
+
 void PimpMessage::createPeerGetFile(PeerFile file)
 {
   auto commandXml = new XmlElement("Command");
