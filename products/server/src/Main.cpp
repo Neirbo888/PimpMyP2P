@@ -9,7 +9,7 @@
  */
 
 #include "JuceHeader.h"
-#include "products/server/src/core/server_processor.h"
+#include "products/server/src/core/tracker_processor.h"
 
 
 
@@ -26,7 +26,7 @@ public:
   //==============================================================================
   void initialise (const String& commandLine) override
   {
-    _pimpServer = new PimpServerProcessor();
+    _pimpServer = new TrackerProcessor();
   }
   
   void shutdown() override
@@ -50,7 +50,7 @@ public:
   }
   
 private:
-  ScopedPointer<PimpServerProcessor> _pimpServer;
+  ScopedPointer<TrackerProcessor> _pimpServer;
 };
 
 //==============================================================================

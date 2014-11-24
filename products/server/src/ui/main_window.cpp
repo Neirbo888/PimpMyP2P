@@ -18,7 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "products/server/src/core/server_processor.h"
+#include "products/server/src/core/tracker_processor.h"
 //[/Headers]
 
 #include "main_window.h"
@@ -28,7 +28,7 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-MainWindow::MainWindow (PimpServerProcessor* processor)
+MainWindow::MainWindow (TrackerProcessor* processor)
     : _processor(processor)
 {
     addAndMakeVisible (_labelSearchField = new Label ("Search Field Label",
@@ -144,7 +144,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
-                 parentClasses="public Component" constructorParams="PimpServerProcessor* processor"
+                 parentClasses="public Component" constructorParams="TrackerProcessor* processor"
                  variableInitialisers="_processor(processor)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="300"
                  initialHeight="500">
