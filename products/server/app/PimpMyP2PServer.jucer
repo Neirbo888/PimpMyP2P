@@ -65,10 +65,10 @@
     <XCODE_MAC targetFolder="../projects/osx/">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" binaryPath="../bin/osx/"
-                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PTracker_d"
+                       binaryPath="../bin/osx/" headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
         <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" binaryPath="bin/osx"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PTracker" binaryPath="bin/osx"
                        headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -90,10 +90,10 @@
     <VS2013 targetFolder="../projects/win32">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       binaryPath="../bin/win32/"/>
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PTracker_d"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/win32/"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PTracker" headerPath="../../../../;../../../../externals/juce_3.0.4/"
                        binaryPath="../bin/win32"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
