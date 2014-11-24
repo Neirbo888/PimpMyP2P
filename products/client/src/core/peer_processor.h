@@ -6,6 +6,7 @@
 
 /// Forward declarations
 class ComponentWindow;
+class MainWindow;
 class PeerMessageHandler;
 class SocketThread;
 
@@ -61,7 +62,7 @@ private:
   /// request
   ScopedPointer<PeerMessageHandler> _messageHandler;
   /// @brief GUI
-  juce::Component* _component;
+  MainWindow* _component;
   /// @brief Window displaying the GUI
   ScopedPointer<ComponentWindow> _window;
   /// @brief Thread listening the TCP socket
