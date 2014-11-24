@@ -10,6 +10,7 @@
 
 #include "products/server/src/core/tracker_file_manager.h"
 #include "products/server/src/core/tracker_processor.h"
+#include "products/common/messages/pimp_message.h"
 
 TrackerFileManager::TrackerFileManager(TrackerProcessor* owner)
 : _owner(owner)
@@ -22,10 +23,10 @@ TrackerFileManager::TrackerFileManager(TrackerProcessor* owner)
 
 TrackerFileManager::~TrackerFileManager() {}
 
-const juce::Array<PeerFile> TrackerFileManager::getSimilarFiles(const PeerFile &peerFile) const
+const juce::Array<PeerFile> TrackerFileManager::getSimilarFiles(const juce::String& keyword) const
 {
   juce::Array<PeerFile> result;
-  auto keywordsDistant = getKeywords(peerFile.getFilename());
+  auto keywordsDistant = getKeywords(keyword);
   
   for (PeerFile p : _availableFiles)
   {
