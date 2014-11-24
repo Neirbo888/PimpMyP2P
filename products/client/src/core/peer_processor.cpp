@@ -6,16 +6,14 @@
 #include "products/client/src/core/peer_message_handler.h"
 
 PeerProcessor::PeerProcessor()
-: Thread("PimpClient"),
+: Thread("PimpPeer"),
+  _fileManager(this),
   _messageHandler(nullptr),
   _socketThread(nullptr)
 {
   // Create the GUI
   _component = new MainWindow(this);
   _window = new ComponentWindow(_component);
-  
-  // Create the file manager
-  _fileManager = new PeerFileManager(this);
   
   // Get the local IP address
   Array<IPAddress> allAddresses;
@@ -24,14 +22,17 @@ PeerProcessor::PeerProcessor()
     if (allAddresses.getReference(i).toString().startsWith("192.168."))
       _address = allAddresses.getUnchecked(i);
   
+  // If no local network is connected, lets initialize with the loopback ip
+  if (_address.toString().equalsIgnoreCase("0.0.0.0"))
+    _address = juce::IPAddress::local();
+  
   // Create our MessageHandler
-  if (!_address.toString().equalsIgnoreCase("0.0.0.0"))
-    _messageHandler = new PeerMessageHandler(_address,_fileManager);
+  _messageHandler = new PeerMessageHandler(_address, _fileManager);
   
   // Create our SocketThread
-  if (_messageHandler)
-    _socketThread = new SocketThread(4807, _messageHandler);
-  else
+  _socketThread = new SocketThread(4807, _messageHandler);
+  
+  if (!_socketThread->isConnected())
     Logger::writeToLog("Couldn't create listener on port 4807");
   
   startThread();
@@ -52,7 +53,8 @@ void PeerProcessor::handleAsyncUpdate()
   Logger::writeToLog("Unhandled async update");
 }
 
-void PeerProcessor::stop() {
+void PeerProcessor::stop()
+{
   signalThreadShouldExit();
   stopThread(2000);
 }
@@ -63,38 +65,65 @@ void PeerProcessor::run()
   Logger::writeToLog("Closing PeerProcessor thread");
 }
 
-void PeerProcessor::sendPeerGetFile(juce::IPAddress destination,
-                                    PeerFile file)
+void PeerProcessor::setSharedFolder(const juce::File& folder)
+{
+  _fileManager.setSharedFolder(folder);
+}
+
+void PeerProcessor::sendPeerGetFile(PeerFile file)
 {
   // Create our PimpMessage request
   PimpMessage request (_address);
   request.createPeerGetFile(file);
-  std::string out = request.getXmlString().toStdString();
+  
+  
+  // Prepare a stream output file to write the data
+  juce::File outputFile (_fileManager.getSharedFolder().getFullPathName() +
+                         juce::File::separator +
+                         file.getFilename());
+  juce::FileOutputStream streamFile (outputFile);
+  
+  if (outputFile.existsAsFile())
+  {
+    Logger::writeToLog("Can't receive an already existing file");
+    return;
+  }
+  if (streamFile.openedOk())
+  {
+    Logger::writeToLog("Can't open output stream");
+    return;
+  }
   
   // Create a new socket to connect to our distant host
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
-  socket->connect(destination.toString(), 4807);
+  socket->connect("DU LOL", 4807);
   
-  // If connection was successful
-  if (socket->isConnected())
+  // If connection can't be done, we get out
+  if (!socket->isConnected())
+  {
+    Logger::writeToLog("Can't connect to distant host");
+  }
+  
+  // Else, we can send the request
+  else
   {
     // Let's send him the request
-    socket->write(out.c_str(), out.length());
+    request.sendToSocket(socket);
     
-    // Prepare a stream output file to write the data
-    juce::File outputFile ("/Users/Adrien/Music/iTunes/iTunes\ Media/Music/Neirbo/Oldies/One2.mp3");
-    juce::FileOutputStream streamFile (outputFile);
-    if (streamFile.openedOk())
+    // Normally we should receive an acknowledge
+    char inBuffer[4096];
+    socket->read(inBuffer,4096,false);
+    PimpMessage acknowledge (inBuffer);
+    
+    if (acknowledge.isCommand(PimpMessage::kOk))
     {
       int bytesRead;
-      char inBuffer[4096];
       do
       {
-        bytesRead = socket->read(inBuffer,4096,false);
+        int bytesRead = socket->read(inBuffer,4096,false);
         streamFile.write(inBuffer, bytesRead);
       } while (bytesRead == 4096);
     }
-    std::cout << std::endl << "fin" << std::endl;
   }
 }
 

@@ -30,32 +30,42 @@ public:
   /// system
   void handleAsyncUpdate();
   
-  /// @brief Datagram thread
+  /// @brief PeerProcessor thread
   void run();
   
   /// @brief Stop the receiver thread
   void stop();
   
   /// @brief Get the file manager
-  PeerFileManager* const getFileManager() { return _fileManager; }
+  const PeerFileManager& getFileManager() { return _fileManager; }
   
   /// @brief Sends a PeerGetFile request to a peer
-  void sendPeerGetFile(juce::IPAddress destination, PeerFile file);
+  void sendPeerGetFile(PeerFile file);
   
   /// @brief Sends a PeerSearch request to the tracker
   void sendTrackerSearch(juce::StringArray keyword);
   
+  /// @brief Set the shared folder
+  /// @param {juce::File} folder - The new shared folder
+  void setSharedFolder(const juce::File& folder);
+  
 private:
-  juce::IPAddress _address; ///< Local ip address
-  juce::IPAddress _tracker; ///< IP Address of the tracker
-  
-  juce::Component* _component; ///< GUI
-  juce::ScopedPointer<ComponentWindow> _window; ///< Window displaying the GUI
-  
-  juce::ScopedPointer<PeerMessageHandler> _messageHandler; ///< MessageHandler for tcp requests
-  juce::ScopedPointer<PeerFileManager> _fileManager;
-  
-  juce::ScopedPointer<SocketThread> _socketThread; ///< Thread handling TCP requests
+  /// @brief Should be initialized with the current LAN IP of this computer,
+  /// assuming it's a Class C network. Otherwise, it should be the loopback IP.
+  juce::IPAddress _address;
+  /// @brief IP Address of the tracker
+  juce::IPAddress _tracker;
+  /// @brief FileManager keeping track of the files in the shared folder
+  PeerFileManager _fileManager;
+  /// @brief Spawns threads each time a TCP connection is made to handle the
+  /// request
+  ScopedPointer<PeerMessageHandler> _messageHandler;
+  /// @brief GUI
+  juce::Component* _component;
+  /// @brief Window displaying the GUI
+  ScopedPointer<ComponentWindow> _window;
+  /// @brief Thread listening the TCP socket
+  ScopedPointer<SocketThread> _socketThread;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerProcessor)
 };
