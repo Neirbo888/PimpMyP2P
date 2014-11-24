@@ -13,8 +13,9 @@
 #include "products/client/src/core/peer_file_manager.h"
 
 PeerMessageHandler::PeerMessageHandler(juce::IPAddress local,
-                                       PeerFileManager *fileManager)
-: MessageHandler(local) {}
+                                       const PeerFileManager& fileManager)
+: MessageHandler(local),
+  _fileManager(fileManager) {}
 
 PeerMessageHandler::~PeerMessageHandler() {}
 

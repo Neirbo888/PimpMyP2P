@@ -24,7 +24,7 @@ class PeerMessageHandler
 {
 public:
   /// @brief Constructor
-  PeerMessageHandler(juce::IPAddress local, PeerFileManager *fileManager);
+  PeerMessageHandler(juce::IPAddress local, const PeerFileManager& fileManager);
   
   /// @brief Destructor
   ~PeerMessageHandler();
@@ -33,9 +33,11 @@ public:
   void spawnNewJob(StreamingSocket* socket);
   
   /// @brief Get the file handler
-  PeerFileManager* getFileManager() { return _fileManager; }
+  const PeerFileManager& getFileManager() { return _fileManager; }
+  
 private:
-  PeerFileManager* _fileManager;
+  /// @brief Owner's file manager
+  const PeerFileManager& _fileManager;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerMessageHandler)
 };
