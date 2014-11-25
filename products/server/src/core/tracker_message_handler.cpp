@@ -13,7 +13,7 @@
 #include "products/server/src/core/tracker_file_manager.h"
 
 TrackerMessageHandler::TrackerMessageHandler(juce::IPAddress local,
-                                             const TrackerFileManager& fileManager)
+                                             TrackerFileManager& fileManager)
 : MessageHandler(local),
 _fileManager(fileManager) {}
 

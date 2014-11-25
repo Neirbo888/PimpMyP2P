@@ -24,7 +24,7 @@ class TrackerMessageHandler
 public:
   /// @brief Constructor
   TrackerMessageHandler(juce::IPAddress local,
-                        const TrackerFileManager& fileManager);
+                        TrackerFileManager& fileManager);
   
   /// @brief Destructor
   ~TrackerMessageHandler();
@@ -33,11 +33,11 @@ public:
   void spawnNewJob(StreamingSocket* socket);
   
   /// @brief Get the file handler
-  const TrackerFileManager& getFileManager() { return _fileManager; }
+  TrackerFileManager& getFileManager() { return _fileManager; }
   
 private:
   /// @brief Owner's file manager
-  const TrackerFileManager& _fileManager;
+  TrackerFileManager& _fileManager;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackerMessageHandler)
 };

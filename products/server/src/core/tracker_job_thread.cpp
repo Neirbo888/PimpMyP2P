@@ -84,3 +84,23 @@ void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
     acknowledge.sendToSocket(_socket);
   }
 }
+
+void TrackerJobThread::handlePeerSignIn(const PimpMessage &request)
+{
+  // Create an acknowledge
+  PimpMessage acknowledge (_owner->getLocalIp());
+  const juce::IPAddress peerIP = request.getSource();
+  
+  // If the peer ip is valid, well let's register him and let him know
+  if (peerIP.toString() != "0.0.0.0")
+  {
+    _owner->getFileManager().registerPeer(peerIP);
+    acknowledge.setCommand(PimpMessage::kOk);
+  }
+  // Else, let him know that something went wrong
+  else
+  {
+    acknowledge.setCommand(PimpMessage::kError);
+  }
+  acknowledge.sendToSocket(_socket);
+}
