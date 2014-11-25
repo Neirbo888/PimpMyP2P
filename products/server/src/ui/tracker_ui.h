@@ -37,8 +37,7 @@ class TrackerProcessor;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class TrackerUi  : public Component,
-                   public ButtonListener
+class TrackerUi  : public Component
 {
 public:
     //==============================================================================
@@ -51,7 +50,6 @@ public:
 
     void paint (Graphics& g);
     void resized();
-    void buttonClicked (Button* buttonThatWasClicked);
 
 
 
@@ -63,9 +61,6 @@ private:
 
     //==============================================================================
     ScopedPointer<Label> _labelSearchField;
-    ScopedPointer<TextEditor> _editorSearchField;
-    ScopedPointer<TextButton> _buttonSetDownloadFolder;
-    ScopedPointer<TextButton> _buttonSearch;
 
 
     //==============================================================================
