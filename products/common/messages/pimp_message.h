@@ -44,6 +44,9 @@ public:
   /// @brief Sets the command of this PimpMessage
   void setCommand(CommandType cmd);
   
+  /// @brief Will return the source of the message if the current PimpMessage
+  const juce::IPAddress getSource() const;
+  
   /// @brief True if this PimpMessage has a PeerFile attribute
   const bool hasPeerFile() const;
   

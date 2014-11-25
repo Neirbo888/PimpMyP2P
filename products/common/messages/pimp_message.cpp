@@ -53,6 +53,15 @@ void PimpMessage::setCommand(PimpMessage::CommandType cmd)
   }
 }
 
+const juce::IPAddress PimpMessage::getSource() const
+{
+  auto sourceXml = _message->getChildByName("SourceIp");
+  if (sourceXml)
+    if (sourceXml->hasAttribute("Value"))
+      return juce::IPAddress(sourceXml->getStringAttribute("Value"));
+  return juce::IPAddress();
+}
+
 const bool PimpMessage::hasPeerFile() const
 {
   auto file = _message->getChildByName("PeerFile");
