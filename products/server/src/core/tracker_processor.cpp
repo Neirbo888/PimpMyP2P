@@ -61,6 +61,7 @@ void TrackerProcessor::stop()
 
 void TrackerProcessor::run()
 {
-  while(!threadShouldExit()) {}
+  while(!threadShouldExit())
+    this->wait(100000);
   Logger::writeToLog("Closing TrackerProcessor thread");
 }
