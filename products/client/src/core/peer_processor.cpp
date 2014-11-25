@@ -36,10 +36,8 @@ PeerProcessor::PeerProcessor()
   // Create our SocketThread
   _socketThread = new SocketThread(4807, _messageHandler);
   
-  if (!_socketThread->isConnected())
-    Logger::writeToLog("Couldn't create listener on port 4807");
-  
   startThread();
+  this->notify();
 }
 
 PeerProcessor::~PeerProcessor()
@@ -73,9 +71,49 @@ void PeerProcessor::stop()
 
 void PeerProcessor::run()
 {
+  // This ensure that we exit the thread when the threadShouldStop flag was
+  // raised
   while(!threadShouldExit())
-    this->wait(100000);
-  Logger::writeToLog("Closing PeerProcessor thread");
+  {
+    // Wait indefinitly until someone notifies the thread, provoking something
+    // to happen (or not) in the state machine.
+    if(this->wait(-1))
+    {
+      // This might be unnecessary but it ensure that when we've raised the
+      // threadShouldStop flag, the thread is stopping like right now
+      if (threadShouldExit())
+      {
+        Logger::writeToLog("Closing PeerProcessor thread");
+        return;
+      }
+      // Let's look at the state of our PeerProcessor
+      switch (_state)
+      {
+        case kUninitialized:
+          // If the socket has failed to connect, there's nothing we can do,
+          // we go to kUnavailable
+          if (!_socketThread->isConnected())
+          {
+            /// @todo publish something on the ui
+            Logger::writeToLog("Couldn't create listener on port 4807");
+            setState(kUnavailable);
+          }
+          // If the Socket is connected, everything's allright, let's move on
+          else
+            setState(kIdle);
+          break;
+          
+        case kShouldRegister:
+          // Trying to resiter are we ?
+          registerToTracker();
+          break;
+          
+        default:
+          break;
+      }
+      sendChangeMessage();
+    }
+  }
 }
 
 void PeerProcessor::setSharedFolder(const juce::File& folder)
