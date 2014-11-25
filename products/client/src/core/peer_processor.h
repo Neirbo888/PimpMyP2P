@@ -6,7 +6,7 @@
 
 /// Forward declarations
 class ComponentWindow;
-class MainWindow;
+class PeerUi;
 class PeerMessageHandler;
 class SocketThread;
 
@@ -85,7 +85,7 @@ private:
   /// request
   ScopedPointer<PeerMessageHandler> _messageHandler;
   /// @brief GUI
-  MainWindow* _component;
+  PeerUi* _ui;
   /// @brief Window displaying the GUI
   ScopedPointer<ComponentWindow> _window;
   /// @brief Thread listening the TCP socket

@@ -21,16 +21,19 @@
 #include "products/client/src/core/peer_processor.h"
 #include "products/client/src/core/peer_file_manager.h"
 #include "products/client/src/ui/pimp_table.h"
+
+// THIS MUST BE DELETED (maybe)
+#include "products/common/files/peer_file.h"
 //[/Headers]
 
-#include "main_window.h"
+#include "peer_ui.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
 //==============================================================================
-MainWindow::MainWindow (PeerProcessor* processor)
+PeerUi::PeerUi (PeerProcessor* processor)
     : _processor(processor)
 {
     addAndMakeVisible (_labelSearchField = new Label ("Search Field Label",
@@ -51,20 +54,51 @@ MainWindow::MainWindow (PeerProcessor* processor)
     _editorSearchField->setPopupMenuEnabled (false);
     _editorSearchField->setText (String::empty);
 
-    addAndMakeVisible (_buttonSetDownloadFolder = new TextButton ("Set Download Folder Button"));
-    _buttonSetDownloadFolder->setButtonText (TRANS("Folder"));
-    _buttonSetDownloadFolder->addListener (this);
+    addAndMakeVisible (_buttonSetFolder = new TextButton ("Set Folder Button"));
+    _buttonSetFolder->setButtonText (TRANS("Set Folder"));
+    _buttonSetFolder->addListener (this);
 
     addAndMakeVisible (_buttonSearch = new TextButton ("Search Button"));
     _buttonSearch->setButtonText (TRANS("Search"));
     _buttonSearch->addListener (this);
+
     addAndMakeVisible (_pimpTable = new PimpTable (this));
     _pimpTable->setName ("Pimp Table");
+
+    addAndMakeVisible (_buttonConnect = new TextButton ("Connect Button"));
+    _buttonConnect->setButtonText (TRANS("Connect"));
+    _buttonConnect->addListener (this);
+
+    addAndMakeVisible (_editorTrackerIP = new TextEditor ("Tracker IP Editor"));
+    _editorTrackerIP->setMultiLine (false);
+    _editorTrackerIP->setReturnKeyStartsNewLine (false);
+    _editorTrackerIP->setReadOnly (false);
+    _editorTrackerIP->setScrollbarsShown (false);
+    _editorTrackerIP->setCaretVisible (false);
+    _editorTrackerIP->setPopupMenuEnabled (false);
+    _editorTrackerIP->setText (String::empty);
 
 
     //[UserPreSize]
   // Create look and feel
   LookAndFeel::setDefaultLookAndFeel(&_lookAndFeel);
+
+  juce::Array<PeerFile> data;
+  PeerFile file1 ("Above and Beyond - Anjunabeats vol6.zip",
+                  "fheuqfzhul5473882",43189);
+  file1.addPeer(IPAddress("192.168.0.2"));
+  file1.addPeer(IPAddress("192.168.0.5"));
+  file1.addPeer(IPAddress("192.168.0.4"));
+  data.add(file1);
+  PeerFile file2 ("Michael Jackson Discography.zip",
+                  "GRQIqGjqiglrqiGRQHIQ4387410",14812);
+  file2.addPeer(IPAddress("192.168.0.2"));
+  file2.addPeer(IPAddress("192.168.0.5"));
+  file2.addPeer(IPAddress("192.168.0.6"));
+  file2.addPeer(IPAddress("192.168.0.98"));
+  data.add(file2);
+
+  _pimpTable->loadData(data);
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -75,16 +109,18 @@ MainWindow::MainWindow (PeerProcessor* processor)
     //[/Constructor]
 }
 
-MainWindow::~MainWindow()
+PeerUi::~PeerUi()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
     _labelSearchField = nullptr;
     _editorSearchField = nullptr;
-    _buttonSetDownloadFolder = nullptr;
+    _buttonSetFolder = nullptr;
     _buttonSearch = nullptr;
     _pimpTable = nullptr;
+    _buttonConnect = nullptr;
+    _editorTrackerIP = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -92,7 +128,7 @@ MainWindow::~MainWindow()
 }
 
 //==============================================================================
-void MainWindow::paint (Graphics& g)
+void PeerUi::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -100,40 +136,55 @@ void MainWindow::paint (Graphics& g)
     g.fillAll (Colours::gainsboro);
 
     //[UserPaint] Add your own custom painting code here..
+  if (_processor->getState() == PeerProcessor::kRegistered)
+    g.setColour (Colour (0xffffd776));
+  else
+    g.setColour (Colour (0xff99a3ff));
+  g.fillEllipse (231.0f, 16.0f, 8.0f, 8.0f);
     //[/UserPaint]
 }
 
-void MainWindow::resized()
+void PeerUi::resized()
 {
     _labelSearchField->setBounds (8, 8, 60, 24);
     _editorSearchField->setBounds (getWidth() - 96 - proportionOfWidth (0.4000f), getHeight() - 8 - 24, proportionOfWidth (0.4000f), 24);
-    _buttonSetDownloadFolder->setBounds (getWidth() - 8 - 96, 8, 96, 24);
+    _buttonSetFolder->setBounds (getWidth() - 8 - 96, 8, 96, 24);
     _buttonSearch->setBounds (getWidth() - 8 - 80, getHeight() - 8 - 24, 80, 24);
     _pimpTable->setBounds (8, 40, getWidth() - 16, getHeight() - 80);
+    _buttonConnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
+    _editorTrackerIP->setBounds (getWidth() - 192 - proportionOfWidth (0.2667f), getHeight() - 368 - 24, proportionOfWidth (0.2667f), 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
 
-void MainWindow::buttonClicked (Button* buttonThatWasClicked)
+void PeerUi::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == _buttonSetDownloadFolder)
+    if (buttonThatWasClicked == _buttonSetFolder)
     {
-        //[UserButtonCode__buttonSetDownloadFolder] -- add your button handler code here..
-        FileChooser chooser("Choose a directory to open",File::nonexistent,"",true);
-        if (chooser.browseForDirectory())
-        {
-          juce::File outputDir = chooser.getResult();
-          _processor->setSharedFolder(outputDir);
-        }
-        //[/UserButtonCode__buttonSetDownloadFolder]
+        //[UserButtonCode__buttonSetFolder] -- add your button handler code here..
+      FileChooser chooser("Choose a directory to open",File::nonexistent,"",true);
+      if (chooser.browseForDirectory())
+      {
+        juce::File outputDir = chooser.getResult();
+        _processor->setSharedFolder(outputDir);
+      }
+        //[/UserButtonCode__buttonSetFolder]
     }
     else if (buttonThatWasClicked == _buttonSearch)
     {
         //[UserButtonCode__buttonSearch] -- add your button handler code here..
+        if (_editorSearchField->getTotalNumChars() > 2)
+          _processor->sendTrackerSearch(_editorSearchField->getText());
         //[/UserButtonCode__buttonSearch]
+    }
+    else if (buttonThatWasClicked == _buttonConnect)
+    {
+        //[UserButtonCode__buttonConnect] -- add your button handler code here..
+      _processor->setState(PeerProcessor::kShouldRegister);
+        //[/UserButtonCode__buttonConnect]
     }
 
     //[UserbuttonClicked_Post]
@@ -143,12 +194,43 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MainWindow::changeListenerCallback(juce::ChangeBroadcaster *source)
+void PeerUi::UpdateUi()
+{
+  switch (_processor->getState()) {
+    case PeerProcessor::kUnavailable:
+      _buttonConnect->setEnabled(false);
+      _buttonSearch->setEnabled(false);
+      _buttonSetFolder->setEnabled(true);
+      _editorSearchField->setEnabled(false);
+      _editorTrackerIP->setEnabled(false);
+      break;
+    case PeerProcessor::kIdle:
+      _buttonSearch->setEnabled(false);
+      _buttonConnect->setEnabled(true);
+      _editorTrackerIP->setEnabled(true);
+      _editorSearchField->setEnabled(false);
+      break;
+    case PeerProcessor::kShouldRegister:
+      _buttonSearch->setEnabled(false);
+      _editorSearchField->setEnabled(false);
+      _buttonConnect->setEnabled(false);
+      break;
+    case PeerProcessor::kRegistered:
+      _buttonSearch->setEnabled(true);
+      _buttonConnect->setEnabled(true);
+      _editorSearchField->setEnabled(true);
+      break;
+    default:
+      break;
+  }
+}
+
+void PeerUi::changeListenerCallback(juce::ChangeBroadcaster *source)
 {
   if (source == _pimpTable)
-  {
     _processor->sendPeerGetFile(_pimpTable->getSelectedFile());
-  }
+  else if (source == _processor)
+    UpdateUi();
 }
 //[/MiscUserCode]
 
@@ -162,7 +244,7 @@ void MainWindow::changeListenerCallback(juce::ChangeBroadcaster *source)
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
+<JUCER_COMPONENT documentType="Component" className="PeerUi" componentName=""
                  parentClasses="public juce::Component, public juce::ChangeListener"
                  constructorParams="PeerProcessor* processor" variableInitialisers="_processor(processor)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
@@ -177,8 +259,8 @@ BEGIN_JUCER_METADATA
               virtualName="" explicitFocusOrder="0" pos="96Rr 8Rr 40% 24" initialText=""
               multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="0"
               caret="0" popupmenu="0"/>
-  <TEXTBUTTON name="Set Download Folder Button" id="a74c01732164b671" memberName="_buttonSetDownloadFolder"
-              virtualName="" explicitFocusOrder="0" pos="8Rr 8 96 24" buttonText="Folder"
+  <TEXTBUTTON name="Set Folder Button" id="a74c01732164b671" memberName="_buttonSetFolder"
+              virtualName="" explicitFocusOrder="0" pos="8Rr 8 96 24" buttonText="Set Folder"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="Search Button" id="718de0990a41ea4e" memberName="_buttonSearch"
               virtualName="" explicitFocusOrder="0" pos="8Rr 8Rr 80 24" buttonText="Search"
@@ -186,6 +268,13 @@ BEGIN_JUCER_METADATA
   <GENERICCOMPONENT name="Pimp Table" id="8d2da6dba96a2b23" memberName="_pimpTable"
                     virtualName="" explicitFocusOrder="0" pos="8 40 16M 80M" class="PimpTable"
                     params="this"/>
+  <TEXTBUTTON name="Connect Button" id="7e7d4511e4a51ca9" memberName="_buttonConnect"
+              virtualName="" explicitFocusOrder="0" pos="112Rr 8 72 24" buttonText="Connect"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TEXTEDITOR name="Tracker IP Editor" id="152c82c01ae8cf62" memberName="_editorTrackerIP"
+              virtualName="" explicitFocusOrder="0" pos="192Rr 368Rr 26.667% 24"
+              initialText="" multiline="0" retKeyStartsLine="0" readonly="0"
+              scrollbars="0" caret="0" popupmenu="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

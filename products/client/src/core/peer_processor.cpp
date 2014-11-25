@@ -1,7 +1,7 @@
 #include "products/common/messages/pimp_message.h"
 #include "products/common/network/socket_thread.h"
 #include "products/common/ui/component_window.h"
-#include "products/client/src/ui/main_window.h"
+#include "products/client/src/ui/peer_ui.h"
 #include "products/client/src/core/peer_processor.h"
 #include "products/client/src/core/peer_message_handler.h"
 
@@ -9,12 +9,15 @@ PeerProcessor::PeerProcessor()
 : Thread("PimpPeer"),
   _fileManager(this),
   _messageHandler(nullptr),
-  _socketThread(nullptr)
+  _ui(nullptr),
+  _window(nullptr),
+  _socketThread(nullptr),
   _state(kUninitialized)
 {
   // Create the GUI
-  _component = new MainWindow(this);
-  _window = new ComponentWindow(_component);
+  _ui = new PeerUi(this);
+  addChangeListener(_ui);
+  _window = new ComponentWindow(_ui);
   
   // Get the local IP address
   Array<IPAddress> allAddresses;
@@ -147,7 +150,10 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
   socket->connect(_tracker.toString(), 4807);
   
   if (!socket->isConnected())
+  {
+    /// @todo publish something on the ui
     Logger::writeToLog("Can't connect to distant host");
+  }
   else
   {
     request.sendToSocket(socket);

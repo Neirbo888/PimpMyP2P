@@ -17,8 +17,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_1200E0CE2CF00B59__
-#define __JUCE_HEADER_1200E0CE2CF00B59__
+#ifndef __JUCE_HEADER_8F90A442528F133__
+#define __JUCE_HEADER_8F90A442528F133__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
@@ -38,18 +38,19 @@ class PimpTable;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MainWindow  : public juce::Component,
-                    public juce::ChangeListener,
-                    public ButtonListener
+class PeerUi  : public juce::Component,
+                public juce::ChangeListener,
+                public ButtonListener
 {
 public:
     //==============================================================================
-    MainWindow (PeerProcessor* processor);
-    ~MainWindow();
+    PeerUi (PeerProcessor* processor);
+    ~PeerUi();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     void changeListenerCallback(juce::ChangeBroadcaster *source);
+    void UpdateUi();
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -67,16 +68,18 @@ private:
     //==============================================================================
     ScopedPointer<Label> _labelSearchField;
     ScopedPointer<TextEditor> _editorSearchField;
-    ScopedPointer<TextButton> _buttonSetDownloadFolder;
+    ScopedPointer<TextButton> _buttonSetFolder;
     ScopedPointer<TextButton> _buttonSearch;
     ScopedPointer<PimpTable> _pimpTable;
+    ScopedPointer<TextButton> _buttonConnect;
+    ScopedPointer<TextEditor> _editorTrackerIP;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerUi)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_1200E0CE2CF00B59__
+#endif   // __JUCE_HEADER_8F90A442528F133__
