@@ -8,6 +8,7 @@
 
 /// Forward declarations
 class ComponentWindow;
+class TrackerUi;
 class TrackerMessageHandler;
 class SocketThread;
 
@@ -47,8 +48,8 @@ private:
   /// @brief Spawns threads each time a TCP connection is made to handle the
   /// request
   ScopedPointer<TrackerMessageHandler> _messageHandler;
-  /// @brief GUI
-  juce::Component* _component;
+  /// @brief The UI
+  TrackerUi* _ui;
   /// @brief Window displaying the GUI
   ScopedPointer<ComponentWindow> _window;
   /// @brief Thread listening the TCP socket

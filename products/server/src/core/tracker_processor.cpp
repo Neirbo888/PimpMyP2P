@@ -1,7 +1,7 @@
 #include "products/common/messages/pimp_message.h"
 #include "products/common/network/socket_thread.h"
 #include "products/common/ui/component_window.h"
-#include "products/server/src/ui/main_window.h"
+#include "products/server/src/ui/tracker_ui.h"
 #include "products/server/src/core/tracker_processor.h"
 #include "products/server/src/core/tracker_message_handler.h"
 
@@ -12,8 +12,8 @@ _messageHandler(nullptr),
 _socketThread(nullptr)
 {
   // Create the GUI
-  _component = new MainWindow(this);
-  _window = new ComponentWindow(_component);
+  _ui = new TrackerUi(this);
+  _window = new ComponentWindow(_ui);
   
   // Get the local IP address
   juce::Array<IPAddress> allAddresses;

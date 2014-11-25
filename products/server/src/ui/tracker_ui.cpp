@@ -21,14 +21,14 @@
 #include "products/server/src/core/tracker_processor.h"
 //[/Headers]
 
-#include "main_window.h"
+#include "tracker_ui.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
 //[/MiscUserDefs]
 
 //==============================================================================
-MainWindow::MainWindow (TrackerProcessor* processor)
+TrackerUi::TrackerUi (TrackerProcessor* processor)
     : _processor(processor)
 {
     addAndMakeVisible (_labelSearchField = new Label ("Search Field Label",
@@ -70,7 +70,7 @@ MainWindow::MainWindow (TrackerProcessor* processor)
     //[/Constructor]
 }
 
-MainWindow::~MainWindow()
+TrackerUi::~TrackerUi()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
@@ -86,7 +86,7 @@ MainWindow::~MainWindow()
 }
 
 //==============================================================================
-void MainWindow::paint (Graphics& g)
+void TrackerUi::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -97,7 +97,7 @@ void MainWindow::paint (Graphics& g)
     //[/UserPaint]
 }
 
-void MainWindow::resized()
+void TrackerUi::resized()
 {
     _labelSearchField->setBounds (216, 144, 60, 24);
     _editorSearchField->setBounds (8, 467, 200, 24);
@@ -107,7 +107,7 @@ void MainWindow::resized()
     //[/UserResized]
 }
 
-void MainWindow::buttonClicked (Button* buttonThatWasClicked)
+void TrackerUi::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
@@ -143,7 +143,7 @@ void MainWindow::buttonClicked (Button* buttonThatWasClicked)
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="MainWindow" componentName=""
+<JUCER_COMPONENT documentType="Component" className="TrackerUi" componentName=""
                  parentClasses="public Component" constructorParams="TrackerProcessor* processor"
                  variableInitialisers="_processor(processor)" snapPixels="8" snapActive="1"
                  snapShown="1" overlayOpacity="0.330" fixedSize="1" initialWidth="300"

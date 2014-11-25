@@ -17,8 +17,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_1200E0CE2CF00B59__
-#define __JUCE_HEADER_1200E0CE2CF00B59__
+#ifndef __JUCE_HEADER_1C31E410EE91E193__
+#define __JUCE_HEADER_1C31E410EE91E193__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
@@ -37,13 +37,13 @@ class TrackerProcessor;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MainWindow  : public Component,
-                    public ButtonListener
+class TrackerUi  : public Component,
+                   public ButtonListener
 {
 public:
     //==============================================================================
-    MainWindow (TrackerProcessor* processor);
-    ~MainWindow();
+    TrackerUi (TrackerProcessor* processor);
+    ~TrackerUi();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -69,10 +69,10 @@ private:
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackerUi)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_1200E0CE2CF00B59__
+#endif   // __JUCE_HEADER_1C31E410EE91E193__

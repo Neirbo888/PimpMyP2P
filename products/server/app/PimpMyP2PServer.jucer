@@ -55,8 +55,8 @@
               file="../src/core/tracker_processor.h"/>
       </GROUP>
       <GROUP id="{DFF2D703-C812-BAB3-E775-676229174117}" name="ui">
-        <FILE id="vrxhTX" name="main_window.cpp" compile="1" resource="0" file="../src/ui/main_window.cpp"/>
-        <FILE id="eHJw8e" name="main_window.h" compile="0" resource="0" file="../src/ui/main_window.h"/>
+        <FILE id="vrxhTX" name="tracker_ui.cpp" compile="1" resource="0" file="../src/ui/tracker_ui.cpp"/>
+        <FILE id="eHJw8e" name="tracker_ui.h" compile="0" resource="0" file="../src/ui/tracker_ui.h"/>
       </GROUP>
       <FILE id="kcgIp3" name="Main.cpp" compile="1" resource="0" file="../src/Main.cpp"/>
     </GROUP>
