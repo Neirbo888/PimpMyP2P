@@ -22,9 +22,13 @@ MessageHandler::~MessageHandler()
 
 void MessageHandler::handleAsyncUpdate()
 {
+  Logger::writeToLog("Async clean");
   for (int i = _threads.size(); --i >= 0;)
     if (!_threads.getReference(i)->isThreadRunning())
+    {
+      deleteAndZero(_threads.getReference(i));
       _threads.remove(i);
+    }
 }
 
 void MessageHandler::clear()
