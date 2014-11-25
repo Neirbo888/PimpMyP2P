@@ -14,15 +14,34 @@ class SocketThread;
 /// @brief Heart of the pimp client
 class PeerProcessor
 : public juce::ActionListener,
+  public juce::ChangeBroadcaster,
   public juce::Thread,
   public juce::AsyncUpdater
 {
 public:
+  /// @brief States available for the state machine
+  enum StateType
+  {
+    kUninitialized = 0,
+    kUnavailable,
+    kIdle,
+    kShouldRegister,
+    kRegistered,
+    kMaxCount
+  };
+  
   /// @brief Constructor
   PeerProcessor();
   
   /// @brief Destructor
   ~PeerProcessor();
+  
+  /// @brief Put the State machine in a given state
+  /// @param {StateType} state - State at which the state machine should be set
+  void setState(StateType state);
+  
+  /// @brief Returns the current active state
+  StateType getState() const { return _state; }
   
   /// @brief ActionListener callback
   void actionListenerCallback (const String& message);
@@ -71,6 +90,8 @@ private:
   ScopedPointer<ComponentWindow> _window;
   /// @brief Thread listening the TCP socket
   ScopedPointer<SocketThread> _socketThread;
+  /// @brief Current state of the PeerProcessor
+  StateType _state;
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerProcessor)
 };

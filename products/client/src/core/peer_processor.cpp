@@ -10,6 +10,7 @@ PeerProcessor::PeerProcessor()
   _fileManager(this),
   _messageHandler(nullptr),
   _socketThread(nullptr)
+  _state(kUninitialized)
 {
   // Create the GUI
   _component = new MainWindow(this);
@@ -43,6 +44,14 @@ PeerProcessor::~PeerProcessor()
   stop();
 }
 
+void PeerProcessor::setState(StateType state)
+{
+  if (_state != state)
+  {
+    _state = state;
+    this->notify();
+  }
+}
 void PeerProcessor::actionListenerCallback(const String& message)
 {
   Logger::writeToLog("Unhandled ActionListener callback");  
