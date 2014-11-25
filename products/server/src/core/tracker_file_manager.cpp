@@ -56,10 +56,10 @@ const juce::StringArray TrackerFileManager::getKeywords(const juce::String &stri
 
 void TrackerFileManager::registerPeer(const juce::IPAddress &peer)
 {
-  
+  Logger::writeToLog("Register " + peer.toString());
 }
 
 void TrackerFileManager::unregisterPeer(const juce::IPAddress &peer)
 {
-  
+  Logger::writeToLog("Unregister " + peer.toString());
 }

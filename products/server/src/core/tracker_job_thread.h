@@ -44,6 +44,8 @@ public:
   /// @brief Handler for peer sign in messages
   void handlePeerSignIn(const PimpMessage& request);
   
+  /// @brief Handler for peer sign out messages
+  void handlePeerSignOut(const PimpMessage &request);
 private:
   /// @brief Handler that has spawned this thread
   TrackerMessageHandler *_owner;

@@ -43,6 +43,7 @@ PeerProcessor::PeerProcessor()
 PeerProcessor::~PeerProcessor()
 {
   stop();
+  unregisterToTracker();
 }
 
 void PeerProcessor::setState(StateType state)
@@ -217,7 +218,12 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
 
 void PeerProcessor::registerToTracker()
 {
-  ScopedPointer<StreamingSocket> socket;
+  if (_tracker.toString() == "0.0.0.0")
+  {
+    setState(kIdle);
+    return;
+  }
+  ScopedPointer<StreamingSocket> socket = new StreamingSocket();
   socket->connect(_tracker.toString(), 4807);
   
   if (!socket->isConnected())
@@ -236,6 +242,34 @@ void PeerProcessor::registerToTracker()
     socket->read(inBuffer,4096,false);
     PimpMessage acknowledge (inBuffer);
     if (acknowledge.isCommand(PimpMessage::kOk))
+    {
       setState(kRegistered);
+    }
+    else
+    {
+      _tracker = juce::IPAddress();
+      setState(kIdle);
+    }
   }
+}
+
+void PeerProcessor::unregisterToTracker()
+{
+  if (_tracker.toString() == "0.0.0.0") return;
+  ScopedPointer<StreamingSocket> socket = new StreamingSocket();
+  socket->connect(_tracker.toString(), 4807);
+  
+  if (!socket->isConnected())
+  {
+    /// @todo publish something on the ui
+    Logger::writeToLog("Can't connect to distant host");
+  }
+  else
+  {
+    PimpMessage unregisterRequest (_address);
+    unregisterRequest.createPeerSignOut();
+    unregisterRequest.sendToSocket(socket);
+    setState(kIdle);
+  }
+  socket->close();
 }

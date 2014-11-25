@@ -49,12 +49,16 @@ void TrackerJobThread::run()
     PimpMessage message (inBuffer);
     if (message.isCommand(PimpMessage::kPeerSearch))
       handleSearchRequest(message);
+    else if (message.isPeerSignIn())
+      handlePeerSignIn(message);
+    else if (message.isPeerSignOut())
+      handlePeerSignOut(message);
   }
   
   _socket->close();
   
-  Logger::writeToLog("Finished TrackerJobThread");
   _owner->triggerAsyncUpdate();
+  Logger::writeToLog("Finished TrackerJobThread");
 }
 
 void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
@@ -103,4 +107,13 @@ void TrackerJobThread::handlePeerSignIn(const PimpMessage &request)
     acknowledge.setCommand(PimpMessage::kError);
   }
   acknowledge.sendToSocket(_socket);
+}
+
+void TrackerJobThread::handlePeerSignOut(const PimpMessage &request)
+{
+  const juce::IPAddress peerIP = request.getSource();
+  if (peerIP.toString() != "0.0.0.0")
+  {
+    _owner->getFileManager().unregisterPeer(peerIP);
+  }
 }

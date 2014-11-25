@@ -73,6 +73,13 @@ public:
   
   /// @brief Try to reach the tracker and register as a connected peer
   void registerToTracker();
+  
+  /// @brief Try to reach the tracker and unregister from connected peer
+  void unregisterToTracker();
+  
+  /// @brief Sets the IP address of the tracker
+  void setTrackerIp(juce::IPAddress tracker) { _tracker = tracker; }
+  
 private:
   /// @brief Should be initialized with the current LAN IP of this computer,
   /// assuming it's a Class C network. Otherwise, it should be the loopback IP.

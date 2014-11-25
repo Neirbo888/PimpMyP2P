@@ -179,6 +179,11 @@ const bool PimpMessage::isPeerSignIn() const
   return isCommand(kPeerSignIn);
 }
 
+const bool PimpMessage::isPeerSignOut() const
+{
+  return isCommand(kPeerSignOut);
+}
+
 void PimpMessage::sendToSocket(juce::StreamingSocket *socket)
 {
   if (socket && socket->isConnected())
@@ -280,5 +285,10 @@ void PimpMessage::createTrackerSearchResult(const juce::Array<PeerFile>& files)
 void PimpMessage::createPeerSignIn()
 {
   setCommand(kPeerSignIn);
+}
+
+void PimpMessage::createPeerSignOut()
+{
+  setCommand(kPeerSignOut);
 }
 

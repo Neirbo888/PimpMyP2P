@@ -79,6 +79,9 @@ public:
   /// @brief True if this PimpMessage is a kPeerSignIn
   const bool isPeerSignIn() const;
   
+  /// @brief True if this PimpMessage is a kPeerSignOut
+  const bool isPeerSignOut() const;
+  
   /// @brief Send the current PimpMessage to the given socket
   /// @param {juce::StreamingSocket*} socket - Socket where the message will be
   /// sent
@@ -111,6 +114,10 @@ public:
   /// @brief Create a sign in message that will be sent from a peer to the
   /// tracker
   void createPeerSignIn();
+  
+  /// @brief Create a sign out message that will be sent from a peer to the
+  /// tracker
+  void createPeerSignOut();
   
 private:
   /// @brief Default constructor is private
