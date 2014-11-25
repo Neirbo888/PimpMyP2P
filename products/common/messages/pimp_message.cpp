@@ -174,6 +174,11 @@ const juce::Array<PeerFile> PimpMessage::getSearchResults() const
   return result;
 }
 
+const bool PimpMessage::isPeerSignIn() const
+{
+  return isCommand(kPeerSignIn);
+}
+
 void PimpMessage::sendToSocket(juce::StreamingSocket *socket)
 {
   if (socket && socket->isConnected())
@@ -271,3 +276,9 @@ void PimpMessage::createTrackerSearchResult(const juce::Array<PeerFile>& files)
   
   _message->addChildElement(resultsXml);
 }
+
+void PimpMessage::createPeerSignIn()
+{
+  setCommand(kPeerSignIn);
+}
+

@@ -76,6 +76,9 @@ public:
   /// attribute, if not the list will be empty
   const juce::Array<PeerFile> getSearchResults() const;
   
+  /// @brief True if this PimpMessage is a kPeerSignIn
+  const bool isPeerSignIn() const;
+  
   /// @brief Send the current PimpMessage to the given socket
   /// @param {juce::StreamingSocket*} socket - Socket where the message will be
   /// sent
@@ -104,6 +107,10 @@ public:
   /// list
   /// @param {juce::Array<PeerFile>} peerFiles - Files that has been found
   void createTrackerSearchResult(const juce::Array<PeerFile>& files);
+  
+  /// @brief Create a sign in message that will be sent from a peer to the
+  /// tracker
+  void createPeerSignIn();
   
 private:
   /// @brief Default constructor is private
