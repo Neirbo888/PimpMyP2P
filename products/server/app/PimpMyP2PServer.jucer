@@ -47,8 +47,6 @@
               file="../src/core/tracker_file_manager.cpp"/>
         <FILE id="m4OLxd" name="tracker_file_manager.h" compile="0" resource="0"
               file="../src/core/tracker_file_manager.h"/>
-        <FILE id="LLsVWV" name="peer_file.cpp" compile="1" resource="0" file="../src/core/peer_file.cpp"/>
-        <FILE id="iOi2B6" name="peer_file.h" compile="0" resource="0" file="../src/core/peer_file.h"/>
         <FILE id="QkTNQ5" name="tracker_processor.cpp" compile="1" resource="0"
               file="../src/core/tracker_processor.cpp"/>
         <FILE id="ZQzwjZ" name="tracker_processor.h" compile="0" resource="0"
@@ -79,12 +77,6 @@
         <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_video" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2013 targetFolder="../projects/win32">
@@ -97,8 +89,6 @@
                        binaryPath="../bin/win32"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_video" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_opengl" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
@@ -106,18 +96,10 @@
         <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </VS2013>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
@@ -125,8 +107,6 @@
     <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_video" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>
