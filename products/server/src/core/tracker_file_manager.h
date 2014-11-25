@@ -53,6 +53,7 @@ private:
   juce::Array<juce::IPAddress> _availablePeers;
   /// @brief List of words that are ignored when finding similarities
   juce::StringArray _ignoredWords;
+  
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackerFileManager)
 };
 
