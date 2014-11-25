@@ -32,7 +32,7 @@ public:
   virtual void spawnNewJob(StreamingSocket* socket) = 0;
   
   /// @brief Return the local IP
-  const IPAddress& getLocalIp() { return _local; }
+  const juce::IPAddress& getLocalIp() { return _local; }
   
   /// @brief Clears the current thread list
   void clear();
