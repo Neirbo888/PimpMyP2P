@@ -78,6 +78,10 @@ PeerUi::PeerUi (PeerProcessor* processor)
     _editorTrackerIP->setPopupMenuEnabled (false);
     _editorTrackerIP->setText (String::empty);
 
+    addAndMakeVisible (_buttonDisconnect = new TextButton ("Disconnect Button"));
+    _buttonDisconnect->setButtonText (TRANS("Disconnect"));
+    _buttonDisconnect->addListener (this);
+
 
     //[UserPreSize]
   // Create look and feel
@@ -121,6 +125,7 @@ PeerUi::~PeerUi()
     _pimpTable = nullptr;
     _buttonConnect = nullptr;
     _editorTrackerIP = nullptr;
+    _buttonDisconnect = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -137,10 +142,15 @@ void PeerUi::paint (Graphics& g)
 
     //[UserPaint] Add your own custom painting code here..
   if (_processor->getState() == PeerProcessor::kRegistered)
+  {
     g.setColour (Colour (0xffffd776));
+    g.fillEllipse (231.0f, 16.0f, 8.0f, 8.0f);
+  }
   else
+  {
     g.setColour (Colour (0xff99a3ff));
-  g.fillEllipse (231.0f, 16.0f, 8.0f, 8.0f);
+    g.fillEllipse (231.0f, 16.0f, 8.0f, 8.0f);
+  }
     //[/UserPaint]
 }
 
@@ -153,6 +163,7 @@ void PeerUi::resized()
     _pimpTable->setBounds (8, 40, getWidth() - 16, getHeight() - 80);
     _buttonConnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
     _editorTrackerIP->setBounds (getWidth() - 192 - proportionOfWidth (0.2667f), getHeight() - 368 - 24, proportionOfWidth (0.2667f), 24);
+    _buttonDisconnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -183,8 +194,18 @@ void PeerUi::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == _buttonConnect)
     {
         //[UserButtonCode__buttonConnect] -- add your button handler code here..
-      _processor->setState(PeerProcessor::kShouldRegister);
+      if (_editorTrackerIP->getText() != "0.0.0.0")
+      {
+        _processor->setTrackerIp(juce::IPAddress (_editorTrackerIP->getText()));
+        _processor->setState(PeerProcessor::kShouldRegister);
+      }
         //[/UserButtonCode__buttonConnect]
+    }
+    else if (buttonThatWasClicked == _buttonDisconnect)
+    {
+        //[UserButtonCode__buttonDisconnect] -- add your button handler code here..
+      _processor->unregisterToTracker();
+        //[/UserButtonCode__buttonDisconnect]
     }
 
     //[UserbuttonClicked_Post]
@@ -199,6 +220,9 @@ void PeerUi::UpdateUi()
   switch (_processor->getState()) {
     case PeerProcessor::kUnavailable:
       _buttonConnect->setEnabled(false);
+      _buttonConnect->setVisible(true);
+      _buttonDisconnect->setEnabled(false);
+      _buttonDisconnect->setVisible(false);
       _buttonSearch->setEnabled(false);
       _buttonSetFolder->setEnabled(true);
       _editorSearchField->setEnabled(false);
@@ -207,6 +231,9 @@ void PeerUi::UpdateUi()
     case PeerProcessor::kIdle:
       _buttonSearch->setEnabled(false);
       _buttonConnect->setEnabled(true);
+      _buttonConnect->setVisible(true);
+      _buttonDisconnect->setEnabled(false);
+      _buttonDisconnect->setVisible(false);
       _editorTrackerIP->setEnabled(true);
       _editorSearchField->setEnabled(false);
       break;
@@ -214,8 +241,16 @@ void PeerUi::UpdateUi()
       _buttonSearch->setEnabled(false);
       _editorSearchField->setEnabled(false);
       _buttonConnect->setEnabled(false);
+      _buttonConnect->setEnabled(false);
+      _buttonConnect->setVisible(false);
+      _buttonDisconnect->setEnabled(false);
+      _buttonDisconnect->setVisible(false);
       break;
     case PeerProcessor::kRegistered:
+      _buttonConnect->setEnabled(false);
+      _buttonConnect->setVisible(false);
+      _buttonDisconnect->setEnabled(true);
+      _buttonDisconnect->setVisible(true);
       _buttonSearch->setEnabled(true);
       _buttonConnect->setEnabled(true);
       _editorSearchField->setEnabled(true);
@@ -223,6 +258,7 @@ void PeerUi::UpdateUi()
     default:
       break;
   }
+  repaint();
 }
 
 void PeerUi::changeListenerCallback(juce::ChangeBroadcaster *source)
@@ -275,6 +311,9 @@ BEGIN_JUCER_METADATA
               virtualName="" explicitFocusOrder="0" pos="192Rr 368Rr 26.667% 24"
               initialText="" multiline="0" retKeyStartsLine="0" readonly="0"
               scrollbars="0" caret="0" popupmenu="0"/>
+  <TEXTBUTTON name="Disconnect Button" id="99a70b8a258bd7c6" memberName="_buttonDisconnect"
+              virtualName="" explicitFocusOrder="0" pos="112Rr 8 72 24" buttonText="Disconnect"
+              connectedEdges="0" needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

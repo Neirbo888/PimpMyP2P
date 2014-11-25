@@ -73,6 +73,7 @@ private:
     ScopedPointer<PimpTable> _pimpTable;
     ScopedPointer<TextButton> _buttonConnect;
     ScopedPointer<TextEditor> _editorTrackerIP;
+    ScopedPointer<TextButton> _buttonDisconnect;
 
 
     //==============================================================================
