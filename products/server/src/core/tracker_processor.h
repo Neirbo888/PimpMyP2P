@@ -3,8 +3,7 @@
 
 #include "JuceHeader.h"
 #include "products/server/src/core/tracker_file_manager.h"
-
-#include "peer_file.h"
+#include "products/common/files/peer_file.h"
 
 /// Forward declarations
 class ComponentWindow;
