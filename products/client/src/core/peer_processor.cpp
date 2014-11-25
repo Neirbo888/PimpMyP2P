@@ -158,6 +158,31 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
       } while (bytesRead == 4096);
     }
     PimpMessage results (xmlResult.toStdString());
-    //_component->publishResults(results.getSearchResults());
+    /// @todo publish something on the ui
+  }
+}
+
+void PeerProcessor::registerToTracker()
+{
+  ScopedPointer<StreamingSocket> socket;
+  socket->connect(_tracker.toString(), 4807);
+  
+  if (!socket->isConnected())
+  {
+    /// @todo publish something on the ui
+    Logger::writeToLog("Can't connect to distant host");
+  }
+  else
+  {
+    PimpMessage registerRequest (_address);
+    registerRequest.createPeerSignIn();
+    registerRequest.sendToSocket(socket);
+    
+    // Normally we should receive an acknowledge
+    char inBuffer[4096];
+    socket->read(inBuffer,4096,false);
+    PimpMessage acknowledge (inBuffer);
+    if (acknowledge.isCommand(PimpMessage::kOk))
+      setState(kRegistered);
   }
 }

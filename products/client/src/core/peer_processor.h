@@ -52,6 +52,8 @@ public:
   /// @param {juce::File} folder - The new shared folder
   void setSharedFolder(const juce::File& folder);
   
+  /// @brief Try to reach the tracker and register as a connected peer
+  void registerToTracker();
 private:
   /// @brief Should be initialized with the current LAN IP of this computer,
   /// assuming it's a Class C network. Otherwise, it should be the loopback IP.
