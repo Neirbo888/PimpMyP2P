@@ -41,8 +41,9 @@ public:
   /// @brief Handler for search from a peer
   void handleSearchRequest(const PimpMessage& request);
   
-  /// @brief Handler for peer sign in messages
-  void handlePeerSignIn(const PimpMessage& request);
+  /// @brief Request used by peers to sign in or refresh their list of
+  /// available files
+  void handlePeerRefresh(const PimpMessage& request);
   
   /// @brief Handler for peer sign out messages
   void handlePeerSignOut(const PimpMessage &request);

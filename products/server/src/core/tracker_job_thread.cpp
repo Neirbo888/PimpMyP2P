@@ -49,8 +49,8 @@ void TrackerJobThread::run()
     PimpMessage message (inBuffer);
     if (message.isCommand(PimpMessage::kPeerSearch))
       handleSearchRequest(message);
-    else if (message.isPeerSignIn())
-      handlePeerSignIn(message);
+    else if (message.isPeerRefresh())
+      handlePeerRefresh(message);
     else if (message.isPeerSignOut())
       handlePeerSignOut(message);
   }
@@ -89,7 +89,7 @@ void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
   }
 }
 
-void TrackerJobThread::handlePeerSignIn(const PimpMessage &request)
+void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
 {
   // Create an acknowledge
   PimpMessage acknowledge (_owner->getLocalIp());

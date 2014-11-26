@@ -174,9 +174,9 @@ const juce::Array<PeerFile> PimpMessage::getSearchResults() const
   return result;
 }
 
-const bool PimpMessage::isPeerSignIn() const
+const bool PimpMessage::isPeerRefresh() const
 {
-  return isCommand(kPeerSignIn);
+  return isCommand(kPeerRefresh);
 }
 
 const bool PimpMessage::isPeerSignOut() const
@@ -282,13 +282,73 @@ void PimpMessage::createTrackerSearchResult(const juce::Array<PeerFile>& files)
   _message->addChildElement(resultsXml);
 }
 
-void PimpMessage::createPeerSignIn()
+void PimpMessage::createPeerRefresh(const juce::Array<PeerFile> localFiles)
 {
-  setCommand(kPeerSignIn);
+  setCommand(kPeerRefresh);
+  if (localFiles.size() != 0)
+  {
+    auto filelistXml = new XmlElement("LocalFileList");
+    
+    for (const PeerFile& file : localFiles)
+    {
+      auto fileXml = new XmlElement("PeerFile");
+      
+      auto dummyName = new XmlElement("Name");
+      dummyName->setAttribute("Value", file.getFilename());
+      fileXml->addChildElement(dummyName);
+      
+      auto dummyMD5 = new XmlElement("MD5");
+      dummyMD5->setAttribute("Value",file.getMD5());
+      fileXml->addChildElement(dummyMD5);
+      
+      auto dummySize = new XmlElement("Size");
+      dummySize->setAttribute("Value", (double)(file.getSize()));
+      fileXml->addChildElement(dummySize);
+      
+      filelistXml->addChildElement(fileXml);
+    }
+    
+    _message->addChildElement(filelistXml);
+  }
 }
 
 void PimpMessage::createPeerSignOut()
 {
   setCommand(kPeerSignOut);
 }
+
+const bool PimpMessage::hasLocalFileList() const
+{
+  auto localFileListXml = _message->getChildByName("LocalFileList");
+  if (localFileListXml) return true;
+  return false;
+}
+
+const juce::Array<PeerFile> PimpMessage::getLocalFileList() const
+{
+  juce::Array<PeerFile> localFiles;
+  auto localFilesXml = _message->getChildByName("LocalFileList");
+  if (localFilesXml)
+  {
+    for (int fileIndex = 0;
+         fileIndex < localFilesXml->getNumChildElements();
+         fileIndex++)
+    {
+      auto file = localFilesXml->getChildElement(fileIndex);
+      if (file)
+      {
+        auto nameXml = file->getChildByName("Name");
+        auto sizeXml = file->getChildByName("Size");
+        auto md5Xml = file->getChildByName("MD5");
+        if (nameXml && sizeXml && md5Xml)
+          localFiles.add(PeerFile(nameXml->getStringAttribute("Value"),
+                                  md5Xml->getStringAttribute("Value"),
+                                  sizeXml->getIntAttribute("Value")));
+      }
+    }
+  }
+  return localFiles;
+}
+
+
 

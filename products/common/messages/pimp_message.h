@@ -16,9 +16,8 @@ public:
   {
     kPeerGetFile = 0, ///< Used among peers to request files
     kTrackerRequestFiles, ///< A file list request from the tracker
-    kPeerSignIn, ///< A peer wants to sign in the tracker
+    kPeerRefresh, ///< A peer wants to refresh its status with the tracker
     kPeerSignOut, ///< A peer is signing out from the tracker
-    kPeerFileList, ///< A peer sends its file list
     kPeerSearch, ///< A peer sends a search to the tracker
     kTrackerSearchResult, ///< The tracker sends the result of a search
     kOk, ///< Confirmation
@@ -76,11 +75,17 @@ public:
   /// attribute, if not the list will be empty
   const juce::Array<PeerFile> getSearchResults() const;
   
-  /// @brief True if this PimpMessage is a kPeerSignIn
-  const bool isPeerSignIn() const;
+  /// @brief True if this PimpMessage is a kPeerRefresh
+  const bool isPeerRefresh() const;
   
   /// @brief True if this PimpMessage is a kPeerSignOut
   const bool isPeerSignOut() const;
+  
+  /// @brief True if this PimpMessage has a Local Filelist
+  const bool hasLocalFileList() const;
+  
+  /// @brief Will return the local file list if this PimpMessage has one
+  const juce::Array<PeerFile> getLocalFileList() const;
   
   /// @brief Send the current PimpMessage to the given socket
   /// @param {juce::StreamingSocket*} socket - Socket where the message will be
@@ -110,10 +115,10 @@ public:
   /// list
   /// @param {juce::Array<PeerFile>} peerFiles - Files that has been found
   void createTrackerSearchResult(const juce::Array<PeerFile>& files);
-  
+ 
   /// @brief Create a sign in message that will be sent from a peer to the
   /// tracker
-  void createPeerSignIn();
+  void createPeerRefresh(const juce::Array<PeerFile> localFiles);
   
   /// @brief Create a sign out message that will be sent from a peer to the
   /// tracker
