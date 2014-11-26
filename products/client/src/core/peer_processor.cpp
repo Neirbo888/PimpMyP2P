@@ -230,11 +230,12 @@ void PeerProcessor::registerToTracker()
   {
     /// @todo publish something on the ui
     Logger::writeToLog("Can't connect to distant host");
+    setState(kIdle);
   }
   else
   {
     PimpMessage registerRequest (_address);
-    registerRequest.createPeerSignIn();
+    registerRequest.createPeerRefresh(_fileManager.getAvailableFiles());
     registerRequest.sendToSocket(socket);
     
     // Normally we should receive an acknowledge
@@ -255,7 +256,11 @@ void PeerProcessor::registerToTracker()
 
 void PeerProcessor::unregisterToTracker()
 {
-  if (_tracker.toString() == "0.0.0.0") return;
+  if (_tracker.toString() == "0.0.0.0")
+  {
+    setState(kIdle);
+    return;
+  }
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
   socket->connect(_tracker.toString(), 4807);
   
@@ -263,6 +268,8 @@ void PeerProcessor::unregisterToTracker()
   {
     /// @todo publish something on the ui
     Logger::writeToLog("Can't connect to distant host");
+    setState(kIdle);
+    return;
   }
   else
   {
