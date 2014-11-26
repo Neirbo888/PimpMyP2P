@@ -100,6 +100,29 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
   {
     _owner->getFileManager().registerPeer(peerIP);
     acknowledge.setCommand(PimpMessage::kOk);
+    acknowledge.sendToSocket(_socket);
+    if (request.hasLocalFileList())
+    {
+      _owner->getFileManager().cleanPeer(peerIP);
+      juce::Array<PeerFile>& array = _owner->getFileManager().getAvailableFiles();
+      for (PeerFile p : request.getLocalFileList())
+      {
+        if (array.contains(p))
+        {
+          int index = array.indexOf(p);
+          array.getReference(index).addPeer(peerIP);
+        }
+        else
+        {
+          p.addPeer(peerIP);
+          array.add(p);
+        }
+      }
+      for (PeerFile p : _owner->getFileManager().getAvailableFiles())
+      {
+        std::cout << p << std::endl;
+      }
+    }
   }
   // Else, let him know that something went wrong
   else

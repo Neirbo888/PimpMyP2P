@@ -30,18 +30,19 @@ public:
   ~TrackerFileManager();
   
   /// @brief Return an array containing all the available files
-  const juce::Array<PeerFile>& getAvailableFiles() const { return _availableFiles; }
+  juce::Array<PeerFile>& getAvailableFiles() { return _availableFiles; }
   
   /// @brief Return an array containing files that looks similar to the given
   /// PeerFile
   const juce::Array<PeerFile> getSimilarFiles(const juce::String& keyword) const;
   
   /// @brief Register new peer
-  void registerPeer(const juce::IPAddress& peer);
+  void registerPeer(const juce::IPAddress peer);
   
   /// @brief Unregister existing peer
-  void unregisterPeer(const juce::IPAddress& peer);
+  void unregisterPeer(const juce::IPAddress peer);
   
+  /// @brief Takes a string and return an array of the keywords contained
   const juce::StringArray getKeywords(const juce::String& string) const;
   
 private:

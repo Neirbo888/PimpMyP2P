@@ -54,12 +54,34 @@ const juce::StringArray TrackerFileManager::getKeywords(const juce::String &stri
   return keywords;
 }
 
-void TrackerFileManager::registerPeer(const juce::IPAddress &peer)
+void TrackerFileManager::registerPeer(const juce::IPAddress peer)
 {
-  Logger::writeToLog("Register " + peer.toString());
+  if (!_availablePeers.contains(peer))
+    _availablePeers.add(peer);
 }
 
-void TrackerFileManager::unregisterPeer(const juce::IPAddress &peer)
+void TrackerFileManager::unregisterPeer(const juce::IPAddress peer)
 {
-  Logger::writeToLog("Unregister " + peer.toString());
+  if (_availablePeers.contains(peer))
+  {
+    int index = _availablePeers.indexOf(peer);
+    _availablePeers.remove(index);
+  }
+}
+
+void TrackerFileManager::cleanPeer(juce::IPAddress peer)
+{
+  for (int i = _availableFiles.size(); --i >= 0;)
+  {
+    const juce::Array<juce::IPAddress>& peerList = _availableFiles.getReference(i).getPeersAddresses();
+    PeerFile& file = _availableFiles.getReference(i);
+    if (peerList.contains(peer) && peerList.size() == 1)
+    {
+      _availableFiles.remove(i);
+    }
+    else if (peerList.contains(peer))
+    {
+      file.removePeer(peer);
+    }
+  }
 }
