@@ -113,6 +113,11 @@ const juce::Range<int> PimpMessage::getByteRange() const
   return juce::Range<int>::emptyRange(0);
 }
 
+const bool PimpMessage::isTrackerSearchResult() const
+{
+  return isCommand(kTrackerSearchResult);
+}
+
 const bool PimpMessage::hasSearchString() const
 {
   auto searchStringXml = _message->getChildByName("SearchString");

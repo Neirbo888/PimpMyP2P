@@ -68,6 +68,9 @@ public:
   /// SearchString attribute, if not the String will be empty
   const juce::String getSearchString() const;
   
+  /// @brief True if this PimpMessage is a kTrackerSearhResult
+  const bool isTrackerSearchResult() const;
+  
   /// @brief True if this PimpMessage has a SearchResults
   const bool hasSearchResults() const;
   
