@@ -61,7 +61,7 @@ void PeerProcessor::actionListenerCallback(const String& message)
 
 void PeerProcessor::handleAsyncUpdate()
 {
-  Logger::writeToLog("Unhandled async update");
+  registerToTracker();
 }
 
 void PeerProcessor::stop()
