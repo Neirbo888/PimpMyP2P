@@ -45,6 +45,8 @@ public:
   /// @brief Takes a string and return an array of the keywords contained
   const juce::StringArray getKeywords(const juce::String& string) const;
   
+  void cleanPeer(juce::IPAddress peer);
+  
 private:
   /// @brief Peer processor owning this manager
   TrackerProcessor *_owner;
