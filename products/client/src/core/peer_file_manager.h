@@ -40,6 +40,9 @@ public:
   
   /// @brief File manager run method
   void run();
+  
+  /// @brief True if the shared folder is properly set
+  bool isSharedFolderValid() { return _sharedFolder.exists(); }
 private:
   /// @brief Peer processor owning this manager
   PeerProcessor *_owner;

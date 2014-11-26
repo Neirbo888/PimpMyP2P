@@ -13,7 +13,8 @@
 
 PeerFileManager::PeerFileManager(PeerProcessor *owner)
 : juce::Thread("FileManager thread"),
-  _owner(owner)
+  _owner(owner),
+  _sharedFolder(juce::File::nonexistent)
 {
   startThread();
 }
