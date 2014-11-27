@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="qcHgwJ" name="PimpMyP2P_TrackerCmd" projectType="consoleapp"
+              version="1.0.0" bundleIdentifier="com.tartofraise.PimpMyP2PServer"
+              includeBinaryInAppConfig="1" jucerVersion="3.1.0" companyName="Tartofraise"
+              companyWebsite="http://tartofrai.se">
+  <MAINGROUP id="h0A73J" name="PimpMyP2P_TrackerCmd">
+    <GROUP id="{621358C9-079A-7FC4-FD81-13E5240F4DCD}" name="cmd">
+      <FILE id="XprB1q" name="Main.cpp" compile="1" resource="0" file="Main.cpp"/>
+    </GROUP>
+    <GROUP id="{7B8206E6-721A-4478-2AE4-696095E849F9}" name="common">
+      <GROUP id="{384F0A9F-ECD5-8D5F-F32E-1CE448A72BC1}" name="files">
+        <FILE id="DHKPeN" name="peer_file.cpp" compile="1" resource="0" file="../../common/files/peer_file.cpp"/>
+        <FILE id="WkTCff" name="peer_file.h" compile="0" resource="0" file="../../common/files/peer_file.h"/>
+      </GROUP>
+      <GROUP id="{F1167A10-7780-BCA2-447E-65504F1D12DC}" name="messages">
+        <FILE id="OEAetX" name="message_handler.cpp" compile="1" resource="0"
+              file="../../common/messages/message_handler.cpp"/>
+        <FILE id="FmQW88" name="message_handler.h" compile="0" resource="0"
+              file="../../common/messages/message_handler.h"/>
+        <FILE id="Lofaxl" name="pimp_message.cpp" compile="1" resource="0"
+              file="../../common/messages/pimp_message.cpp"/>
+        <FILE id="IZausP" name="pimp_message.h" compile="0" resource="0" file="../../common/messages/pimp_message.h"/>
+      </GROUP>
+      <GROUP id="{E6042DE2-3107-742D-1C9B-ADEC6B2BEC67}" name="network">
+        <FILE id="oSaOWa" name="socket_thread.cpp" compile="1" resource="0"
+              file="../../common/network/socket_thread.cpp"/>
+        <FILE id="TOcwNn" name="socket_thread.h" compile="0" resource="0" file="../../common/network/socket_thread.h"/>
+      </GROUP>
+      <GROUP id="{446E6389-151F-58A1-9430-7586BADA25CB}" name="ui">
+        <FILE id="CWmayv" name="component_window.cpp" compile="1" resource="0"
+              file="../../common/ui/component_window.cpp"/>
+        <FILE id="muspdb" name="component_window.h" compile="0" resource="0"
+              file="../../common/ui/component_window.h"/>
+        <FILE id="yAK97f" name="look_and_feel.cpp" compile="1" resource="0"
+              file="../../common/ui/look_and_feel.cpp"/>
+        <FILE id="rfAnsm" name="look_and_feel.h" compile="0" resource="0" file="../../common/ui/look_and_feel.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{2180BE95-80E2-70B3-4B94-1D2BF660BB67}" name="src">
+      <GROUP id="{069829C3-D4C3-B0DF-72E1-B9D6372401FB}" name="core">
+        <FILE id="vErrzg" name="tracker_file_manager.cpp" compile="1" resource="0"
+              file="../src/core/tracker_file_manager.cpp"/>
+        <FILE id="m4OLxd" name="tracker_file_manager.h" compile="0" resource="0"
+              file="../src/core/tracker_file_manager.h"/>
+        <FILE id="BhccWR" name="tracker_job_thread.cpp" compile="1" resource="0"
+              file="../src/core/tracker_job_thread.cpp"/>
+        <FILE id="d2EuA6" name="tracker_job_thread.h" compile="0" resource="0"
+              file="../src/core/tracker_job_thread.h"/>
+        <FILE id="Fqu7oq" name="tracker_message_handler.cpp" compile="1" resource="0"
+              file="../src/core/tracker_message_handler.cpp"/>
+        <FILE id="Ca6ft7" name="tracker_message_handler.h" compile="0" resource="0"
+              file="../src/core/tracker_message_handler.h"/>
+        <FILE id="QkTNQ5" name="tracker_processor.cpp" compile="1" resource="0"
+              file="../src/core/tracker_processor.cpp"/>
+        <FILE id="ZQzwjZ" name="tracker_processor.h" compile="0" resource="0"
+              file="../src/core/tracker_processor.h"/>
+      </GROUP>
+      <GROUP id="{DFF2D703-C812-BAB3-E775-676229174117}" name="ui">
+        <FILE id="vrxhTX" name="tracker_ui.cpp" compile="1" resource="0" file="../src/ui/tracker_ui.cpp"/>
+        <FILE id="eHJw8e" name="tracker_ui.h" compile="0" resource="0" file="../src/ui/tracker_ui.h"/>
+      </GROUP>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="../projects/osx/">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PTracker_d"
+                       binaryPath="../bin/osx/" headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PTracker" binaryPath="bin/osx"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2013 targetFolder="../projects/win32">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PTracker_d"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/win32/"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PTracker" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       binaryPath="../bin/win32"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </VS2013>
+    <LINUX_MAKE targetFolder="../projects/linux">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="PimpMyP2P_TrackerCmd_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="PimpMyP2P_TrackerCmd" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
