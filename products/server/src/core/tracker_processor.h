@@ -20,7 +20,7 @@ class TrackerProcessor
 {
 public:
   /// @brief Constructor
-  TrackerProcessor();
+  TrackerProcessor(bool isCommandLine);
   
   /// @brief Destructor
   ~TrackerProcessor();
