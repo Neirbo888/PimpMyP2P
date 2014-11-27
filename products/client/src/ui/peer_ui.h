@@ -40,6 +40,7 @@ class PimpTable;
 */
 class PeerUi  : public juce::Component,
                 public juce::ChangeListener,
+                public juce::TextEditor::Listener,
                 public ButtonListener
 {
 public:
@@ -52,6 +53,7 @@ public:
     void changeListenerCallback(juce::ChangeBroadcaster *source);
     void UpdateUi();
     void publishSearchResults(juce::Array<PeerFile> results);
+    void textEditorReturnKeyPressed (TextEditor&);
     //[/UserMethods]
 
     void paint (Graphics& g);

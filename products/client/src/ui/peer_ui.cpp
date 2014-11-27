@@ -86,6 +86,7 @@ PeerUi::PeerUi (PeerProcessor* processor)
     //[UserPreSize]
   // Create look and feel
   LookAndFeel::setDefaultLookAndFeel(&_lookAndFeel);
+  _editorSearchField->addListener(this);
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -258,6 +259,15 @@ void PeerUi::publishSearchResults(juce::Array<PeerFile> results)
     std::cout << p << std::endl;
   _pimpTable->loadData(results);
 }
+
+void PeerUi::textEditorReturnKeyPressed (TextEditor& editor)
+{
+  if (editor.getName() == _editorSearchField->getName())
+  {
+    if (_editorSearchField->getTotalNumChars() > 2)
+      _processor->sendTrackerSearch(_editorSearchField->getText());
+  }
+}
 //[/MiscUserCode]
 
 
@@ -271,7 +281,7 @@ void PeerUi::publishSearchResults(juce::Array<PeerFile> results)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="PeerUi" componentName=""
-                 parentClasses="public juce::Component, public juce::ChangeListener"
+                 parentClasses="public juce::Component, public juce::ChangeListener, public juce::TextEditor::Listener"
                  constructorParams="PeerProcessor* processor" variableInitialisers="_processor(processor)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="600" initialHeight="400">
