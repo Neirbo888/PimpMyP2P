@@ -86,23 +86,6 @@ PeerUi::PeerUi (PeerProcessor* processor)
     //[UserPreSize]
   // Create look and feel
   LookAndFeel::setDefaultLookAndFeel(&_lookAndFeel);
-
-  juce::Array<PeerFile> data;
-  PeerFile file1 ("Above and Beyond - Anjunabeats vol6.zip",
-                  "fheuqfzhul5473882",43189);
-  file1.addPeer(IPAddress("192.168.0.2"));
-  file1.addPeer(IPAddress("192.168.0.5"));
-  file1.addPeer(IPAddress("192.168.0.4"));
-  data.add(file1);
-  PeerFile file2 ("Michael Jackson Discography.zip",
-                  "GRQIqGjqiglrqiGRQHIQ4387410",14812);
-  file2.addPeer(IPAddress("192.168.0.2"));
-  file2.addPeer(IPAddress("192.168.0.5"));
-  file2.addPeer(IPAddress("192.168.0.6"));
-  file2.addPeer(IPAddress("192.168.0.98"));
-  data.add(file2);
-
-  _pimpTable->loadData(data);
     //[/UserPreSize]
 
     setSize (600, 400);
