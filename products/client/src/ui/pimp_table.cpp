@@ -85,7 +85,16 @@ void PimpTable::paintCell (Graphics& g, int rowNumber, int columnId,
   // Size
   else if (columnId == 2)
   {
-    text = juce::String(_files.getReference(rowNumber).getSize());
+    double moSize = _files.getReference(rowNumber).getSize();
+    moSize /= 1000000;
+    text = juce::String(moSize);
+    int index;
+    if ((index = text.indexOf(".")) != -1 &&
+        text.length() - index > 2)
+    {
+      text = text.substring(0, index + 2);
+    }
+    text += " mo";
   }
   
   // Source
