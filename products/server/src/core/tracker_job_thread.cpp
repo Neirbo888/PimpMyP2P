@@ -35,9 +35,14 @@ void TrackerJobThread::stop() {
 void TrackerJobThread::run()
 {
   // Create a char tab to store what's coming
+  juce::String in;
+  int bytesRead;
   char inBuffer[4096];
-  
-  int bytesRead = _socket->read(inBuffer,4096,false);
+  do
+  {
+    bytesRead = _socket->read(inBuffer,4096,false);
+    in += juce::String(inBuffer,bytesRead);
+  } while (bytesRead == 4096);
   
   // If an error has been detected
   if (bytesRead == -1)
@@ -46,13 +51,15 @@ void TrackerJobThread::run()
   }
   else
   {
-    PimpMessage message (inBuffer);
+    PimpMessage message (in.toStdString());
     if (message.isCommand(PimpMessage::kPeerSearch))
       handleSearchRequest(message);
     else if (message.isPeerRefresh())
       handlePeerRefresh(message);
     else if (message.isPeerSignOut())
       handlePeerSignOut(message);
+    else
+      Logger::writeToLog("Error no handler");
   }
   
   _socket->close();
