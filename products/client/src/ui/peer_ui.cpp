@@ -268,6 +268,13 @@ void PeerUi::changeListenerCallback(juce::ChangeBroadcaster *source)
   else if (source == _processor)
     UpdateUi();
 }
+
+void PeerUi::publishSearchResults(juce::Array<PeerFile> results)
+{
+  for (PeerFile p : results)
+    std::cout << p << std::endl;
+  _pimpTable->loadData(results);
+}
 //[/MiscUserCode]
 
 

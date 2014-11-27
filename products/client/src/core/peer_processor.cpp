@@ -207,12 +207,19 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
       int bytesRead;
       do
       {
-        int bytesRead = socket->read(inBuffer,4096,false);
+        bytesRead = socket->read(inBuffer,4096,false);
         xmlResult += inBuffer;
       } while (bytesRead == 4096);
     }
     PimpMessage results (xmlResult.toStdString());
-    /// @todo publish something on the ui
+    if (results.isTrackerSearchResult() && results.hasSearchResults())
+    {
+      juce::Array<PeerFile> resultArray = results.getSearchResults();
+      for (PeerFile p : resultArray) {
+        std::cout << p << std::endl;
+      }
+      _ui->publishSearchResults(resultArray);
+    }
   }
 }
 

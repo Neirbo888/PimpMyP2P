@@ -51,6 +51,7 @@ public:
     //[UserMethods]     -- You can add your own custom methods in this section.
     void changeListenerCallback(juce::ChangeBroadcaster *source);
     void UpdateUi();
+    void publishSearchResults(juce::Array<PeerFile> results);
     //[/UserMethods]
 
     void paint (Graphics& g);
