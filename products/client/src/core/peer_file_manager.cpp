@@ -14,10 +14,7 @@
 PeerFileManager::PeerFileManager(PeerProcessor *owner)
 : juce::Thread("FileManager thread"),
   _owner(owner),
-  _sharedFolder(juce::File::nonexistent)
-{
-  startThread();
-}
+  _sharedFolder(juce::File::nonexistent) {}
 
 PeerFileManager::~PeerFileManager()
 {
@@ -28,47 +25,48 @@ PeerFileManager::~PeerFileManager()
 void PeerFileManager::setSharedFolder(const juce::File& folder)
 {
   if (folder.exists())
-    _sharedFolder = folder;
+  {
+    _sharedFolder = juce::File(folder);
+    startThread();
+  }
 }
 
 void PeerFileManager::run()
 {
-  while (!threadShouldExit())
+  if (_sharedFolder.exists())
   {
-    if (_sharedFolder.exists())
+    Logger::writeToLog("Scanning folder");
+    bool contentHasChanged = false;
+    juce::Array<juce::File> foundFiles;
+    juce::Array<PeerFile> newAvailableFilesArray;
+    
+    _sharedFolder.findChildFiles(foundFiles,juce::File::findFiles, false, "*");
+    for (const juce::File& file : foundFiles)
     {
-      bool contentHasChanged = false;
-      juce::Array<juce::File> foundFiles;
-      juce::Array<PeerFile> newAvailableFilesArray;
-      
-      _sharedFolder.findChildFiles(foundFiles,juce::File::findFiles, false, "*");
-      for (juce::File* file = foundFiles.begin(); file != foundFiles.end(); file++)
-        newAvailableFilesArray.add(PeerFile(*file));
-      if (newAvailableFilesArray.size() == _availableFiles.size())
+      if (threadShouldExit()) return;
+      newAvailableFilesArray.add(PeerFile(file));
+    }
+    if (foundFiles.size() == _availableFiles.size())
+    {
+      const juce::Array<PeerFile>& availableFiles = this->getAvailableFiles();
+      for (PeerFile* peerFile = newAvailableFilesArray.begin();
+           peerFile != newAvailableFilesArray.end(); peerFile++)
       {
-        const juce::Array<PeerFile>& availableFiles = this->getAvailableFiles();
-        for (PeerFile* peerFile = newAvailableFilesArray.begin();
-             peerFile != newAvailableFilesArray.end(); peerFile++)
-        {
-          if (!availableFiles.contains(*peerFile)) {
-            contentHasChanged = true;
-            break;
-          }
+        if (!availableFiles.contains(*peerFile)) {
+          contentHasChanged = true;
+          break;
         }
       }
-      else
-        contentHasChanged = true;
-      
-      if (contentHasChanged)
-      {
-        ScopedLock lock (_mutex);
-        _availableFiles = newAvailableFilesArray;
-        _owner->triggerAsyncUpdate();
-      }
     }
+    else
+      contentHasChanged = true;
     
-    // Wait a little bit before doing another scan
-    juce::Thread::wait(5000);
+    if (contentHasChanged)
+    {
+      ScopedLock lock (_mutex);
+      _availableFiles = newAvailableFilesArray;
+      _owner->triggerAsyncUpdate();
+    }
+    Logger::writeToLog("End scan");
   }
-  Logger::writeToLog("Closing PeerFileManager thread");
 }
