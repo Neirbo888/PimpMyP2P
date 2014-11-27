@@ -65,11 +65,11 @@ void TrackerJobThread::run()
   _socket->close();
   
   _owner->triggerAsyncUpdate();
-  Logger::writeToLog("Finished TrackerJobThread");
 }
 
 void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
 {
+  Logger::writeToLog("Handling search request");
   // Create an acknowledge
   PimpMessage acknowledge (_owner->getLocalIp());
   
@@ -98,6 +98,7 @@ void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
 
 void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
 {
+  Logger::writeToLog("Handling peer refresh");
   // Create an acknowledge
   PimpMessage acknowledge (_owner->getLocalIp());
   const juce::IPAddress peerIP = request.getSource();
@@ -111,23 +112,21 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
     if (request.hasLocalFileList())
     {
       _owner->getFileManager().cleanPeer(peerIP);
-      juce::Array<PeerFile>& array = _owner->getFileManager().getAvailableFiles();
-      for (PeerFile p : request.getLocalFileList())
+      juce::Array<PeerFile>& localFiles = _owner->getFileManager().getAvailableFiles();
+      juce::Array<PeerFile> distantFiles = request.getLocalFileList();
+      Logger::writeToLog("Peer has " + juce::String(distantFiles.size()) + " files");
+      for (PeerFile p : distantFiles)
       {
-        if (array.contains(p))
+        if (localFiles.contains(p))
         {
-          int index = array.indexOf(p);
-          array.getReference(index).addPeer(peerIP);
+          int index = localFiles.indexOf(p);
+          localFiles.getReference(index).addPeer(peerIP);
         }
         else
         {
           p.addPeer(peerIP);
-          array.add(p);
+          localFiles.add(p);
         }
-      }
-      for (PeerFile p : _owner->getFileManager().getAvailableFiles())
-      {
-        std::cout << p << std::endl;
       }
     }
   }
@@ -141,6 +140,7 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
 
 void TrackerJobThread::handlePeerSignOut(const PimpMessage &request)
 {
+  Logger::writeToLog("Handling peer signout");
   const juce::IPAddress peerIP = request.getSource();
   if (peerIP.toString() != "0.0.0.0")
   {

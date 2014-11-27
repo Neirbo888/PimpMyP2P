@@ -23,7 +23,7 @@ TrackerFileManager::TrackerFileManager(TrackerProcessor* owner)
 
 TrackerFileManager::~TrackerFileManager() {}
 
-const juce::Array<PeerFile> TrackerFileManager::getSimilarFiles(const juce::String& keyword) const
+juce::Array<PeerFile> TrackerFileManager::getSimilarFiles(const juce::String& keyword)
 {
   juce::Array<PeerFile> result;
   auto keywordsDistant = getKeywords(keyword);
@@ -31,11 +31,14 @@ const juce::Array<PeerFile> TrackerFileManager::getSimilarFiles(const juce::Stri
   for (PeerFile p : _availableFiles)
   {
     auto keywordsLocal = getKeywords(p.getFilename());
-    for (juce::String s : keywordsDistant)
-      if (keywordsLocal.contains(s))
+    for (juce::String sDistant : keywordsDistant)
+      for (juce::String sLocal : keywordsLocal)
       {
-        result.add(p);
-        break;
+        if (sLocal.equalsIgnoreCase(sDistant))
+        {
+          result.add(p);
+          break;
+        }
       }
   }
   return result;

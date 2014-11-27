@@ -34,7 +34,7 @@ public:
   
   /// @brief Return an array containing files that looks similar to the given
   /// PeerFile
-  const juce::Array<PeerFile> getSimilarFiles(const juce::String& keyword) const;
+  juce::Array<PeerFile> getSimilarFiles(const juce::String& keyword);
   
   /// @brief Register new peer
   void registerPeer(const juce::IPAddress peer);
