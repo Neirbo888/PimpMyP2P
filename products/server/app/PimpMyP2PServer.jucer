@@ -4,6 +4,9 @@
               bundleIdentifier="com.tartofraise.PimpMyP2PServer" includeBinaryInAppConfig="1"
               jucerVersion="3.1.0" companyName="Tartofraise" companyWebsite="http://tartofrai.se">
   <MAINGROUP id="h0A73J" name="PimpMyP2PServer">
+    <GROUP id="{621358C9-079A-7FC4-FD81-13E5240F4DCD}" name="app">
+      <FILE id="x9l4s2" name="Main.cpp" compile="1" resource="0" file="Main.cpp"/>
+    </GROUP>
     <GROUP id="{7B8206E6-721A-4478-2AE4-696095E849F9}" name="common">
       <GROUP id="{384F0A9F-ECD5-8D5F-F32E-1CE448A72BC1}" name="files">
         <FILE id="DHKPeN" name="peer_file.cpp" compile="1" resource="0" file="../../common/files/peer_file.cpp"/>
@@ -35,6 +38,10 @@
     </GROUP>
     <GROUP id="{2180BE95-80E2-70B3-4B94-1D2BF660BB67}" name="src">
       <GROUP id="{069829C3-D4C3-B0DF-72E1-B9D6372401FB}" name="core">
+        <FILE id="vErrzg" name="tracker_file_manager.cpp" compile="1" resource="0"
+              file="../src/core/tracker_file_manager.cpp"/>
+        <FILE id="m4OLxd" name="tracker_file_manager.h" compile="0" resource="0"
+              file="../src/core/tracker_file_manager.h"/>
         <FILE id="BhccWR" name="tracker_job_thread.cpp" compile="1" resource="0"
               file="../src/core/tracker_job_thread.cpp"/>
         <FILE id="d2EuA6" name="tracker_job_thread.h" compile="0" resource="0"
@@ -43,10 +50,6 @@
               file="../src/core/tracker_message_handler.cpp"/>
         <FILE id="Ca6ft7" name="tracker_message_handler.h" compile="0" resource="0"
               file="../src/core/tracker_message_handler.h"/>
-        <FILE id="vErrzg" name="tracker_file_manager.cpp" compile="1" resource="0"
-              file="../src/core/tracker_file_manager.cpp"/>
-        <FILE id="m4OLxd" name="tracker_file_manager.h" compile="0" resource="0"
-              file="../src/core/tracker_file_manager.h"/>
         <FILE id="QkTNQ5" name="tracker_processor.cpp" compile="1" resource="0"
               file="../src/core/tracker_processor.cpp"/>
         <FILE id="ZQzwjZ" name="tracker_processor.h" compile="0" resource="0"
@@ -56,7 +59,6 @@
         <FILE id="vrxhTX" name="tracker_ui.cpp" compile="1" resource="0" file="../src/ui/tracker_ui.cpp"/>
         <FILE id="eHJw8e" name="tracker_ui.h" compile="0" resource="0" file="../src/ui/tracker_ui.h"/>
       </GROUP>
-      <FILE id="kcgIp3" name="Main.cpp" compile="1" resource="0" file="../src/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

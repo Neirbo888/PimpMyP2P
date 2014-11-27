@@ -26,7 +26,7 @@ public:
   //==============================================================================
   void initialise (const String& commandLine) override
   {
-    _pimpServer = new TrackerProcessor();
+    _pimpServer = new TrackerProcessor(false);
   }
   
   void shutdown() override
