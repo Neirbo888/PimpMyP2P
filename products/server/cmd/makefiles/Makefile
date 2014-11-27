@@ -15,7 +15,7 @@ ifeq ($(CONFIG),Debug)
   OUTDIR := ../../bin/linux
 
   ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -march=armv6
+    TARGET_ARCH := -m64
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
@@ -36,7 +36,7 @@ ifeq ($(CONFIG),Release)
   OUTDIR := ../makefiles
 
   ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -march=armv6
+    TARGET_ARCH := -m64
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
