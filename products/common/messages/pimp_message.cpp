@@ -140,7 +140,7 @@ const bool PimpMessage::hasSearchResults() const
   return false;
 }
 
-const juce::Array<PeerFile> PimpMessage::getSearchResults() const
+juce::Array<PeerFile> PimpMessage::getSearchResults()
 {
   juce::Array<PeerFile> result;
   auto searchResultsXml = _message->getChildByName("SearchResults");
@@ -168,10 +168,11 @@ const juce::Array<PeerFile> PimpMessage::getSearchResults() const
             juce::IPAddress dummyIP (dummyPeer->getStringAttribute("Value"));
             peersList.add(juce::IPAddress(dummyIP));
           }
-          result.add(PeerFile(nameXml->getStringAttribute("Value"),
-                              md5Xml->getStringAttribute("Value"),
-                              sizeXml->getIntAttribute("Value"),
-                              peersList));
+          PeerFile p (nameXml->getStringAttribute("Value"),
+                      md5Xml->getStringAttribute("Value"),
+                      sizeXml->getIntAttribute("Value"),
+                      peersList);
+          result.add(p);
         }
       }
     }

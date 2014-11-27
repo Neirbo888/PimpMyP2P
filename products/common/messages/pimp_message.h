@@ -76,7 +76,7 @@ public:
   
   /// @brief Will return a list of PeerFile if the message has a SearchResults
   /// attribute, if not the list will be empty
-  const juce::Array<PeerFile> getSearchResults() const;
+  juce::Array<PeerFile> getSearchResults();
   
   /// @brief True if this PimpMessage is a kPeerRefresh
   const bool isPeerRefresh() const;
