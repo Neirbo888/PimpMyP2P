@@ -30,7 +30,7 @@ public:
   ~PimpTable();
   
   /// @brief Load data received
-  void loadData(juce::Array<PeerFile> files) { _files = files; }
+  void loadData(juce::Array<PeerFile> files);
   
   /// @brief Returns the current number of rows in the table
   int getNumRows();
@@ -61,6 +61,8 @@ public:
 private:
   /// @brief The table component itself
   TableListBox _table;
+  /// @brief The number of rows that are to be painted
+  int _numRows;
   /// @brief This is the XML data received from the Tracker
   juce::Array<PeerFile> _files;
 };

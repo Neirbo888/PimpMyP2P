@@ -11,6 +11,7 @@
 #include "products/client/src/ui/pimp_table.h"
 
 PimpTable::PimpTable(juce::ChangeListener* listener)
+: _numRows(0)
 {
   // Create our table component and add it to this component..
   addAndMakeVisible (_table);
@@ -36,9 +37,18 @@ PimpTable::PimpTable(juce::ChangeListener* listener)
 
 PimpTable::~PimpTable() {}
 
+void PimpTable::loadData(juce::Array<PeerFile> files)
+{
+  _files = files;
+  _numRows = _files.size();
+  _table.resized();
+  _table.repaint();
+  repaint();
+}
+
 int PimpTable::getNumRows()
 {
-  return _files.size();
+  return _numRows;
 }
 
 void PimpTable::resized()
