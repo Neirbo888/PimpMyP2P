@@ -82,6 +82,22 @@
         <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <VS2013 targetFolder="../projects/win32">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2P_TrackerCmd_d"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/win32"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2P_TrackerCmd"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/win32"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </VS2013>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
