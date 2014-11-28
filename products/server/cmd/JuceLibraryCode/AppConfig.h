@@ -26,9 +26,6 @@
 #define JUCE_MODULE_AVAILABLE_juce_cryptography         1
 #define JUCE_MODULE_AVAILABLE_juce_data_structures      1
 #define JUCE_MODULE_AVAILABLE_juce_events               1
-#define JUCE_MODULE_AVAILABLE_juce_graphics             1
-#define JUCE_MODULE_AVAILABLE_juce_gui_basics           1
-#define JUCE_MODULE_AVAILABLE_juce_gui_extra            1
 
 //==============================================================================
 // juce_core flags:
@@ -51,47 +48,6 @@
 
 #ifndef    JUCE_INCLUDE_ZLIB_CODE
  //#define JUCE_INCLUDE_ZLIB_CODE
-#endif
-
-//==============================================================================
-// juce_graphics flags:
-
-#ifndef    JUCE_USE_COREIMAGE_LOADER
- //#define JUCE_USE_COREIMAGE_LOADER
-#endif
-
-#ifndef    JUCE_USE_DIRECTWRITE
- //#define JUCE_USE_DIRECTWRITE
-#endif
-
-//==============================================================================
-// juce_gui_basics flags:
-
-#ifndef    JUCE_ENABLE_REPAINT_DEBUGGING
- //#define JUCE_ENABLE_REPAINT_DEBUGGING
-#endif
-
-#ifndef    JUCE_USE_XSHM
- //#define JUCE_USE_XSHM
-#endif
-
-#ifndef    JUCE_USE_XRENDER
- //#define JUCE_USE_XRENDER
-#endif
-
-#ifndef    JUCE_USE_XCURSOR
- //#define JUCE_USE_XCURSOR
-#endif
-
-//==============================================================================
-// juce_gui_extra flags:
-
-#ifndef    JUCE_WEB_BROWSER
- //#define JUCE_WEB_BROWSER
-#endif
-
-#ifndef    JUCE_ENABLE_LIVE_CONSTANT_EDITOR
- //#define JUCE_ENABLE_LIVE_CONSTANT_EDITOR
 #endif
 
 

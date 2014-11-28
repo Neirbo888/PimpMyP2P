@@ -15,13 +15,13 @@ ifeq ($(CONFIG),Debug)
   OUTDIR := ../../bin/linux
 
   ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -m64
+    TARGET_ARCH := -march=armv6
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS)
-  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt 
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   TARGET := PimpMyP2P_TrackerCmd_d
@@ -33,16 +33,16 @@ ifeq ($(CONFIG),Release)
   BINDIR := build
   LIBDIR := build
   OBJDIR := build/intermediate/Release
-  OUTDIR := ../makefiles
+  OUTDIR := ../../bin/linux
 
   ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -m64
+    TARGET_ARCH := -march=armv6
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS)
-  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt 
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   TARGET := PimpMyP2P_TrackerCmd
@@ -56,20 +56,14 @@ OBJECTS := \
   $(OBJDIR)/message_handler_6c74c9f9.o \
   $(OBJDIR)/pimp_message_26a170e7.o \
   $(OBJDIR)/socket_thread_8b901c15.o \
-  $(OBJDIR)/component_window_77ab82d.o \
-  $(OBJDIR)/look_and_feel_6b86d11d.o \
   $(OBJDIR)/tracker_file_manager_966083ab.o \
   $(OBJDIR)/tracker_job_thread_2b4d168d.o \
   $(OBJDIR)/tracker_message_handler_46d9f3b.o \
   $(OBJDIR)/tracker_processor_ec3c0bbb.o \
-  $(OBJDIR)/tracker_ui_def3be00.o \
   $(OBJDIR)/juce_core_83c62e58.o \
   $(OBJDIR)/juce_cryptography_b9a4fcb2.o \
   $(OBJDIR)/juce_data_structures_227d5014.o \
   $(OBJDIR)/juce_events_db69aecc.o \
-  $(OBJDIR)/juce_graphics_6dc24830.o \
-  $(OBJDIR)/juce_gui_basics_b38617ac.o \
-  $(OBJDIR)/juce_gui_extra_29a24434.o \
 
 .PHONY: clean
 
@@ -113,16 +107,6 @@ $(OBJDIR)/socket_thread_8b901c15.o: ../../../common/network/socket_thread.cpp
 	@echo "Compiling socket_thread.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/component_window_77ab82d.o: ../../../common/ui/component_window.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling component_window.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/look_and_feel_6b86d11d.o: ../../../common/ui/look_and_feel.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling look_and_feel.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/tracker_file_manager_966083ab.o: ../../src/core/tracker_file_manager.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling tracker_file_manager.cpp"
@@ -143,11 +127,6 @@ $(OBJDIR)/tracker_processor_ec3c0bbb.o: ../../src/core/tracker_processor.cpp
 	@echo "Compiling tracker_processor.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/tracker_ui_def3be00.o: ../../src/ui/tracker_ui.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling tracker_ui.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/juce_core_83c62e58.o: ../../../../externals/juce_git/modules/juce_core/juce_core.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling juce_core.cpp"
@@ -166,21 +145,6 @@ $(OBJDIR)/juce_data_structures_227d5014.o: ../../../../externals/juce_git/module
 $(OBJDIR)/juce_events_db69aecc.o: ../../../../externals/juce_git/modules/juce_events/juce_events.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling juce_events.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_graphics_6dc24830.o: ../../../../externals/juce_git/modules/juce_graphics/juce_graphics.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_graphics.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_gui_basics_b38617ac.o: ../../../../externals/juce_git/modules/juce_gui_basics/juce_gui_basics.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_gui_basics.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_gui_extra_29a24434.o: ../../../../externals/juce_git/modules/juce_gui_extra/juce_gui_extra.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_gui_extra.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)

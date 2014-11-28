@@ -18,9 +18,6 @@
 #include "modules/juce_cryptography/juce_cryptography.h"
 #include "modules/juce_data_structures/juce_data_structures.h"
 #include "modules/juce_events/juce_events.h"
-#include "modules/juce_graphics/juce_graphics.h"
-#include "modules/juce_gui_basics/juce_gui_basics.h"
-#include "modules/juce_gui_extra/juce_gui_extra.h"
 
 #if ! DONT_SET_USING_JUCE_NAMESPACE
  // If your code uses a lot of JUCE classes, then this will obviously save you

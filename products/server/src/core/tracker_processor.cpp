@@ -1,23 +1,14 @@
 #include "products/common/messages/pimp_message.h"
 #include "products/common/network/socket_thread.h"
-#include "products/common/ui/component_window.h"
-#include "products/server/src/ui/tracker_ui.h"
 #include "products/server/src/core/tracker_processor.h"
 #include "products/server/src/core/tracker_message_handler.h"
 
-TrackerProcessor::TrackerProcessor(bool isCommandLine)
+TrackerProcessor::TrackerProcessor()
 : Thread("PimpTracker"),
 _fileManager(this),
 _messageHandler(nullptr),
 _socketThread(nullptr)
 {
-  // Create the GUI
-  if (!isCommandLine)
-  {
-    _ui = new TrackerUi(this);
-    _window = new ComponentWindow(_ui);
-  }
-  
   // Get the local IP address
   juce::Array<IPAddress> allAddresses;
   juce::IPAddress::findAllAddresses(allAddresses);

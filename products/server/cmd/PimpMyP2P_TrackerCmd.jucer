@@ -27,15 +27,6 @@
               file="../../common/network/socket_thread.cpp"/>
         <FILE id="TOcwNn" name="socket_thread.h" compile="0" resource="0" file="../../common/network/socket_thread.h"/>
       </GROUP>
-      <GROUP id="{446E6389-151F-58A1-9430-7586BADA25CB}" name="ui">
-        <FILE id="CWmayv" name="component_window.cpp" compile="1" resource="0"
-              file="../../common/ui/component_window.cpp"/>
-        <FILE id="muspdb" name="component_window.h" compile="0" resource="0"
-              file="../../common/ui/component_window.h"/>
-        <FILE id="yAK97f" name="look_and_feel.cpp" compile="1" resource="0"
-              file="../../common/ui/look_and_feel.cpp"/>
-        <FILE id="rfAnsm" name="look_and_feel.h" compile="0" resource="0" file="../../common/ui/look_and_feel.h"/>
-      </GROUP>
     </GROUP>
     <GROUP id="{2180BE95-80E2-70B3-4B94-1D2BF660BB67}" name="src">
       <GROUP id="{069829C3-D4C3-B0DF-72E1-B9D6372401FB}" name="core">
@@ -56,10 +47,6 @@
         <FILE id="ZQzwjZ" name="tracker_processor.h" compile="0" resource="0"
               file="../src/core/tracker_processor.h"/>
       </GROUP>
-      <GROUP id="{DFF2D703-C812-BAB3-E775-676229174117}" name="ui">
-        <FILE id="vrxhTX" name="tracker_ui.cpp" compile="1" resource="0" file="../src/ui/tracker_ui.cpp"/>
-        <FILE id="eHJw8e" name="tracker_ui.h" compile="0" resource="0" file="../src/ui/tracker_ui.h"/>
-      </GROUP>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
@@ -67,30 +54,40 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="PimpMyP2P_TrackerCmd_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       linuxArchitecture="-m64" binaryPath="../bin/linux"/>
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
                        targetName="PimpMyP2P_TrackerCmd" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       linuxArchitecture="-m64" binaryPath="makefiles"/>
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
         <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <XCODE_MAC targetFolder="../projects/osx">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2P_TrackerCmd_d"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/osx"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2P_TrackerCmd"
+                       headerPath="../../../../;../../../../externals/juce_3.0.4/" binaryPath="../bin/osx"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
     <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

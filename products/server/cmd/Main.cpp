@@ -15,7 +15,7 @@
 //==============================================================================
 int main (int argc, char* argv[])
 {
-  ScopedPointer<TrackerProcessor> _processor = new TrackerProcessor(true);
+  ScopedPointer<TrackerProcessor> _processor = new TrackerProcessor();
   while(1)
   {
     sleep(100000);

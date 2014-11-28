@@ -6,8 +6,6 @@
 #include "products/common/files/peer_file.h"
 
 /// Forward declarations
-class ComponentWindow;
-class TrackerUi;
 class TrackerMessageHandler;
 class SocketThread;
 
@@ -20,7 +18,7 @@ class TrackerProcessor
 {
 public:
   /// @brief Constructor
-  TrackerProcessor(bool isCommandLine);
+  TrackerProcessor();
   
   /// @brief Destructor
   ~TrackerProcessor();
@@ -47,10 +45,6 @@ private:
   /// @brief Spawns threads each time a TCP connection is made to handle the
   /// request
   ScopedPointer<TrackerMessageHandler> _messageHandler;
-  /// @brief The UI
-  TrackerUi* _ui;
-  /// @brief Window displaying the GUI
-  ScopedPointer<ComponentWindow> _window;
   /// @brief Thread listening the TCP socket
   ScopedPointer<SocketThread> _socketThread;
 };
