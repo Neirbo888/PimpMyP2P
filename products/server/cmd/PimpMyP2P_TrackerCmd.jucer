@@ -50,7 +50,7 @@
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <LINUX_MAKE targetFolder="makefiles">
+    <LINUX_MAKE targetFolder="makefiles" extraDefs="JUCE_USE_XSHM=0 JUCE_USE_XINERAMA=0">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="PimpMyP2P_TrackerCmd_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
