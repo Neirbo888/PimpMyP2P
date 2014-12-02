@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    peer_file.cpp
-    Created: 19 Nov 2014 9:44:05pm
-    Author:  Adrien Tisseraud
-
-  ==============================================================================
-*/
-
 #include "products/common/files/peer_file.h"
 
 PeerFile::PeerFile(const juce::File& file)
