@@ -38,8 +38,8 @@ public:
   /// @brief Stop the running PeerJobThread
   void stop();
   
-  /// @brief Handler for sending files to a client
-  void handleSendRequest(const PimpMessage& request);
+  /// @brief Handler for PeerFileRequest messages
+  void handlePeerFileRequest(const PimpMessage& request);
   
 private:
   /// @brief Handler that has spawned this thread

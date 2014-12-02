@@ -1,13 +1,5 @@
 #include "products/common/messages/pimp_message.h"
 
-PimpMessage::PimpMessage(juce::IPAddress srcIp)
-: _message(new XmlElement("PimpMessage"))
-{
-  auto sourceIpXml = new XmlElement("SourceIp");
-  sourceIpXml->setAttribute("Value", srcIp.toString());
-  _message->addChildElement(sourceIpXml);
-}
-
 PimpMessage::PimpMessage(const std::string& xmlData)
 {
   XmlDocument document (xmlData);
@@ -16,7 +8,16 @@ PimpMessage::PimpMessage(const std::string& xmlData)
   {
     _message = new XmlElement("PimpMessage");
     setCommand(kError);
+    auto errorXml = new XmlElement("ErrorMessage");
+    errorXml->addTextElement("Can't parse Xml string");
+    _message->addChildElement(errorXml);
   }
+}
+
+PimpMessage::PimpMessage(CommandType type)
+: _message(new XmlElement("PimpMessage"))
+{
+  setCommand(type);
 }
 
 PimpMessage::~PimpMessage()
@@ -53,69 +54,55 @@ void PimpMessage::setCommand(PimpMessage::CommandType cmd)
   }
 }
 
-const juce::IPAddress PimpMessage::getSource() const
+const bool PimpMessage::hasSource() const
 {
   auto sourceXml = _message->getChildByName("SourceIp");
-  if (sourceXml)
-    if (sourceXml->hasAttribute("Value"))
-      return juce::IPAddress(sourceXml->getStringAttribute("Value"));
+  if (sourceXml && sourceXml->hasAttribute("Value"))
+      return true;
+  return false;
+}
+
+const juce::IPAddress PimpMessage::getSource() const
+{
+  if (hasSource())
+  {
+    auto sourceXml = _message->getChildByName("SourceIp");
+    return juce::IPAddress(sourceXml->getStringAttribute("Value"));
+  }
   return juce::IPAddress();
 }
 
 const bool PimpMessage::hasPeerFile() const
 {
-  auto file = _message->getChildByName("PeerFile");
-  if (file)
-    return file->hasAttribute("Name") &&
-           file->hasAttribute("MD5") &&
-           file->hasAttribute("Size");
+  auto peerFileXml = _message->getChildByName("PeerFile");
+  if (peerFileXml)
+    return hasValidPeerFile(peerFileXml);
   return false;
 }
 
 const PeerFile PimpMessage::getPeerFile() const
 {
-  auto file = _message->getChildByName("PeerFile");
-  if (file)
-  {
-    auto nameXml = file->getChildByName("Name");
-    auto sizeXml = file->getChildByName("Size");
-    auto md5Xml = file->getChildByName("MD5");
-    if (!nameXml || !sizeXml || !md5Xml)
-      return PeerFile::emptyPeerFile();
-    {
-      return PeerFile(nameXml->getStringAttribute("Value"),
-                      md5Xml->getStringAttribute("Value"),
-                      sizeXml->getIntAttribute("Value"));
-    }
-  }
-  return PeerFile::emptyPeerFile();
+  
+  return getPeerFileFromXmlElement(_message->getChildByName("PeerFile"));
 }
 
-const bool PimpMessage::hasByteRange() const
+const bool PimpMessage::hasRange() const
 {
-  auto range = _message->getChildByName("Range");
-  if (range)
-    return range->hasAttribute("Start") && range->hasAttribute("End");
+  auto rangeXml = _message->getChildByName("Range");
+  if (rangeXml)
+    return rangeXml->hasAttribute("Start") && rangeXml->hasAttribute("End");
   return false;
 }
 
-const juce::Range<int> PimpMessage::getByteRange() const
+const juce::Range<int> PimpMessage::getRange() const
 {
-  auto range = _message->getChildByName("Range");
-  if (range)
-    if (range->hasAttribute("Start") && range->hasAttribute("End"))
-    {
-      juce::Range<int> byteRange;
-      byteRange.setStart(range->getIntAttribute("Start"));
-      byteRange.setEnd(range->getIntAttribute("End"));
-      return byteRange;
-    }
+  if (hasRange())
+  {
+    auto rangeXml = _message->getChildByName("Range");
+    return juce::Range<int> (rangeXml->getIntAttribute("Start"),
+                             rangeXml->getIntAttribute("End"));
+  }
   return juce::Range<int>::emptyRange(0);
-}
-
-const bool PimpMessage::isTrackerSearchResult() const
-{
-  return isCommand(kTrackerSearchResult);
 }
 
 const bool PimpMessage::hasSearchString() const
@@ -144,187 +131,21 @@ juce::Array<PeerFile> PimpMessage::getSearchResults()
 {
   juce::Array<PeerFile> result;
   auto searchResultsXml = _message->getChildByName("SearchResults");
+  
   if (searchResultsXml)
   {
     for (int fileIndex = 0;
          fileIndex < searchResultsXml->getNumChildElements();
          fileIndex++)
     {
-      auto file = searchResultsXml->getChildElement(fileIndex);
-      if (file)
-      {
-        auto nameXml = file->getChildByName("Name");
-        auto sizeXml = file->getChildByName("Size");
-        auto md5Xml = file->getChildByName("MD5");
-        auto peersXml = file->getChildByName("PeersList");
-        if (nameXml && sizeXml && md5Xml && peersXml)
-        {
-          juce::Array<juce::IPAddress> peersList;
-          for (int peerIndex = 0;
-               peerIndex < peersXml->getNumChildElements();
-               peerIndex++)
-          {
-            auto dummyPeer = peersXml->getChildElement(peerIndex);
-            juce::IPAddress dummyIP (dummyPeer->getStringAttribute("Value"));
-            peersList.add(juce::IPAddress(dummyIP));
-          }
-          PeerFile p (nameXml->getStringAttribute("Value"),
-                      md5Xml->getStringAttribute("Value"),
-                      sizeXml->getIntAttribute("Value"),
-                      peersList);
-          result.add(p);
-        }
-      }
+      auto xmlFile = searchResultsXml->getChildElement(fileIndex);
+      auto dummyFile = getPeerFileFromXmlElement(xmlFile);
+      if (dummyFile != PeerFile::emptyPeerFile())
+        result.add(dummyFile);
     }
   }
+  
   return result;
-}
-
-const bool PimpMessage::isPeerRefresh() const
-{
-  return isCommand(kPeerRefresh);
-}
-
-const bool PimpMessage::isPeerSignOut() const
-{
-  return isCommand(kPeerSignOut);
-}
-
-void PimpMessage::sendToSocket(juce::StreamingSocket *socket)
-{
-  if (socket && socket->isConnected())
-  {
-    std::string out = getXmlString().toStdString();
-    union Ustuff { int i; unsigned char c[4]; };
-    Ustuff outUnion;
-    outUnion.i = out.length();
-    socket->write(outUnion.c, 4);
-    socket->write(out.c_str(), outUnion.i);
-  }
-}
-
-void PimpMessage::createPeerGetFile(PeerFile file)
-{
-  setCommand(kPeerGetFile);
-  
-  auto fileXml = new XmlElement("PeerFile");
-  
-  auto dummyName = new XmlElement("Name");
-  dummyName->setAttribute("Value", file.getFilename());
-  fileXml->addChildElement(dummyName);
-  
-  auto dummyMD5 = new XmlElement("MD5");
-  dummyMD5->setAttribute("Value",file.getMD5());
-  fileXml->addChildElement(dummyMD5);
-  
-  auto dummySize = new XmlElement("Size");
-  dummySize->setAttribute("Value", (double)(file.getSize()));
-  fileXml->addChildElement(dummySize);
-  
-  _message->addChildElement(fileXml);
-}
-
-void PimpMessage::createPeerGetFile(PeerFile file,
-                                    juce::Range<int> byteRange)
-{
-  createPeerGetFile(file);
-  auto rangeXml = new XmlElement("Range");
-  
-  auto dummyStart = new XmlElement("Start");
-  dummyStart->setAttribute("Value", byteRange.getStart());
-  rangeXml->addChildElement(dummyStart);
-  
-  auto dummyEnd = new XmlElement("End");
-  dummyEnd->setAttribute("Value", byteRange.getEnd());
-  rangeXml->addChildElement(dummyEnd);
-  
-  _message->addChildElement(rangeXml);
-}
-
-void PimpMessage::createPeerSearch(juce::String keystring)
-{
-  setCommand(kPeerSearch);
-  
-  auto searchStringXml = new XmlElement("SearchString");
-  searchStringXml->setAttribute("Value", keystring);
-  _message->addChildElement(searchStringXml);
-}
-
-void PimpMessage::createErrorMessage(juce::String message)
-{
-  setCommand(kError);
-}
-
-void PimpMessage::createTrackerSearchResult(const juce::Array<PeerFile>& files)
-{
-  setCommand(kTrackerSearchResult);
-  
-  auto resultsXml = new XmlElement("SearchResults");
-  
-  for (const PeerFile& file : files)
-  {
-    auto fileXml = new XmlElement("PeerFile");
-    
-    auto dummyName = new XmlElement("Name");
-    dummyName->setAttribute("Value", file.getFilename());
-    fileXml->addChildElement(dummyName);
-    
-    auto dummyMD5 = new XmlElement("MD5");
-    dummyMD5->setAttribute("Value",file.getMD5());
-    fileXml->addChildElement(dummyMD5);
-    
-    auto dummySize = new XmlElement("Size");
-    dummySize->setAttribute("Value", (double)(file.getSize()));
-    fileXml->addChildElement(dummySize);
-    
-    auto dummyPeersAddresses = new XmlElement("PeersList");
-    for (const juce::IPAddress& address : file.getPeersAddresses())
-    {
-      auto dummyPeer = new XmlElement("Peer");
-      dummyPeer->setAttribute("Value", address.toString());
-      dummyPeersAddresses->addChildElement(dummyPeer);
-    }
-    fileXml->addChildElement(dummyPeersAddresses);
-    
-    resultsXml->addChildElement(fileXml);
-  }
-  
-  _message->addChildElement(resultsXml);
-}
-
-void PimpMessage::createPeerRefresh(const juce::Array<PeerFile> localFiles)
-{
-  setCommand(kPeerRefresh);
-  if (localFiles.size() != 0)
-  {
-    auto filelistXml = new XmlElement("LocalFileList");
-    
-    for (const PeerFile& file : localFiles)
-    {
-      auto fileXml = new XmlElement("PeerFile");
-      
-      auto dummyName = new XmlElement("Name");
-      dummyName->setAttribute("Value", file.getFilename());
-      fileXml->addChildElement(dummyName);
-      
-      auto dummyMD5 = new XmlElement("MD5");
-      dummyMD5->setAttribute("Value",file.getMD5());
-      fileXml->addChildElement(dummyMD5);
-      
-      auto dummySize = new XmlElement("Size");
-      dummySize->setAttribute("Value", (double)(file.getSize()));
-      fileXml->addChildElement(dummySize);
-      
-      filelistXml->addChildElement(fileXml);
-    }
-    
-    _message->addChildElement(filelistXml);
-  }
-}
-
-void PimpMessage::createPeerSignOut()
-{
-  setCommand(kPeerSignOut);
 }
 
 const bool PimpMessage::hasLocalFileList() const
@@ -344,20 +165,208 @@ const juce::Array<PeerFile> PimpMessage::getLocalFileList() const
          fileIndex < localFilesXml->getNumChildElements();
          fileIndex++)
     {
-      auto file = localFilesXml->getChildElement(fileIndex);
-      if (file)
+      const PeerFile file = getPeerFileFromXmlElement(localFilesXml->getChildElement(fileIndex));
+      if (file != PeerFile::emptyPeerFile())
       {
-        auto nameXml = file->getChildByName("Name");
-        auto sizeXml = file->getChildByName("Size");
-        auto md5Xml = file->getChildByName("MD5");
-        if (nameXml && sizeXml && md5Xml)
-          localFiles.add(PeerFile(nameXml->getStringAttribute("Value"),
-                                  md5Xml->getStringAttribute("Value"),
-                                  sizeXml->getIntAttribute("Value")));
+        localFiles.add(file);
       }
     }
   }
   return localFiles;
+}
+
+void PimpMessage::sendToSocket(juce::StreamingSocket *socket,
+                               juce::IPAddress source)
+{
+  if (socket && socket->isConnected())
+  {
+    XmlElement localMessage (*_message);
+    auto sourceIpXml = new XmlElement("SourceIp");
+    sourceIpXml->setAttribute("Value", source.toString());
+    localMessage.addChildElement(sourceIpXml);
+    
+    juce::String out = localMessage.createDocument(juce::String::empty);
+    
+    union Ustuff { int i; unsigned char c[4]; };
+    Ustuff outUnion;
+    outUnion.i = out.length();
+    socket->write(outUnion.c, 4);
+    socket->write(out.toRawUTF8(), outUnion.i);
+  }
+}
+
+PimpMessage PimpMessage::createPeerFileRequest(PeerFile file)
+{
+  PimpMessage peerFileRequest (kPeerFileRequest);
+  peerFileRequest._message->addChildElement(getXmlElementFromPeerFile(file));
+  
+  return peerFileRequest;
+}
+
+PimpMessage PimpMessage::createPeerSearch(juce::String keystring)
+{
+  PimpMessage peerSearch (kPeerSearch);
+  
+  auto searchStringXml = new XmlElement("SearchString");
+  searchStringXml->setAttribute("Value", keystring);
+  peerSearch._message->addChildElement(searchStringXml);
+  
+  return peerSearch;
+}
+
+PimpMessage PimpMessage::createErrorMessage(juce::String message)
+{
+  PimpMessage error (kError);
+  auto errorXml = new XmlElement("ErrorMessage");
+  errorXml->addTextElement(message);
+  error._message->addChildElement(errorXml);
+  return error;
+}
+
+PimpMessage PimpMessage::createOk()
+{
+  PimpMessage ok (kOk);
+  return ok;
+}
+
+PimpMessage PimpMessage::createTrackerSearchResult(const juce::Array<PeerFile>& files)
+{
+  PimpMessage trackerSearchResult (kTrackerSearchResult);
+  
+  auto resultsXml = new XmlElement("SearchResults");
+  
+  for (const PeerFile& file : files)
+    resultsXml->addChildElement(getXmlElementFromPeerFile(file));
+  
+  trackerSearchResult._message->addChildElement(resultsXml);
+  
+  return trackerSearchResult;
+}
+
+PimpMessage PimpMessage::createPeerRefresh(const juce::Array<PeerFile> localFiles)
+{
+  PimpMessage peerRefresh (kPeerRefresh);
+  if (localFiles.size() != 0)
+  {
+    auto filelistXml = new XmlElement("LocalFileList");
+    
+    for (const PeerFile& file : localFiles)
+    {
+      filelistXml->addChildElement(getXmlElementFromPeerFile(file));
+    }
+    
+    peerRefresh._message->addChildElement(filelistXml);
+  }
+  
+  return peerRefresh;
+}
+
+PimpMessage PimpMessage::createPeerSignOut()
+{
+  PimpMessage peerSignOut (kPeerSignOut);
+  return peerSignOut;
+}
+
+const bool PimpMessage::hasValidPeerFile(juce::XmlElement *element)
+{
+  if (element->hasTagName("PeerFile"))
+  {
+    auto nameXml = element->getChildByName("Name");
+    if (!nameXml)
+      return false;
+    if (!nameXml->hasAttribute("Value"))
+      return false;
+    
+    auto sizeXml = element->getChildByName("Size");
+    if (!sizeXml)
+      return false;
+    if (!sizeXml->hasAttribute("Value"))
+      return false;
+    
+    auto md5Xml = element->getChildByName("MD5");
+    if (!md5Xml)
+      return false;
+    if (!md5Xml->hasAttribute("Value"))
+      return false;
+    
+    auto peersXml = element->getChildByName("PeersList");
+    if (!peersXml)
+      return false;
+    
+    for (int peerIndex = 0; peerIndex < peersXml->getNumChildElements();
+         peerIndex++)
+      if (!peersXml->getChildElement(peerIndex)->hasAttribute("Value"))
+        return false;
+    
+    return true;
+  }
+  return false;
+}
+
+const PeerFile PimpMessage::getPeerFileFromXmlElement(juce::XmlElement *element)
+{
+  if (!element)
+  {
+    Logger::writeToLog("Trying to parse a nullptr to a PeerFile");
+    return PeerFile::emptyPeerFile();
+  }
+  if (hasValidPeerFile(element))
+  {
+    auto nameXml = element->getChildByName("Name");
+    auto sizeXml = element->getChildByName("Size");
+    auto md5Xml = element->getChildByName("MD5");
+    auto peersXml = element->getChildByName("PeersList");
+    
+    juce::Array<juce::IPAddress> peersList;
+    for (int peerIndex = 0; peerIndex < peersXml->getNumChildElements();
+         peerIndex++)
+    {
+      auto dummyPeer = peersXml->getChildElement(peerIndex);
+      peersList.add(juce::IPAddress(dummyPeer->getStringAttribute("Value")));
+    }
+    
+    return PeerFile(nameXml->getStringAttribute("Value"),
+                    md5Xml->getStringAttribute("Value"),
+                    sizeXml->getIntAttribute("Value"),
+                    peersList);
+  }
+  
+  Logger::writeToLog("Trying to parse an invalid XmlElement to a PeerFile");
+  return PeerFile::emptyPeerFile();
+}
+
+juce::XmlElement* PimpMessage::getXmlElementFromPeerFile(PeerFile file)
+{
+  if (file == PeerFile::emptyPeerFile())
+  {
+    Logger::writeToLog("Trying to parse an empty PeerFile to an XmlElement");
+    return nullptr;
+  }
+  
+  auto fileXml = new XmlElement("PeerFile");
+  
+  auto dummyName = new XmlElement("Name");
+  dummyName->setAttribute("Value", file.getFilename());
+  fileXml->addChildElement(dummyName);
+  
+  auto dummyMD5 = new XmlElement("MD5");
+  dummyMD5->setAttribute("Value",file.getMD5());
+  fileXml->addChildElement(dummyMD5);
+  
+  auto dummySize = new XmlElement("Size");
+  dummySize->setAttribute("Value", (double)(file.getSize()));
+  fileXml->addChildElement(dummySize);
+  
+  auto dummyPeersAddresses = new XmlElement("PeersList");
+  for (const juce::IPAddress& address : file.getPeersAddresses())
+  {
+    auto dummyPeer = new XmlElement("Peer");
+    dummyPeer->setAttribute("Value", address.toString());
+    dummyPeersAddresses->addChildElement(dummyPeer);
+  }
+  fileXml->addChildElement(dummyPeersAddresses);
+  
+  return fileXml;
 }
 
 PimpMessage PimpMessage::createFromSocket(juce::StreamingSocket *socket)
@@ -367,14 +376,14 @@ PimpMessage PimpMessage::createFromSocket(juce::StreamingSocket *socket)
     union Ustuff { int i; unsigned char c[4]; };
     Ustuff outUnion;
     int bytesRead = socket->read(outUnion.c, 4, true);
-    Logger::writeToLog(juce::String(outUnion.i));
     if (bytesRead == 4 && outUnion.i != 0)
     {
       juce::MemoryBlock buffer (outUnion.i, true);
       bytesRead = socket->read(buffer.getData(), outUnion.i, true);
+      Logger::writeToLog("PIMPMESSAGE RECEIVED:");
       Logger::writeToLog(buffer.toString());
       return PimpMessage(buffer.toString().toStdString());
     }
   }
-  return PimpMessage("error");
+  return PimpMessage::createErrorMessage("Can't create from socket");
 }

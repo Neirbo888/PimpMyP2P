@@ -36,11 +36,11 @@ void TrackerJobThread::run()
 {
   PimpMessage message = PimpMessage::createFromSocket(_socket);
   
-  if (message.isCommand(PimpMessage::kError))
+  if (message.isError())
     Logger::writeToLog("Error receiving command");
   else
   {
-    if (message.isCommand(PimpMessage::kPeerSearch))
+    if (message.isPeerSearch())
       handleSearchRequest(message);
     else if (message.isPeerRefresh())
       handlePeerRefresh(message);
@@ -55,46 +55,38 @@ void TrackerJobThread::run()
 }
 
 void TrackerJobThread::handleSearchRequest(const PimpMessage& request)
-{
-  Logger::writeToLog("Handling search request");
-  // Create an acknowledge
-  PimpMessage acknowledge (_owner->getLocalIp());
-  
+{  
   juce::String searchString;
   if (request.hasSearchString())
   {
     searchString = request.getSearchString();
   
     // Send our peer that we've received his request and will be processing
-    acknowledge.setCommand(PimpMessage::kOk);
-    acknowledge.sendToSocket(_socket);
+    PimpMessage acknowledge = PimpMessage::createOk();
+    acknowledge.sendToSocket(_socket, _owner->getLocalIp());
     
     juce::Array<PeerFile> searchResults;
     searchResults = _owner->getFileManager().getSimilarFiles(searchString);
     
-    PimpMessage resultMessage (_owner->getLocalIp());
-    resultMessage.createTrackerSearchResult(searchResults);
-    resultMessage.sendToSocket(_socket);
+    PimpMessage resultMessage = PimpMessage::createTrackerSearchResult(searchResults);
+    resultMessage.sendToSocket(_socket, _owner->getLocalIp());
   }
   else
   {
-    acknowledge.createErrorMessage("Can't find searchstring");
-    acknowledge.sendToSocket(_socket);
+    PimpMessage error = PimpMessage::createErrorMessage("Can't find searchstring");
+    error.sendToSocket(_socket, _owner->getLocalIp());
   }
 }
 
 void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
 {
-  Logger::writeToLog("Handling peer refresh");
-  // Create an acknowledge
-  PimpMessage acknowledge (_owner->getLocalIp());
   const juce::IPAddress peerIP = request.getSource();
   
   if (peerIP.toString() != "0.0.0.0")
   {
     _owner->getFileManager().registerPeer(peerIP);
-    acknowledge.setCommand(PimpMessage::kOk);
-    acknowledge.sendToSocket(_socket);
+    PimpMessage acknowledge = PimpMessage::createOk();
+    acknowledge.sendToSocket(_socket, _owner->getLocalIp());
     if (request.hasLocalFileList())
     {
       _owner->getFileManager().cleanPeer(peerIP);
@@ -119,14 +111,13 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
   // Else, let him know that something went wrong
   else
   {
-    acknowledge.setCommand(PimpMessage::kError);
-    acknowledge.sendToSocket(_socket);
+    PimpMessage error = PimpMessage::createErrorMessage("Error handling peer refresh");
+    error.sendToSocket(_socket, _owner->getLocalIp());
   }
 }
 
 void TrackerJobThread::handlePeerSignOut(const PimpMessage &request)
 {
-  Logger::writeToLog("Handling peer signout");
   const juce::IPAddress peerIP = request.getSource();
   if (peerIP.toString() != "0.0.0.0")
   {

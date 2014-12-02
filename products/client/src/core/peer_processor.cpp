@@ -125,8 +125,7 @@ void PeerProcessor::setSharedFolder(const juce::File& folder)
 void PeerProcessor::sendPeerGetFile(PeerFile file)
 {
   // Create our PimpMessage request
-  PimpMessage request (_address);
-  request.createPeerGetFile(file);
+  PimpMessage request = PimpMessage::createPeerFileRequest(file);
   
   
   // Prepare a stream output file to write the data
@@ -157,8 +156,7 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
 
 void PeerProcessor::sendTrackerSearch(const juce::String keystring)
 {
-  PimpMessage request (_address);
-  request.createPeerSearch(keystring);
+  PimpMessage request = PimpMessage::createPeerSearch(keystring);
   
   // Create a new socket to connect to our distant host
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
@@ -171,13 +169,13 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
   }
   else
   {
-    request.sendToSocket(socket);
+    request.sendToSocket(socket, _address);
     
     // Normally we should receive an acknowledge
     PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
     
     // If the message receive is OK
-    if (acknowledge.isCommand(PimpMessage::kOk))
+    if (acknowledge.isOk())
     {
       PimpMessage results = PimpMessage::createFromSocket(socket);
       if (results.isTrackerSearchResult() && results.hasSearchResults())
@@ -207,13 +205,12 @@ void PeerProcessor::registerToTracker()
   }
   else
   {
-    PimpMessage registerRequest (_address);
-    registerRequest.createPeerRefresh(_fileManager.getAvailableFiles());
-    registerRequest.sendToSocket(socket);
+    PimpMessage registerRequest = PimpMessage::createPeerRefresh(_fileManager.getAvailableFiles());
+    registerRequest.sendToSocket(socket, _address);
     
     // Normally we should receive an acknowledge
     PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
-    if (acknowledge.isCommand(PimpMessage::kOk))
+    if (acknowledge.isOk())
     {
       setState(kRegistered);
     }
@@ -244,9 +241,8 @@ void PeerProcessor::unregisterToTracker()
   }
   else
   {
-    PimpMessage unregisterRequest (_address);
-    unregisterRequest.createPeerSignOut();
-    unregisterRequest.sendToSocket(socket);
+    PimpMessage unregisterRequest = PimpMessage::createPeerSignOut();
+    unregisterRequest.sendToSocket(socket, _address);
     setState(kIdle);
   }
   socket->close();

@@ -37,13 +37,13 @@ void PeerJobThread::run()
   PimpMessage message = PimpMessage::createFromSocket(_socket);
   
   // If an error has been detected
-  if (message.isCommand(PimpMessage::kError))
+  if (message.isError())
   {
     Logger::writeToLog("Error receiving command");
   }
   else
   {
-    if (message.isCommand(PimpMessage::kPeerGetFile))
+    if (message.isPeerFileRequest())
       handlePeerFileRequest(message);
   }
   
