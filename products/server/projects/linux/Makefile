@@ -18,12 +18,12 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=armv6
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   TARGET := PimpMyP2P_TrackerCmd_d
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
@@ -39,19 +39,19 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=armv6
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_4BD83949=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   TARGET := PimpMyP2P_TrackerCmd
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/Main_e223237d.o \
+  $(OBJDIR)/Main_c775b6e3.o \
   $(OBJDIR)/peer_file_837f18c1.o \
   $(OBJDIR)/message_handler_6c74c9f9.o \
   $(OBJDIR)/pimp_message_26a170e7.o \
@@ -82,7 +82,7 @@ strip:
 	@echo Stripping PimpMyP2P_TrackerCmd
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
 
-$(OBJDIR)/Main_e223237d.o: ../Main.cpp
+$(OBJDIR)/Main_c775b6e3.o: ../../cmd/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
