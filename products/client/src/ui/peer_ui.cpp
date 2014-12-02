@@ -255,8 +255,6 @@ void PeerUi::changeListenerCallback(juce::ChangeBroadcaster *source)
 
 void PeerUi::publishSearchResults(juce::Array<PeerFile> results)
 {
-  for (PeerFile p : results)
-    std::cout << p << std::endl;
   _pimpTable->loadData(results);
 }
 
