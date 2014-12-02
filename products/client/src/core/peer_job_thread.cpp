@@ -34,19 +34,15 @@ void PeerJobThread::stop() {
 
 void PeerJobThread::run()
 {
-  // Create a char tab to store what's coming
-  char inBuffer[4096];
-  
-  int bytesRead = _socket->read(inBuffer,4096,false);
+  PimpMessage message = PimpMessage::createFromSocket(_socket);
   
   // If an error has been detected
-  if (bytesRead == -1)
+  if (message.isCommand(PimpMessage::kError))
   {
     Logger::writeToLog("Error receiving command");
   }
   else
   {
-    PimpMessage message (inBuffer);
     if (message.isCommand(PimpMessage::kPeerGetFile))
       handleSendRequest(message);
   }

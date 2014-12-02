@@ -162,10 +162,7 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
     // Let's send him the request
     request.sendToSocket(socket);
     
-    // Normally we should receive an acknowledge
-    char inBuffer[4096];
-    socket->read(inBuffer,4096,false);
-    PimpMessage acknowledge (inBuffer);
+    PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
     
     if (acknowledge.isCommand(PimpMessage::kOk))
     {
@@ -198,24 +195,12 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
     request.sendToSocket(socket);
     
     // Normally we should receive an acknowledge
-    char inBuffer[4096];
-    socket->read(inBuffer,4096,false);
-    PimpMessage acknowledge (inBuffer);
+    PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
     
     // If the message receive is OK
     if (acknowledge.isCommand(PimpMessage::kOk))
     {
-      int bytesRead;
-      juce::String xmlResult;
-      // We should receive the search result
-      do
-      {
-        bytesRead = socket->read(inBuffer,4096,false);
-        xmlResult += juce::String(inBuffer,bytesRead);
-      } while (bytesRead == 4096);
-      
-      //
-      PimpMessage results (xmlResult.toStdString());
+      PimpMessage results = PimpMessage::createFromSocket(socket);
       if (results.isTrackerSearchResult() && results.hasSearchResults())
       {
         juce::Array<PeerFile> resultArray = results.getSearchResults();
@@ -248,9 +233,7 @@ void PeerProcessor::registerToTracker()
     registerRequest.sendToSocket(socket);
     
     // Normally we should receive an acknowledge
-    char inBuffer[4096];
-    socket->read(inBuffer,4096,false);
-    PimpMessage acknowledge (inBuffer);
+    PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
     if (acknowledge.isCommand(PimpMessage::kOk))
     {
       setState(kRegistered);

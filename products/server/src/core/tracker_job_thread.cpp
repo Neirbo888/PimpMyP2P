@@ -34,24 +34,12 @@ void TrackerJobThread::stop() {
 
 void TrackerJobThread::run()
 {
-  // Create a char tab to store what's coming
-  juce::String in;
-  int bytesRead;
-  char inBuffer[4096];
-  do
-  {
-    bytesRead = _socket->read(inBuffer,4096,false);
-    in += juce::String(inBuffer,bytesRead);
-  } while (bytesRead == 4096);
+  PimpMessage message = PimpMessage::createFromSocket(_socket);
   
-  // If an error has been detected
-  if (bytesRead == -1)
-  {
+  if (message.isCommand(PimpMessage::kError))
     Logger::writeToLog("Error receiving command");
-  }
   else
   {
-    PimpMessage message (in.toStdString());
     if (message.isCommand(PimpMessage::kPeerSearch))
       handleSearchRequest(message);
     else if (message.isPeerRefresh())
@@ -62,8 +50,7 @@ void TrackerJobThread::run()
       Logger::writeToLog("Error no handler");
   }
   
-  _socket->close();
-  
+  _socket->close();  
   _owner->triggerAsyncUpdate();
 }
 
@@ -103,7 +90,6 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
   PimpMessage acknowledge (_owner->getLocalIp());
   const juce::IPAddress peerIP = request.getSource();
   
-  // If the peer ip is valid, well let's register him and let him know
   if (peerIP.toString() != "0.0.0.0")
   {
     _owner->getFileManager().registerPeer(peerIP);
@@ -134,8 +120,8 @@ void TrackerJobThread::handlePeerRefresh(const PimpMessage &request)
   else
   {
     acknowledge.setCommand(PimpMessage::kError);
+    acknowledge.sendToSocket(_socket);
   }
-  acknowledge.sendToSocket(_socket);
 }
 
 void TrackerJobThread::handlePeerSignOut(const PimpMessage &request)

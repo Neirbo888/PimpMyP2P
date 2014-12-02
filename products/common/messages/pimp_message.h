@@ -127,12 +127,14 @@ public:
   /// tracker
   void createPeerSignOut();
   
+  static PimpMessage createFromSocket(juce::StreamingSocket* socket);
+  
 private:
   /// @brief Default constructor is private
   PimpMessage();
   
   /// @brief The content of a PimpMessage is stored in a XmlElement
-  juce::ScopedPointer<juce::XmlElement> _message;
+  juce::XmlElement* _message;
 };
 
 

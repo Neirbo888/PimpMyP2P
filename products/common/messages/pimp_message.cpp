@@ -21,7 +21,7 @@ PimpMessage::PimpMessage(const std::string& xmlData)
 
 PimpMessage::~PimpMessage()
 {
-  _message = nullptr;
+  deleteAndZero(_message);
 }
 
 const juce::String PimpMessage::getXmlString() const
@@ -195,7 +195,11 @@ void PimpMessage::sendToSocket(juce::StreamingSocket *socket)
   if (socket && socket->isConnected())
   {
     std::string out = getXmlString().toStdString();
-    socket->write(out.c_str(), out.length());
+    union Ustuff { int i; unsigned char c[4]; };
+    Ustuff outUnion;
+    outUnion.i = out.length();
+    socket->write(outUnion.c, 4);
+    socket->write(out.c_str(), outUnion.i);
   }
 }
 
@@ -356,5 +360,21 @@ const juce::Array<PeerFile> PimpMessage::getLocalFileList() const
   return localFiles;
 }
 
-
-
+PimpMessage PimpMessage::createFromSocket(juce::StreamingSocket *socket)
+{
+  if (socket && socket->isConnected())
+  {
+    union Ustuff { int i; unsigned char c[4]; };
+    Ustuff outUnion;
+    int bytesRead = socket->read(outUnion.c, 4, true);
+    Logger::writeToLog(juce::String(outUnion.i));
+    if (bytesRead == 4 && outUnion.i != 0)
+    {
+      juce::MemoryBlock buffer (outUnion.i, true);
+      bytesRead = socket->read(buffer.getData(), outUnion.i, true);
+      Logger::writeToLog(buffer.toString());
+      return PimpMessage(buffer.toString().toStdString());
+    }
+  }
+  return PimpMessage("error");
+}
