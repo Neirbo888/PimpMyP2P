@@ -134,7 +134,7 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
                          juce::File::separator +
                          file.getFilename());
   juce::FileOutputStream streamFile (outputFile);
-  
+  juce::Array<juce::IPAddress> peers = file.getPeersAddresses();
   if (outputFile.existsAsFile())
   {
     Logger::writeToLog("Can't receive an already existing file");
@@ -146,41 +146,13 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
     return;
   }
   
-  // Create a new socket to connect to our distant host
-  ScopedPointer<StreamingSocket> socket = new StreamingSocket();
-  socket->connect("DU LOL", 4807);
-  
-  // If connection can't be done, we get out
-  if (!socket->isConnected())
+  if (peers.size() == 0)
   {
-    Logger::writeToLog("Can't connect to distant host");
+    Logger::writeToLog("Can't find any peers with this file");
+    return;
   }
   
-  // Else, we can send the request
-  else
-  {
-    // Let's send him the request
-    request.sendToSocket(socket);
-    
-    PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
-    
-    if (acknowledge.isCommand(PimpMessage::kOk))
-    {
-      int totalBytesCount = 0;
-      do
-      {
-        int sizeToRead;
-        if (file.getSize() - totalBytesCount < 4096)
-          sizeToRead = file.getSize() - totalBytesCount;
-        else
-          sizeToRead = 4096;
-        juce::MemoryBlock buffer (sizeToRead, true);
-        int bytesRead = socket->read(buffer.getData(), sizeToRead, false);
-        totalBytesCount += bytesRead;
-        streamFile.write(buffer.getData(), bytesRead);
-      } while (totalBytesCount != file.getSize());
-    }
-  }
+  //// HAVE TO DO SOMETHING HERE
 }
 
 void PeerProcessor::sendTrackerSearch(const juce::String keystring)
