@@ -166,12 +166,19 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
     
     if (acknowledge.isCommand(PimpMessage::kOk))
     {
-      int bytesRead;
+      int totalBytesCount = 0;
       do
       {
-        int bytesRead = socket->read(inBuffer,4096,false);
-        streamFile.write(inBuffer, bytesRead);
-      } while (bytesRead == 4096);
+        int sizeToRead;
+        if (file.getSize() - totalBytesCount < 4096)
+          sizeToRead = file.getSize() - totalBytesCount;
+        else
+          sizeToRead = 4096;
+        juce::MemoryBlock buffer (sizeToRead, true);
+        int bytesRead = socket->read(buffer.getData(), sizeToRead, false);
+        totalBytesCount += bytesRead;
+        streamFile.write(buffer.getData(), bytesRead);
+      } while (totalBytesCount != file.getSize());
     }
   }
 }

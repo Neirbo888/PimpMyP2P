@@ -89,64 +89,44 @@ void PeerJobThread::handleSendRequest(const PimpMessage& request)
     else
       hasValidPart = true;
     
-    // Check if the file can be opened on the filesystem
     if (streamFile.openedOk())
       canBeOpened = true;
     
-    // If everything's good, well let's just say we're ready to send
     if (hasFile && hasValidPart && canBeOpened)
     {
       acknowledge.setCommand(PimpMessage::kOk);
       acknowledge.sendToSocket(_socket);
       
-      // And we can start to send the file
       int bytesRead;
-      char inBuffer[4096];
+      int totalSent = 0;
+      int sizeToBeRead;
+      int bytesToSend;
       
-      // If it's a part upload, we must calculate the range to send
       if (request.hasByteRange())
       {
-        // First we retrieve our range
         Range<int> range = request.getByteRange();
-        
-        // We must keep track of how much data we've sent, starting at 0
-        int totalSent = 0;
-        
-        // Set the read head to the start position in the file
         streamFile.setPosition(range.getStart());
-        do
-        {
-          int sizeToBeSent;
-          
-          // An arbitrary choice of mine, I chose that my packet size must not
-          // be over 4096 bytes.
-          if (range.getLength() - totalSent > 4096)
-            sizeToBeSent = 4096;
-          else
-            sizeToBeSent = range.getLength() - totalSent;
-          
-          // Read the fixed amount of data in the file stream
-          bytesRead = streamFile.read(inBuffer, sizeToBeSent);
-          
-          // And write it directly in the socket
-          _socket->write(inBuffer, bytesRead);
-          
-          // Increment our data counter and iterate
-          totalSent += bytesRead;
-        } while (totalSent != range.getLength());
+        sizeToBeRead = range.getLength();
       }
       else
+        sizeToBeRead = peerFile.getSize();
+      
+      do
       {
-        do
-        {
-          bytesRead = streamFile.read(inBuffer,4096);
-          _socket->write(inBuffer, bytesRead);
-        } while (bytesRead == 4096);
-      }
+        juce::MemoryBlock buffer (4096, true);
+        
+        if (sizeToBeRead - totalSent < 4096)
+          bytesToSend = sizeToBeRead - totalSent;
+        else
+          bytesToSend = 4096;
+        
+        bytesRead = streamFile.read(buffer.getData(), bytesToSend);
+        _socket->write(buffer.getData(), bytesRead);
+        
+        totalSent += bytesRead;
+      } while (totalSent != sizeToBeRead);
     }
     
-    // If something went wrong, let's be good here and tell our connected host
-    // that there was an error and we're going to shut him off real soon
     else
     {
       acknowledge.createErrorMessage("Something went wrong");
