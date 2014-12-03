@@ -20,10 +20,7 @@ PimpMessage::PimpMessage(CommandType type)
   setCommand(type);
 }
 
-PimpMessage::~PimpMessage()
-{
-  deleteAndZero(_message);
-}
+PimpMessage::~PimpMessage() {}
 
 const juce::String PimpMessage::getXmlString() const
 {
@@ -400,4 +397,17 @@ const int PimpMessage::getPartNumber() const
     return _message->getChildByName("PartNumber")->getIntAttribute("Value");
   return -1;
 }
+
+PimpMessage::PimpMessage(const PimpMessage& otherMessage)
+{
+  XmlDocument document (otherMessage.getXmlString());
+  _message = document.getDocumentElement();
+  if (!_message)
+  {
+    _message = new XmlElement("PimpMessage");
+    setCommand(kError);
+    auto errorXml = new XmlElement("ErrorMessage");
+    errorXml->addTextElement("Copy constructor failed");
+    _message->addChildElement(errorXml);
+  }
 }

@@ -139,6 +139,10 @@ public:
   void sendToSocket(juce::StreamingSocket* socket,
                     juce::IPAddress source);
   
+  /// @brief Constructs a PimpMessage as a copy of another one
+  /// @param {PeerFile} otherMessage - PimpMessage that will be copied
+  PimpMessage(const PimpMessage & otherMessage);
+  
 private:
   ////////////////////// COMMAND SETTING AND GETTING /////////////////////////
   
@@ -184,7 +188,7 @@ private:
   PimpMessage(CommandType type);
   
   /// @brief The content of a PimpMessage is stored in a XmlElement
-  juce::XmlElement* _message;
+  ScopedPointer<juce::XmlElement> _message;
 };
 
 
