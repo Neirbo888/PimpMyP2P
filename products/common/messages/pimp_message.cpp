@@ -386,4 +386,18 @@ PimpMessage PimpMessage::createFromSocket(juce::StreamingSocket *socket)
     }
   }
   return PimpMessage::createErrorMessage("Can't create from socket");
+const bool PimpMessage::hasPartNumber() const
+{
+  auto partNumberXml = _message->getChildByName("PartNumber");
+  if (partNumberXml)
+    return partNumberXml->hasAttribute("Value");
+  return false;
+}
+
+const int PimpMessage::getPartNumber() const
+{
+  if (hasPartNumber())
+    return _message->getChildByName("PartNumber")->getIntAttribute("Value");
+  return -1;
+}
 }

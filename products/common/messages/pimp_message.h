@@ -38,6 +38,13 @@ public:
   /// either no range defined or even no File attribute at all
   const juce::Range<int> getRange() const;
   
+  /// @brief True if this PimpMessage has a PartNumber attribute defined
+  const bool hasPartNumber() const;
+  
+  /// @brief Will return the number of the part or -1 if there's no PartNumber
+  /// attribute in this PimpMessage
+  const int getPartNumber() const;
+  
   /// @brief True if this PimpMessage has a SearchString
   const bool hasSearchString() const;
   
