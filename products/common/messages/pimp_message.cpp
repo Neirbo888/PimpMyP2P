@@ -383,6 +383,26 @@ PimpMessage PimpMessage::createFromSocket(juce::StreamingSocket *socket)
     }
   }
   return PimpMessage::createErrorMessage("Can't create from socket");
+}
+
+PimpMessage PimpMessage::createPeerFileSend(PeerFile file,
+                                            juce::Range<int> range,
+                                            int part)
+{
+  PimpMessage peerFileSend (kPeerFileSend);
+  peerFileSend._message->addChildElement(getXmlElementFromPeerFile(file));
+  
+  auto rangeXml = new XmlElement("Range");
+  rangeXml->setAttribute("Start", range.getStart());
+  rangeXml->setAttribute("End", range.getEnd());
+  peerFileSend._message->addChildElement(rangeXml);
+  
+  auto partXml = new XmlElement("Part");
+  partXml->setAttribute("Value", part);
+  peerFileSend._message->addChildElement(partXml);  
+  return peerFileSend;
+}
+
 const bool PimpMessage::hasPartNumber() const
 {
   auto partNumberXml = _message->getChildByName("PartNumber");

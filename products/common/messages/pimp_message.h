@@ -96,9 +96,17 @@ public:
   
   ///////////////////////// MESSAGES CREATION /////////////////////////////////
   
-  /// @brief Creates a PeerGetFile request to download a file from another peer
-  /// @param {PeerFile} file - File to download
+  /// @brief Creates a PeerGetFile request to ask a peer if he is able to send
+  /// us the given file
+  /// @param {PeerFile} file - File to check
   static PimpMessage createPeerFileRequest(PeerFile file);
+  
+  /// @brief Create a PeerSendFile request to ask a peer to send a file
+  /// @param {PeerFile} file - File that will be sent
+  /// @param {juce::Range<int>} range - The range of the file that will be sent
+  /// @param {int} part - The part number
+  static PimpMessage createPeerFileSend(PeerFile file, juce::Range<int> range,
+                                        int part);
   
   /// @brief Creates a search request for the tracker
   /// @param {juce::StringArray} keywords - Array containing all the keywords
