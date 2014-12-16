@@ -1,13 +1,3 @@
-/*
-  ==============================================================================
-
-    peer_file_manager.h
-    Created: 19 Nov 2014 7:55:14pm
-    Author:  Adrien Tisseraud
-
-  ==============================================================================
-*/
-
 #ifndef PEER_FILE_MANAGER_H_INCLUDED
 #define PEER_FILE_MANAGER_H_INCLUDED
 
@@ -37,6 +27,14 @@ public:
   
   /// @brief Return the current shared folder
   const juce::File& getSharedFolder() const { return _sharedFolder; }
+  
+  /// @brief Sends a file to the given socket
+  void sendFileToSocket(const int index,
+                        juce::StreamingSocket* socket) const;
+  
+  /// @brief Receive a file from the given socket and store it on the filesystem
+  void receiveFileFromSocket(const PeerFile& queuedFile,
+                             juce::StreamingSocket *socket);
   
   /// @brief File manager run method
   void run();

@@ -70,3 +70,106 @@ void PeerFileManager::run()
     Logger::writeToLog("End scan");
   }
 }
+
+void PeerFileManager::sendFileToSocket(const int index,
+                                       juce::StreamingSocket *socket) const
+{
+  if (index >= getAvailableFiles().size() ||
+      index < 0)
+  {
+    Logger::writeToLog("Trying to send invalid index");
+    return;
+  }
+  
+  const PeerFile& file = getAvailableFiles().getReference(index);
+  juce::FileInputStream inputStream (file.getFile());
+  
+  if (!inputStream.openedOk())
+  {
+    Logger::writeToLog("Can't open input stream");
+    return;
+  }
+  
+  if (!socket)
+  {
+    Logger::writeToLog("Socket is invalid");
+    return;
+  }
+  
+  if (!socket->isConnected())
+  {
+    Logger::writeToLog("Socket has been closed");
+    return;
+  }
+  
+  union Ustuff { int i; unsigned char c[4]; };
+  Ustuff outUnion;
+  outUnion.i = file.getSize();
+  socket->write(outUnion.c, 4);
+  int totalSent = 0;
+  do
+  {
+    int sizeToSend = 4096;
+    if (file.getSize() - totalSent < 4096)
+      sizeToSend = file.getSize() - totalSent;
+    juce::MemoryBlock buffer (sizeToSend, true);
+    int readBytes = inputStream.read(buffer.getData(), sizeToSend);
+    socket->write(buffer.getData(), readBytes);
+    totalSent += sizeToSend;
+  } while (totalSent != file.getSize());
+}
+
+void PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
+                                            juce::StreamingSocket *socket)
+{
+  juce::File outputFile (_sharedFolder.getFullPathName() +
+                         juce::File::separator +
+                         queuedFile.getFilename());
+  
+  juce::FileOutputStream streamFile (outputFile);
+  
+  if (outputFile.existsAsFile())
+  {
+    Logger::writeToLog("Can't receive an already existing file");
+    return;
+  }
+  if (streamFile.openedOk())
+  {
+    Logger::writeToLog("Can't open output stream");
+    return;
+  }
+  
+  if (!socket)
+  {
+    Logger::writeToLog("Socket is invalid");
+    return;
+  }
+  
+  if (!socket->isConnected())
+  {
+    Logger::writeToLog("Socket has been closed");
+    return;
+  }
+  
+  union Ustuff { int i; unsigned char c[4]; };
+  Ustuff outUnion;
+  int bytesRead = socket->read(outUnion.c, 4, true);
+  if (bytesRead != 4 || outUnion.i == 0)
+  {
+    Logger::writeToLog("Invalid size read");
+    return;
+  }
+  
+  int totalReceived = 0;
+  do
+  {
+    int sizeToReceive = 4096;
+    if (queuedFile.getSize() - totalReceived < 4096)
+      sizeToReceive = queuedFile.getSize() - totalReceived;
+    
+    juce::MemoryBlock buffer (sizeToReceive, true);
+    int readBytes = socket->read(buffer.getData(), sizeToReceive, true);
+    streamFile.write(buffer.getData(), readBytes);
+    totalReceived += sizeToReceive;
+  } while (totalReceived != queuedFile.getSize());
+}
