@@ -55,5 +55,27 @@ void PeerJobThread::run()
 
 void PeerJobThread::handlePeerFileRequest(const PimpMessage& request)
 {
+  PeerFile requestedFile = request.getPeerFile();
   
+  if (requestedFile == PeerFile::emptyPeerFile())
+  {
+    Logger::writeToLog("Requested file is empty");
+    PimpMessage error = PimpMessage::createErrorMessage("Is empty");
+    error.sendToSocket(_socket, _owner->getLocalIp());
+    return;
+  }
+  
+  juce::Array<PeerFile> availablesFiles = _owner->getFileManager().getAvailableFiles();
+  if (!availablesFiles.contains(requestedFile))
+  {
+    Logger::writeToLog("Requested file wasn't found");
+    PimpMessage error = PimpMessage::createErrorMessage("Not found");
+    error.sendToSocket(_socket, _owner->getLocalIp());
+    return;
+  }
+  
+  int fileIndex = availablesFiles.indexOf(requestedFile);
+  PimpMessage acknowledge = PimpMessage::createOk();
+  acknowledge.sendToSocket(_socket, _owner->getLocalIp());
+  _owner->getFileManager().sendFileToSocket(fileIndex, _socket);
 }
