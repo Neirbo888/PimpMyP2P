@@ -109,6 +109,10 @@ void PeerProcessor::run()
           registerToTracker();
           break;
           
+        case kShouldDownloadFile:
+          // We should prepare to download
+          downloadQueuedPeerFile();
+          
         default:
           break;
       }
@@ -122,18 +126,35 @@ void PeerProcessor::setSharedFolder(const juce::File& folder)
   _fileManager.setSharedFolder(folder);
 }
 
-void PeerProcessor::sendPeerGetFile(PeerFile file)
+void PeerProcessor::queuePeerFileTask(PeerFile file)
 {
+  if (_state != kRegistered)
+  {
+    Logger::writeToLog("Enable to queue" + file.getFilename());
+    return;
+  }
+  
+  
+  setState(kShouldDownloadFile);
+}
+
+void PeerProcessor::downloadQueuedPeerFile()
+{
+  if (_queuedFile == PeerFile::emptyPeerFile())
+  {
+    Logger::writeToLog("Can't download empty file");
+    return;
+  }
   // Create our PimpMessage request
-  PimpMessage request = PimpMessage::createPeerFileRequest(file);
+  PimpMessage request = PimpMessage::createPeerFileRequest(_queuedFile);
   
   
   // Prepare a stream output file to write the data
   juce::File outputFile (_fileManager.getSharedFolder().getFullPathName() +
                          juce::File::separator +
-                         file.getFilename());
+                         _queuedFile.getFilename());
   juce::FileOutputStream streamFile (outputFile);
-  juce::Array<juce::IPAddress> peers = file.getPeersAddresses();
+  juce::Array<juce::IPAddress> peers = _queuedFile.getPeersAddresses();
   if (outputFile.existsAsFile())
   {
     Logger::writeToLog("Can't receive an already existing file");
@@ -151,7 +172,22 @@ void PeerProcessor::sendPeerGetFile(PeerFile file)
     return;
   }
   
-  //// HAVE TO DO SOMETHING HERE
+  Logger::writeToLog("Ready to download");
+  
+  for (juce::IPAddress peer : peers)
+  {
+    juce::ScopedPointer<StreamingSocket> socket = new StreamingSocket();
+    socket->connect(peer.toString(), 4807);
+    if (socket->isConnected())
+    {
+      request.sendToSocket(socket, _address);
+      PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
+      if (acknowledge.isOk())
+      {
+        _fileManager.receiveFileFromSocket(_queuedFile, socket);
+      }
+    }
+  }
 }
 
 void PeerProcessor::sendTrackerSearch(const juce::String keystring)

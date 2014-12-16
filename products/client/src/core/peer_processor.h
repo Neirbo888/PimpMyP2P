@@ -27,6 +27,8 @@ public:
     kIdle,
     kShouldRegister,
     kRegistered,
+    kShouldDownloadFile,
+    kDownloading,
     kMaxCount
   };
   
@@ -59,8 +61,11 @@ public:
   /// @brief Get the file manager
   const PeerFileManager& getFileManager() { return _fileManager; }
   
-  /// @brief Sends a PeerGetFile request to a peer
-  void sendPeerGetFile(PeerFile file);
+  /// @brief Prepare a PeerFile for download
+  void queuePeerFileTask(PeerFile file);
+  
+  /// @brief Download a PeerFile from a Peer
+  void downloadQueuedPeerFile();
   
   /// @brief Sends a PeerSearch request to the tracker
   /// @param {juce::String} keystring - KeyString that will be sent to the
@@ -99,7 +104,8 @@ private:
   ScopedPointer<SocketThread> _socketThread;
   /// @brief Current state of the PeerProcessor
   StateType _state;
-  
+  /// @brief PeerFile that should be downloaded
+  PeerFile _queuedFile;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerProcessor)
 };
 

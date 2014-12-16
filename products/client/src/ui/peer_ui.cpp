@@ -248,7 +248,7 @@ void PeerUi::UpdateUi()
 void PeerUi::changeListenerCallback(juce::ChangeBroadcaster *source)
 {
   if (source == _pimpTable)
-    _processor->sendPeerGetFile(_pimpTable->getSelectedFile());
+    _processor->queuePeerFileTask(_pimpTable->getSelectedFile());
   else if (source == _processor)
     UpdateUi();
 }
