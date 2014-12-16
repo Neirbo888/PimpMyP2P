@@ -5,28 +5,7 @@
 DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 
 ifndef CONFIG
-  CONFIG=Debug
-endif
-
-ifeq ($(CONFIG),Debug)
-  BINDIR := build
-  LIBDIR := build
-  OBJDIR := build/intermediate/Debug
-  OUTDIR := ../../bin/linux
-
-  ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -march=armv6
-  endif
-
-  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
-  CXXFLAGS += $(CFLAGS)
-  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
-  LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
-  TARGET := PimpMyP2P_TrackerCmd_d
-  BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
-  CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
+  CONFIG=Release
 endif
 
 ifeq ($(CONFIG),Release)
@@ -36,7 +15,7 @@ ifeq ($(CONFIG),Release)
   OUTDIR := ../../bin/linux
 
   ifeq ($(TARGET_ARCH),)
-    TARGET_ARCH := -march=armv6
+    TARGET_ARCH := -m64
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
@@ -46,6 +25,27 @@ ifeq ($(CONFIG),Release)
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
   TARGET := PimpMyP2P_TrackerCmd
+  BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
+  CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
+endif
+
+ifeq ($(CONFIG),Raspberry)
+  BINDIR := build
+  LIBDIR := build
+  OBJDIR := build/intermediate/Raspberry
+  OUTDIR := ../../bin/linux
+
+  ifeq ($(TARGET_ARCH),)
+    TARGET_ARCH := -march=armv6
+  endif
+
+  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "-std=c++0x" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
+  CXXFLAGS += $(CFLAGS)
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -ldl -lpthread -lrt 
+  LDDEPS :=
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "-std=c++0x" -D "JUCE_USE_XSHM=0" -D "JUCE_USE_XINERAMA=0" -D "JUCER_LINUX_MAKE_6D5AAF4E=1" -D "JUCE_APP_VERSION=1.0.0" -D "JUCE_APP_VERSION_HEX=0x10000" -I /usr/include -I /usr/include/freetype2 -I ../../cmd/JuceLibraryCode -I ../../../../externals/juce_git/modules -I ../../../../ -I ../../../../externals/juce_3.0.4/
+  TARGET := PimpMyP2P_TrackerCmd_raspberry
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
 endif

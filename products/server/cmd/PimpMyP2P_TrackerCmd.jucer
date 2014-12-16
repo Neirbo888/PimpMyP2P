@@ -52,12 +52,12 @@
   <EXPORTFORMATS>
     <LINUX_MAKE targetFolder="../projects/linux" extraDefs="JUCE_USE_XSHM=0 JUCE_USE_XINERAMA=0">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
-                       targetName="PimpMyP2P_TrackerCmd_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
                        targetName="PimpMyP2P_TrackerCmd" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux"/>
+                       linuxArchitecture="-m64" binaryPath="../bin/linux"/>
+        <CONFIGURATION name="Raspberry" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="PimpMyP2P_TrackerCmd_raspberry" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux" defines="-std=c++0x"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
