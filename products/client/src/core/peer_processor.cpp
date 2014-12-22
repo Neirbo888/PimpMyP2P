@@ -193,7 +193,18 @@ void PeerProcessor::downloadQueuedPeerFile()
       PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
       if (acknowledge.isOk())
       {
-        _fileManager.receiveFileFromSocket(_queuedFile, socket);
+        if (_fileManager.receiveFileFromSocket(_queuedFile, socket))
+        {
+          Logger::writeToLog(_queuedFile.getFilename() +
+                             " has been successfuly downloaded");
+          setState(kRegistered);
+          return;
+        }
+        else
+        {
+          Logger::writeToLog(_queuedFile.getFilename() +
+                             " has failed from peer : " + peer.toString());
+        }
       }
     }
   }
