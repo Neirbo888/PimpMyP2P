@@ -68,6 +68,7 @@ void TrackerFileManager::unregisterPeer(const juce::IPAddress peer)
   if (_availablePeers.contains(peer))
   {
     int index = _availablePeers.indexOf(peer);
+    cleanPeer(peer);
     _availablePeers.remove(index);
   }
 }
