@@ -57,7 +57,7 @@ void PeerProcessor::setState(StateType state)
 }
 void PeerProcessor::actionListenerCallback(const String& message)
 {
-  Logger::writeToLog("Unhandled ActionListener callback");  
+  publishLogMessage("Unhandled ActionListener callback");
 }
 
 void PeerProcessor::handleAsyncUpdate()
@@ -69,7 +69,7 @@ void PeerProcessor::handleAsyncUpdate()
   }
   else
   {
-    Logger::writeToLog("Unhandled AsyncUpdate callback");
+    publishLogMessage("Unhandled AsyncUpdate callback");
   }
 }
 
@@ -105,7 +105,7 @@ void PeerProcessor::run()
           if (!_socketThread->isConnected())
           {
             /// @todo publish something on the ui
-            Logger::writeToLog("Couldn't create listener on port 4807");
+            publishLogMessage("Couldn't create listener on port 4807");
             setState(kUnavailable);
           }
           // If the Socket is connected, everything's allright, let's move on
@@ -139,7 +139,7 @@ void PeerProcessor::queuePeerFileTask(PeerFile file)
 {
   if (_state != kRegistered)
   {
-    Logger::writeToLog("Enable to queue" + file.getFilename());
+    publishLogMessage("Enable to queue" + file.getFilename());
     return;
   }
   
@@ -151,7 +151,7 @@ void PeerProcessor::downloadQueuedPeerFile()
 {
   if (_queuedFile == PeerFile::emptyPeerFile())
   {
-    Logger::writeToLog("Can't download empty file");
+    publishLogMessage("Can't download empty file");
     return;
   }
   // Create our PimpMessage request
@@ -171,17 +171,17 @@ void PeerProcessor::downloadQueuedPeerFile()
   }
   if (streamFile.openedOk())
   {
-    Logger::writeToLog("Can't open output stream");
+    publishLogMessage("Can't receive an already existing file");
     return;
   }
   
   if (peers.size() == 0)
   {
-    Logger::writeToLog("Can't find any peers with this file");
+    publishLogMessage("Can't find any peers with this file");
     return;
   }
   
-  Logger::writeToLog("Ready to download");
+  publishLogMessage("Ready to download");
   
   for (juce::IPAddress peer : peers)
   {
@@ -195,15 +195,15 @@ void PeerProcessor::downloadQueuedPeerFile()
       {
         if (_fileManager.receiveFileFromSocket(_queuedFile, socket))
         {
-          Logger::writeToLog(_queuedFile.getFilename() +
-                             " has been successfuly downloaded");
+          publishLogMessage(_queuedFile.getFilename() +
+                            " has been successfuly downloaded");
           setState(kRegistered);
           return;
         }
         else
         {
-          Logger::writeToLog(_queuedFile.getFilename() +
-                             " has failed from peer : " + peer.toString());
+          publishLogMessage(_queuedFile.getFilename() +
+                            " has failed from peer : " + peer.toString());
         }
       }
     }
@@ -219,10 +219,7 @@ void PeerProcessor::sendTrackerSearch(const juce::String keystring)
   socket->connect(_tracker.toString(), 4807);
   
   if (!socket->isConnected())
-  {
-    /// @todo publish something on the ui
-    Logger::writeToLog("Can't connect to distant host");
-  }
+    publishLogMessage("Can't connect to distant host");
   else
   {
     request.sendToSocket(socket, _address);
@@ -248,6 +245,7 @@ void PeerProcessor::registerToTracker()
   if (_tracker.toString() == "0.0.0.0")
   {
     setState(kIdle);
+    publishLogMessage("Tracker ip is invalid");
     return;
   }
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
@@ -256,8 +254,8 @@ void PeerProcessor::registerToTracker()
   if (!socket->isConnected())
   {
     /// @todo publish something on the ui
-    Logger::writeToLog("Can't connect to distant host");
-    setState(kIdle);
+    publishLogMessage("Can't connect to distant host");
+    setState(kReadyToRegister);
   }
   else
   {
@@ -268,12 +266,14 @@ void PeerProcessor::registerToTracker()
     PimpMessage acknowledge = PimpMessage::createFromSocket(socket);
     if (acknowledge.isOk())
     {
+      publishLogMessage("Connected to " + _tracker.toString());
       setState(kRegistered);
     }
     else
     {
       _tracker = juce::IPAddress();
       setState(kIdle);
+      publishLogMessage("Distant host is not ready");
     }
   }
 }
@@ -290,9 +290,8 @@ void PeerProcessor::unregisterToTracker()
   
   if (!socket->isConnected())
   {
-    /// @todo publish something on the ui
-    Logger::writeToLog("Can't connect to distant host");
     setState(kIdle);
+    publishLogMessage("Can't connect to distant host");
     return;
   }
   else
@@ -302,4 +301,15 @@ void PeerProcessor::unregisterToTracker()
     setState(kIdle);
   }
   socket->close();
+}
+
+void PeerProcessor::publishLogMessage(const juce::String &message)
+{
+  
+  const MessageManagerLock mmLock (Thread::getCurrentThread());
+  if (mmLock.lockWasGained())
+    _ui->setStatusMessage(message);
+  else
+    Logger::writeToLog("KIKOOO");
+  Logger::writeToLog(message);
 }

@@ -54,6 +54,7 @@ public:
     void UpdateUi();
     void publishSearchResults(juce::Array<PeerFile> results);
     void textEditorReturnKeyPressed (TextEditor&);
+    void setStatusMessage(const juce::String& message);
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -69,7 +70,6 @@ private:
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<Label> _labelSearchField;
     ScopedPointer<TextEditor> _editorSearchField;
     ScopedPointer<TextButton> _buttonSetFolder;
     ScopedPointer<TextButton> _buttonSearch;

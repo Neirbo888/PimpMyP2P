@@ -91,7 +91,11 @@ public:
   /// @brief Sets the value to the progress meter
   void setProgress(double newValue) { _progress = newValue; }
   
+  /// @brief Simple logging helper
+  void publishLogMessage(const juce::String& message);
+  
 private:
+  
   /// @brief Should be initialized with the current LAN IP of this computer,
   /// assuming it's a Class C network. Otherwise, it should be the loopback IP.
   juce::IPAddress _address;

@@ -36,15 +36,6 @@
 PeerUi::PeerUi (PeerProcessor* processor)
     : _processor(processor)
 {
-    addAndMakeVisible (_labelSearchField = new Label ("Search Field Label",
-                                                      TRANS("Search :")));
-    _labelSearchField->setFont (Font ("Helvetica", 11.00f, Font::plain));
-    _labelSearchField->setJustificationType (Justification::centredRight);
-    _labelSearchField->setEditable (false, false, false);
-    _labelSearchField->setColour (Label::textColourId, Colour (0xff595f66));
-    _labelSearchField->setColour (TextEditor::textColourId, Colours::black);
-    _labelSearchField->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
     addAndMakeVisible (_editorSearchField = new TextEditor ("Search Field Editor"));
     _editorSearchField->setMultiLine (false);
     _editorSearchField->setReturnKeyStartsNewLine (false);
@@ -90,9 +81,11 @@ PeerUi::PeerUi (PeerProcessor* processor)
   // Create look and feel
   LookAndFeel::setDefaultLookAndFeel(&_lookAndFeel);
   _editorSearchField->addListener(this);
+
+  _progressBar->setTextToDisplay(juce::String::empty);
     //[/UserPreSize]
 
-    setSize (600, 400);
+    setSize (600, 410);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -105,7 +98,6 @@ PeerUi::~PeerUi()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    _labelSearchField = nullptr;
     _editorSearchField = nullptr;
     _buttonSetFolder = nullptr;
     _buttonSearch = nullptr;
@@ -144,18 +136,14 @@ void PeerUi::paint (Graphics& g)
 
 void PeerUi::resized()
 {
-    //[UserPreResize] Add your own custom resize code here..
-    //[/UserPreResize]
-
-    _labelSearchField->setBounds (8, 8, 60, 24);
-    _editorSearchField->setBounds (getWidth() - 96 - proportionOfWidth (0.4000f), getHeight() - 8 - 24, proportionOfWidth (0.4000f), 24);
+    _editorSearchField->setBounds (8, 368, proportionOfWidth (0.8266f), 24);
     _buttonSetFolder->setBounds (getWidth() - 8 - 96, 8, 96, 24);
-    _buttonSearch->setBounds (getWidth() - 8 - 80, getHeight() - 8 - 24, 80, 24);
-    _pimpTable->setBounds (8, 40, getWidth() - 16, getHeight() - 80);
+    _buttonSearch->setBounds (getWidth() - 8 - 80, 368, 80, 24);
+    _pimpTable->setBounds (8, 40, getWidth() - 16, 320);
     _buttonConnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
-    _editorTrackerIP->setBounds (getWidth() - 192 - proportionOfWidth (0.2667f), getHeight() - 368 - 24, proportionOfWidth (0.2667f), 24);
+    _editorTrackerIP->setBounds (getWidth() - 192 - proportionOfWidth (0.2667f), 8, proportionOfWidth (0.2667f), 24);
     _buttonDisconnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
-    _progressBar->setBounds (0, 368 - 8, proportionOfWidth (1.0000f), 8);
+    _progressBar->setBounds (-1, getHeight() - -1 - 17, 602, 17);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -274,6 +262,11 @@ void PeerUi::textEditorReturnKeyPressed (TextEditor& editor)
       _processor->sendTrackerSearch(_editorSearchField->getText());
   }
 }
+
+void PeerUi::setStatusMessage(const juce::String &message)
+{
+  _progressBar->setTextToDisplay(message);
+}
 //[/MiscUserCode]
 
 
@@ -290,38 +283,33 @@ BEGIN_JUCER_METADATA
                  parentClasses="public juce::Component, public juce::ChangeListener, public juce::TextEditor::Listener"
                  constructorParams="PeerProcessor* processor" variableInitialisers="_processor(processor)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="600" initialHeight="400">
+                 fixedSize="1" initialWidth="600" initialHeight="410">
   <BACKGROUND backgroundColour="ffdcdcdc"/>
-  <LABEL name="Search Field Label" id="d25be79670612cf1" memberName="_labelSearchField"
-         virtualName="" explicitFocusOrder="0" pos="8 8 60 24" textCol="ff595f66"
-         edTextCol="ff000000" edBkgCol="0" labelText="Search :" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Helvetica"
-         fontsize="11" bold="0" italic="0" justification="34"/>
   <TEXTEDITOR name="Search Field Editor" id="67e851ba8745bfe6" memberName="_editorSearchField"
-              virtualName="" explicitFocusOrder="0" pos="96Rr 8Rr 40% 24" initialText=""
-              multiline="0" retKeyStartsLine="0" readonly="0" scrollbars="0"
-              caret="0" popupmenu="0"/>
+              virtualName="" explicitFocusOrder="0" pos="8 368 82.667% 24"
+              initialText="" multiline="0" retKeyStartsLine="0" readonly="0"
+              scrollbars="0" caret="0" popupmenu="0"/>
   <TEXTBUTTON name="Set Folder Button" id="a74c01732164b671" memberName="_buttonSetFolder"
               virtualName="" explicitFocusOrder="0" pos="8Rr 8 96 24" buttonText="Set Folder"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="Search Button" id="718de0990a41ea4e" memberName="_buttonSearch"
-              virtualName="" explicitFocusOrder="0" pos="8Rr 8Rr 80 24" buttonText="Search"
+              virtualName="" explicitFocusOrder="0" pos="8Rr 368 80 24" buttonText="Search"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <GENERICCOMPONENT name="Pimp Table" id="8d2da6dba96a2b23" memberName="_pimpTable"
-                    virtualName="" explicitFocusOrder="0" pos="8 40 16M 80M" class="PimpTable"
+                    virtualName="" explicitFocusOrder="0" pos="8 40 16M 320" class="PimpTable"
                     params="this"/>
   <TEXTBUTTON name="Connect Button" id="7e7d4511e4a51ca9" memberName="_buttonConnect"
               virtualName="" explicitFocusOrder="0" pos="112Rr 8 72 24" buttonText="Connect"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTEDITOR name="Tracker IP Editor" id="152c82c01ae8cf62" memberName="_editorTrackerIP"
-              virtualName="" explicitFocusOrder="0" pos="192Rr 368Rr 26.667% 24"
+              virtualName="" explicitFocusOrder="0" pos="192Rr 8 26.667% 24"
               initialText="" multiline="0" retKeyStartsLine="0" readonly="0"
               scrollbars="0" caret="0" popupmenu="0"/>
   <TEXTBUTTON name="Disconnect Button" id="99a70b8a258bd7c6" memberName="_buttonDisconnect"
               virtualName="" explicitFocusOrder="0" pos="112Rr 8 72 24" buttonText="Disconnect"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <GENERICCOMPONENT name="Progress Bar" id="a0bbe1135972e7a3" memberName="_progressBar"
-                    virtualName="" explicitFocusOrder="0" pos="0 368r 100% 8" class="juce::ProgressBar"
+                    virtualName="" explicitFocusOrder="0" pos="-1 -1Rr 602 17" class="juce::ProgressBar"
                     params="_processor-&gt;getProgress()"/>
 </JUCER_COMPONENT>
 
