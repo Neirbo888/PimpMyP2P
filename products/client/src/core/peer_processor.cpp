@@ -182,7 +182,7 @@ void PeerProcessor::downloadQueuedPeerFile()
     return;
   }
   
-  publishLogMessage("Ready to download");
+  publishLogMessage("Downloading " + _queuedFile.getFilename());
   
   for (juce::IPAddress peer : peers)
   {
@@ -196,14 +196,20 @@ void PeerProcessor::downloadQueuedPeerFile()
       {
         if (_fileManager.receiveFileFromSocket(_queuedFile, socket))
         {
-          publishLogMessage(_queuedFile.getFilename() +
-                            " has been successfuly downloaded");
           juce::File result (_fileManager.getSharedFolder().getFullPathName() +
                            juce::File::separator +
                            _queuedFile.getFilename());
           PeerFile resultPeer (result);
-          publishLogMessage("MD5: " + _queuedFile.getMD5() +
-                            " vs. " + resultPeer.getMD5());
+          if (_queuedFile.getMD5() == resultPeer.getMD5())
+          {
+            publishLogMessage(_queuedFile.getFilename() +
+                              " has been successfuly downloaded");
+          }
+          else
+          {
+            publishLogMessage(juce::String("Download has successfully ended") +
+                              juce::String(" but MD5 is invalid"));
+          }
           setState(kRegistered);
           return;
         }
