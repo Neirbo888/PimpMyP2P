@@ -23,6 +23,9 @@ PimpLookAndFeel::PimpLookAndFeel()
   
   setColour(ScrollBar::trackColourId, juce::Colour(0xfff0f2f2));
   setColour(ScrollBar::backgroundColourId, juce::Colour(0xfff0f2f2));
+  
+  setColour(ProgressBar::foregroundColourId, juce::Colour(0xff595f66));
+  setColour(ProgressBar::backgroundColourId, juce::Colour(0xffdcdcdc));
 }
 
 PimpLookAndFeel::~PimpLookAndFeel() {}
@@ -288,13 +291,23 @@ void PimpLookAndFeel::drawProgressBar (Graphics& g,
                                                double progress,
                                                const String& textToShow)
 {
-  g.setColour(juce::Colour (0xff595f66));
+  const Colour background (progressBar.findColour (ProgressBar::backgroundColourId));
+  const Colour foreground (progressBar.findColour (ProgressBar::foregroundColourId));
+  
+  g.setColour(foreground);
   
   if (progress >= 0.0f && progress < 1.0f)
   {
     g.fillRect(1.0f, 1.0f,
                (float) jlimit (0.0, width - 2.0, progress * (width - 2.0)),
                (float) (height - 2));
+  }
+  if (textToShow.isNotEmpty())
+  {
+    g.setColour (Colour::contrasting (background, foreground));
+    g.setFont(Font ("Helvetica", 9.00f, Font::plain));
+    
+    g.drawText (textToShow, 0, 0, width, height, Justification::centred, false);
   }
 }
 
