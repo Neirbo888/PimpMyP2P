@@ -57,7 +57,7 @@
                        linuxArchitecture="-m64" binaryPath="../bin/linux"/>
         <CONFIGURATION name="Raspberry" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
                        targetName="PimpMyP2P_TrackerCmd_raspberry" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux" defines="-std=c++0x"/>
+                       linuxArchitecture="-march=armv6" binaryPath="../bin/linux" defines=""/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
