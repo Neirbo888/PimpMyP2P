@@ -25,6 +25,8 @@ public:
     kUninitialized = 0,
     kUnavailable,
     kIdle,
+    kAnalyzing,
+    kReadyToRegister,
     kShouldRegister,
     kRegistered,
     kShouldDownloadFile,

@@ -24,42 +24,19 @@ void PeerFileManager::setSharedFolder(const juce::File& folder)
 
 void PeerFileManager::run()
 {
-  if (_sharedFolder.exists())
+  juce::Array<juce::File> foundFiles;
+  _availableFiles.clear();
+  
+  _sharedFolder.findChildFiles(foundFiles,juce::File::findFiles, false, "*");
+  for (const juce::File& file : foundFiles)
   {
-    Logger::writeToLog("Scanning folder");
-    bool contentHasChanged = false;
-    juce::Array<juce::File> foundFiles;
-    juce::Array<PeerFile> newAvailableFilesArray;
-    
-    _sharedFolder.findChildFiles(foundFiles,juce::File::findFiles, false, "*");
-    for (const juce::File& file : foundFiles)
-    {
-      if (threadShouldExit()) return;
-      newAvailableFilesArray.add(PeerFile(file));
-    }
-    if (foundFiles.size() == _availableFiles.size())
-    {
-      const juce::Array<PeerFile>& availableFiles = this->getAvailableFiles();
-      for (PeerFile* peerFile = newAvailableFilesArray.begin();
-           peerFile != newAvailableFilesArray.end(); peerFile++)
-      {
-        if (!availableFiles.contains(*peerFile)) {
-          contentHasChanged = true;
-          break;
-        }
-      }
-    }
-    else
-      contentHasChanged = true;
-    
-    if (contentHasChanged)
-    {
-      ScopedLock lock (_mutex);
-      _availableFiles = newAvailableFilesArray;
-      _owner->triggerAsyncUpdate();
-    }
-    Logger::writeToLog("End scan");
+    _owner->setProgress((double)(foundFiles.indexOf(file))/(double)(foundFiles.size()));
+    _owner->publishLogMessage("Scanning " + file.getFileNameWithoutExtension());
+    _availableFiles.add(PeerFile(file));
   }
+  
+  _owner->setProgress(0);
+  _owner->triggerAsyncUpdate();
 }
 
 void PeerFileManager::sendFileToSocket(const int index,
@@ -118,13 +95,7 @@ bool PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
                          queuedFile.getFilename());
   
   juce::FileOutputStream streamFile (outputFile);
-  
-  if (outputFile.existsAsFile())
-  {
-    Logger::writeToLog("Can't receive an already existing file");
-    return false;
-  }
-  if (streamFile.openedOk())
+  if (!streamFile.openedOk())
   {
     Logger::writeToLog("Can't open output stream");
     return false;

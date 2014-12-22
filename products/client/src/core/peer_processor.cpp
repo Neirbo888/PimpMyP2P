@@ -67,6 +67,12 @@ void PeerProcessor::handleAsyncUpdate()
   {
     registerToTracker();
   }
+  else if (_state == kAnalyzing)
+  {
+    publishLogMessage("Shared folder is now "
+                      + _fileManager.getSharedFolder().getFullPathName());
+    setState(kReadyToRegister);
+  }
   else
   {
     publishLogMessage("Unhandled AsyncUpdate callback");
@@ -81,46 +87,39 @@ void PeerProcessor::stop()
 
 void PeerProcessor::run()
 {
-  // This ensure that we exit the thread when the threadShouldStop flag was
-  // raised
   while(!threadShouldExit())
   {
-    // Wait indefinitly until someone notifies the thread, provoking something
-    // to happen (or not) in the state machine.
     if(this->wait(-1))
     {
-      // This might be unnecessary but it ensure that when we've raised the
-      // threadShouldStop flag, the thread is stopping like right now
       if (threadShouldExit())
       {
         Logger::writeToLog("Closing PeerProcessor thread");
         return;
       }
-      // Let's look at the state of our PeerProcessor
       switch (_state)
       {
         case kUninitialized:
-          // If the socket has failed to connect, there's nothing we can do,
-          // we go to kUnavailable
           if (!_socketThread->isConnected())
           {
             /// @todo publish something on the ui
             publishLogMessage("Couldn't create listener on port 4807");
             setState(kUnavailable);
           }
-          // If the Socket is connected, everything's allright, let's move on
           else
             setState(kIdle);
           break;
           
         case kShouldRegister:
-          // Trying to resiter are we ?
           registerToTracker();
           break;
           
         case kShouldDownloadFile:
-          // We should prepare to download
           downloadQueuedPeerFile();
+          break;
+          
+        case kAnalyzing:
+          _fileManager.startThread();
+          break;
           
         default:
           break;
@@ -132,7 +131,15 @@ void PeerProcessor::run()
 
 void PeerProcessor::setSharedFolder(const juce::File& folder)
 {
-  _fileManager.setSharedFolder(folder);
+  if (folder.exists())
+  {
+    _fileManager.setSharedFolder(folder);
+    setState(kAnalyzing);
+  }
+  else
+  {
+    publishLogMessage("The folder is invalid");
+  }
 }
 
 void PeerProcessor::queuePeerFileTask(PeerFile file)
@@ -143,7 +150,7 @@ void PeerProcessor::queuePeerFileTask(PeerFile file)
     return;
   }
   
-  
+  _queuedFile = file;
   setState(kShouldDownloadFile);
 }
 
@@ -162,14 +169,8 @@ void PeerProcessor::downloadQueuedPeerFile()
   juce::File outputFile (_fileManager.getSharedFolder().getFullPathName() +
                          juce::File::separator +
                          _queuedFile.getFilename());
-  juce::FileOutputStream streamFile (outputFile);
   juce::Array<juce::IPAddress> peers = _queuedFile.getPeersAddresses();
   if (outputFile.existsAsFile())
-  {
-    Logger::writeToLog("Can't receive an already existing file");
-    return;
-  }
-  if (streamFile.openedOk())
   {
     publishLogMessage("Can't receive an already existing file");
     return;
@@ -197,6 +198,12 @@ void PeerProcessor::downloadQueuedPeerFile()
         {
           publishLogMessage(_queuedFile.getFilename() +
                             " has been successfuly downloaded");
+          juce::File result (_fileManager.getSharedFolder().getFullPathName() +
+                           juce::File::separator +
+                           _queuedFile.getFilename());
+          PeerFile resultPeer (result);
+          publishLogMessage("MD5: " + _queuedFile.getMD5() +
+                            " vs. " + resultPeer.getMD5());
           setState(kRegistered);
           return;
         }
@@ -244,8 +251,8 @@ void PeerProcessor::registerToTracker()
 {
   if (_tracker.toString() == "0.0.0.0")
   {
-    setState(kIdle);
     publishLogMessage("Tracker ip is invalid");
+    setState(kReadyToRegister);
     return;
   }
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
@@ -272,8 +279,8 @@ void PeerProcessor::registerToTracker()
     else
     {
       _tracker = juce::IPAddress();
-      setState(kIdle);
       publishLogMessage("Distant host is not ready");
+      setState(kReadyToRegister);
     }
   }
 }
@@ -282,7 +289,7 @@ void PeerProcessor::unregisterToTracker()
 {
   if (_tracker.toString() == "0.0.0.0")
   {
-    setState(kIdle);
+    setState(kReadyToRegister);
     return;
   }
   ScopedPointer<StreamingSocket> socket = new StreamingSocket();
@@ -290,15 +297,16 @@ void PeerProcessor::unregisterToTracker()
   
   if (!socket->isConnected())
   {
-    setState(kIdle);
     publishLogMessage("Can't connect to distant host");
+    setState(kReadyToRegister);
     return;
   }
   else
   {
     PimpMessage unregisterRequest = PimpMessage::createPeerSignOut();
     unregisterRequest.sendToSocket(socket, _address);
-    setState(kIdle);
+    setState(kReadyToRegister);
+    _tracker = juce::IPAddress();
   }
   socket->close();
 }

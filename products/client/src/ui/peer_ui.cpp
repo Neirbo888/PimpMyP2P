@@ -159,8 +159,7 @@ void PeerUi::buttonClicked (Button* buttonThatWasClicked)
       FileChooser chooser("Choose a directory to open",File::nonexistent,"",true);
       if (chooser.browseForDirectory())
       {
-        juce::File outputDir = chooser.getResult();
-        _processor->setSharedFolder(outputDir);
+        _processor->setSharedFolder(chooser.getResult());
       }
         //[/UserButtonCode__buttonSetFolder]
     }
@@ -201,38 +200,77 @@ void PeerUi::UpdateUi()
     case PeerProcessor::kUnavailable:
       _buttonConnect->setEnabled(false);
       _buttonConnect->setVisible(true);
+
       _buttonDisconnect->setEnabled(false);
       _buttonDisconnect->setVisible(false);
+
       _buttonSearch->setEnabled(false);
-      _buttonSetFolder->setEnabled(true);
+      _buttonSetFolder->setEnabled(false);
       _editorSearchField->setEnabled(false);
       _editorTrackerIP->setEnabled(false);
       break;
+
     case PeerProcessor::kIdle:
-      _buttonSearch->setEnabled(false);
-      _buttonConnect->setEnabled(true);
+      _buttonConnect->setEnabled(false);
       _buttonConnect->setVisible(true);
+
       _buttonDisconnect->setEnabled(false);
       _buttonDisconnect->setVisible(false);
+
+      _buttonSearch->setEnabled(false);
+      _buttonSetFolder->setEnabled(true);
       _editorTrackerIP->setEnabled(true);
       _editorSearchField->setEnabled(false);
       break;
-    case PeerProcessor::kShouldRegister:
-      _buttonSearch->setEnabled(false);
-      _editorSearchField->setEnabled(false);
+
+    case PeerProcessor::kAnalyzing:
       _buttonConnect->setEnabled(false);
-      _buttonConnect->setEnabled(false);
-      _buttonConnect->setVisible(false);
+      _buttonConnect->setVisible(true);
+
       _buttonDisconnect->setEnabled(false);
       _buttonDisconnect->setVisible(false);
+
+      _buttonSearch->setEnabled(false);
+      _buttonSetFolder->setEnabled(false);
+      _editorSearchField->setEnabled(false);
+      _editorTrackerIP->setEnabled(false);
       break;
+
+    case PeerProcessor::kReadyToRegister:
+      _buttonConnect->setEnabled(true);
+      _buttonConnect->setVisible(true);
+
+      _buttonDisconnect->setEnabled(false);
+      _buttonDisconnect->setVisible(false);
+
+      _buttonSearch->setEnabled(false);
+      _buttonSetFolder->setEnabled(true);
+      _editorTrackerIP->setEnabled(true);
+      _editorSearchField->setEnabled(false);
+      break;
+
+    case PeerProcessor::kShouldRegister:
+      _buttonConnect->setEnabled(false);
+      _buttonConnect->setVisible(false);
+
+      _buttonDisconnect->setEnabled(false);
+      _buttonDisconnect->setVisible(true);
+
+      _buttonSearch->setEnabled(false);
+      _buttonSetFolder->setEnabled(false);
+      _editorSearchField->setEnabled(false);
+      break;
+
     case PeerProcessor::kRegistered:
       _buttonConnect->setEnabled(false);
       _buttonConnect->setVisible(false);
+
       _buttonDisconnect->setEnabled(true);
       _buttonDisconnect->setVisible(true);
+
       _buttonSearch->setEnabled(true);
       _buttonConnect->setEnabled(true);
+      _buttonSetFolder->setEnabled(false);
       _editorSearchField->setEnabled(true);
       break;
     default:

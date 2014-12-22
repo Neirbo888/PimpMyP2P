@@ -36,7 +36,7 @@ public:
   bool receiveFileFromSocket(const PeerFile& queuedFile,
                              juce::StreamingSocket *socket);
   
-  /// @brief File manager run method
+  /// @brief File manager scanning method
   void run();
   
   /// @brief True if the shared folder is properly set
