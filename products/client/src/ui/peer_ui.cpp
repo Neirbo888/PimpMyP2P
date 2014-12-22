@@ -82,6 +82,9 @@ PeerUi::PeerUi (PeerProcessor* processor)
     _buttonDisconnect->setButtonText (TRANS("Disconnect"));
     _buttonDisconnect->addListener (this);
 
+    addAndMakeVisible (_progressBar = new juce::ProgressBar (_processor->getProgress()));
+    _progressBar->setName ("Progress Bar");
+
 
     //[UserPreSize]
   // Create look and feel
@@ -110,6 +113,7 @@ PeerUi::~PeerUi()
     _buttonConnect = nullptr;
     _editorTrackerIP = nullptr;
     _buttonDisconnect = nullptr;
+    _progressBar = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -140,6 +144,9 @@ void PeerUi::paint (Graphics& g)
 
 void PeerUi::resized()
 {
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     _labelSearchField->setBounds (8, 8, 60, 24);
     _editorSearchField->setBounds (getWidth() - 96 - proportionOfWidth (0.4000f), getHeight() - 8 - 24, proportionOfWidth (0.4000f), 24);
     _buttonSetFolder->setBounds (getWidth() - 8 - 96, 8, 96, 24);
@@ -148,6 +155,7 @@ void PeerUi::resized()
     _buttonConnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
     _editorTrackerIP->setBounds (getWidth() - 192 - proportionOfWidth (0.2667f), getHeight() - 368 - 24, proportionOfWidth (0.2667f), 24);
     _buttonDisconnect->setBounds (getWidth() - 112 - 72, 8, 72, 24);
+    _progressBar->setBounds (0, 368 - 8, proportionOfWidth (1.0000f), 8);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -312,6 +320,9 @@ BEGIN_JUCER_METADATA
   <TEXTBUTTON name="Disconnect Button" id="99a70b8a258bd7c6" memberName="_buttonDisconnect"
               virtualName="" explicitFocusOrder="0" pos="112Rr 8 72 24" buttonText="Disconnect"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <GENERICCOMPONENT name="Progress Bar" id="a0bbe1135972e7a3" memberName="_progressBar"
+                    virtualName="" explicitFocusOrder="0" pos="0 368r 100% 8" class="juce::ProgressBar"
+                    params="_processor-&gt;getProgress()"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

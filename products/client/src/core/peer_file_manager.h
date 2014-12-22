@@ -33,7 +33,7 @@ public:
                         juce::StreamingSocket* socket) const;
   
   /// @brief Receive a file from the given socket and store it on the filesystem
-  void receiveFileFromSocket(const PeerFile& queuedFile,
+  bool receiveFileFromSocket(const PeerFile& queuedFile,
                              juce::StreamingSocket *socket);
   
   /// @brief File manager run method

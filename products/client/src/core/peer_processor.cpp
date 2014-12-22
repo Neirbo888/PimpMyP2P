@@ -12,7 +12,8 @@ PeerProcessor::PeerProcessor()
   _ui(nullptr),
   _window(nullptr),
   _socketThread(nullptr),
-  _state(kUninitialized)
+  _state(kUninitialized),
+  _progress(0)
 {
   // Create the GUI
   _ui = new PeerUi(this);
@@ -61,7 +62,15 @@ void PeerProcessor::actionListenerCallback(const String& message)
 
 void PeerProcessor::handleAsyncUpdate()
 {
-  registerToTracker();
+  if (_state == kRegistered ||
+      _state == kShouldRegister)
+  {
+    registerToTracker();
+  }
+  else
+  {
+    Logger::writeToLog("Unhandled AsyncUpdate callback");
+  }
 }
 
 void PeerProcessor::stop()

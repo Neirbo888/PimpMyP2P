@@ -77,6 +77,7 @@ private:
     ScopedPointer<TextButton> _buttonConnect;
     ScopedPointer<TextEditor> _editorTrackerIP;
     ScopedPointer<TextButton> _buttonDisconnect;
+    ScopedPointer<juce::ProgressBar> _progressBar;
 
 
     //==============================================================================

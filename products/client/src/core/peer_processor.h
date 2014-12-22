@@ -85,6 +85,12 @@ public:
   /// @brief Sets the IP address of the tracker
   void setTrackerIp(juce::IPAddress tracker) { _tracker = tracker; }
   
+  /// @brief Progress bar getter
+  double& getProgress() { return _progress; }
+  
+  /// @brief Sets the value to the progress meter
+  void setProgress(double newValue) { _progress = newValue; }
+  
 private:
   /// @brief Should be initialized with the current LAN IP of this computer,
   /// assuming it's a Class C network. Otherwise, it should be the loopback IP.
@@ -106,6 +112,9 @@ private:
   StateType _state;
   /// @brief PeerFile that should be downloaded
   PeerFile _queuedFile;
+  /// @brief Progress bar meter
+  double _progress;
+  
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeerProcessor)
 };
 

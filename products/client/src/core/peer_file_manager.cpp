@@ -1,13 +1,4 @@
-/*
-  ==============================================================================
-
-    peer_file_manager.cpp
-    Created: 19 Nov 2014 7:55:14pm
-    Author:  Adrien Tisseraud
-
-  ==============================================================================
-*/
-
+#include "products/common/messages/pimp_message.h"
 #include "products/client/src/core/peer_file_manager.h"
 #include "products/client/src/core/peer_processor.h"
 
@@ -119,7 +110,7 @@ void PeerFileManager::sendFileToSocket(const int index,
   } while (totalSent != file.getSize());
 }
 
-void PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
+bool PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
                                             juce::StreamingSocket *socket)
 {
   juce::File outputFile (_sharedFolder.getFullPathName() +
@@ -131,24 +122,24 @@ void PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
   if (outputFile.existsAsFile())
   {
     Logger::writeToLog("Can't receive an already existing file");
-    return;
+    return false;
   }
   if (streamFile.openedOk())
   {
     Logger::writeToLog("Can't open output stream");
-    return;
+    return false;
   }
   
   if (!socket)
   {
     Logger::writeToLog("Socket is invalid");
-    return;
+    return false;
   }
   
   if (!socket->isConnected())
   {
     Logger::writeToLog("Socket has been closed");
-    return;
+    return false;
   }
   
   union Ustuff { int i; unsigned char c[4]; };
@@ -157,12 +148,13 @@ void PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
   if (bytesRead != 4 || outUnion.i == 0)
   {
     Logger::writeToLog("Invalid size read");
-    return;
+    return false;
   }
   
   int totalReceived = 0;
   do
   {
+    _owner->setProgress((double)(totalReceived)/(double)(outUnion.i));
     int sizeToReceive = 4096;
     if (queuedFile.getSize() - totalReceived < 4096)
       sizeToReceive = queuedFile.getSize() - totalReceived;
@@ -172,4 +164,8 @@ void PeerFileManager::receiveFileFromSocket(const PeerFile& queuedFile,
     streamFile.write(buffer.getData(), readBytes);
     totalReceived += sizeToReceive;
   } while (totalReceived != queuedFile.getSize());
+  
+  _owner->setProgress(0);
+  
+  return true;
 }
