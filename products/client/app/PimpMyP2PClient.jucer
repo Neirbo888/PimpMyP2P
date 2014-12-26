@@ -58,8 +58,8 @@
         <FILE id="GUzlPy" name="pimp_table.cpp" compile="1" resource="0" file="../src/ui/pimp_table.cpp"/>
         <FILE id="X1wuwD" name="pimp_table.h" compile="1" resource="0" file="../src/ui/pimp_table.h"/>
       </GROUP>
-      <FILE id="kcgIp3" name="Main.cpp" compile="1" resource="0" file="../src/Main.cpp"/>
     </GROUP>
+    <FILE id="u9OZN9" name="Main.cpp" compile="1" resource="0" file="Main.cpp"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="../projects/osx/">

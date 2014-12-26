@@ -63,7 +63,7 @@ OBJECTS := \
   $(OBJDIR)/peer_processor_8e4029cf.o \
   $(OBJDIR)/peer_ui_1570a2f6.o \
   $(OBJDIR)/pimp_table_c68e2030.o \
-  $(OBJDIR)/Main_36be1979.o \
+  $(OBJDIR)/Main_ea31d1dc.o \
   $(OBJDIR)/juce_core_83c62e58.o \
   $(OBJDIR)/juce_cryptography_b9a4fcb2.o \
   $(OBJDIR)/juce_data_structures_227d5014.o \
@@ -149,7 +149,7 @@ $(OBJDIR)/pimp_table_c68e2030.o: ../../src/ui/pimp_table.cpp
 	@echo "Compiling pimp_table.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/Main_36be1979.o: ../../src/Main.cpp
+$(OBJDIR)/Main_ea31d1dc.o: ../../app/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
