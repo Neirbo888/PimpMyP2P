@@ -1,0 +1,6 @@
+<map id="PeerUi" name="PeerUi">
+<area shape="rect" id="node8" href="$class_peer_processor.html" title="Heart of the pimp client. " alt="" coords="781,125,891,150"/>
+<area shape="rect" id="node6" href="$class_pimp_look_and_feel.html" title="PimpLookAndFeel" alt="" coords="232,362,362,387"/>
+<area shape="rect" id="node14" href="$class_peer_file_manager.html" title="Handles the list of shared files,. " alt="" coords="1022,81,1146,106"/>
+<area shape="rect" id="node13" href="$class_peer_file.html" title="Holds information about a file owned by one or several peers. " alt="" coords="550,202,621,227"/>
+</map>

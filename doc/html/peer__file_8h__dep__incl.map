@@ -1,0 +1,25 @@
+<map id="/Users/Adrien/Documents/Development/PimpMyP2P/products/common/files/peer_file.h" name="/Users/Adrien/Documents/Development/PimpMyP2P/products/common/files/peer_file.h">
+<area shape="rect" id="node2" href="$peer__file__manager_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_file_manager.h" alt="" coords="715,121,895,186"/>
+<area shape="rect" id="node9" href="$peer__ui_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/ui\l/peer_ui.cpp" alt="" coords="111,350,291,415"/>
+<area shape="rect" id="node10" href="$pimp__table_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/ui\l/pimp_table.h" alt="" coords="132,121,312,186"/>
+<area shape="rect" id="node12" href="$peer__file_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/common/files\l/peer_file.cpp" alt="" coords="956,121,1136,186"/>
+<area shape="rect" id="node13" href="$pimp__message_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/common/messages\l/pimp_message.h" alt="" coords="1172,121,1367,186"/>
+<area shape="rect" id="node21" href="$tracker__file__manager_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_file_manager.h" alt="" coords="1740,121,1920,186"/>
+<area shape="rect" id="node23" href="$tracker__processor_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_processor.h" alt="" coords="2082,235,2261,301"/>
+<area shape="rect" id="node3" href="$peer__file__manager_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_file_manager.cpp" alt="" coords="739,350,919,415"/>
+<area shape="rect" id="node4" href="$peer__job__thread_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_job_thread.cpp" alt="" coords="1158,350,1337,415"/>
+<area shape="rect" id="node5" href="$peer__message__handler_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_message_handler.cpp" alt="" coords="944,350,1133,415"/>
+<area shape="rect" id="node6" href="$peer__processor_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_processor.h" alt="" coords="527,235,707,301"/>
+<area shape="rect" id="node7" href="$client_2app_2_main_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/app/Main.cpp" alt="" coords="316,357,511,409"/>
+<area shape="rect" id="node8" href="$peer__processor_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_processor.cpp" alt="" coords="535,350,715,415"/>
+<area shape="rect" id="node11" href="$pimp__table_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/ui\l/pimp_table.cpp" alt="" coords="4,235,184,301"/>
+<area shape="rect" id="node14" href="$peer__job__thread_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/client/src/core\l/peer_job_thread.h" alt="" coords="935,235,1115,301"/>
+<area shape="rect" id="node15" href="$pimp__message_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/common/messages\l/pimp_message.cpp" alt="" coords="1190,235,1385,301"/>
+<area shape="rect" id="node16" href="$tracker__file__manager_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_file_manager.cpp" alt="" coords="2006,350,2185,415"/>
+<area shape="rect" id="node17" href="$tracker__job__thread_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_job_thread.h" alt="" coords="1460,235,1640,301"/>
+<area shape="rect" id="node20" href="$tracker__processor_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_processor.cpp" alt="" coords="1802,350,1981,415"/>
+<area shape="rect" id="node18" href="$tracker__job__thread_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_job_thread.cpp" alt="" coords="1370,350,1549,415"/>
+<area shape="rect" id="node19" href="$tracker__message__handler_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_message_handler.cpp" alt="" coords="1574,350,1777,415"/>
+<area shape="rect" id="node22" href="$tracker__message__handler_8h.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/src/core\l/tracker_message_handler.h" alt="" coords="1665,235,1855,301"/>
+<area shape="rect" id="node24" href="$server_2cmd_2_main_8cpp.html" title="/Users/Adrien/Documents\l/Development/PimpMyP2P\l/products/server/cmd/Main.cpp" alt="" coords="2210,357,2413,409"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="PeerMessageHandler" name="PeerMessageHandler">
+<area shape="rect" id="node2" href="$class_message_handler.html" title="Abstract class spawning threads when TCP requests are received, must be derived and customize by eith..." alt="" coords="212,5,334,30"/>
+<area shape="rect" id="node4" href="$class_peer_file_manager.html" title="Handles the list of shared files,. " alt="" coords="212,95,335,121"/>
+<area shape="rect" id="node6" href="$class_peer_processor.html" title="Heart of the pimp client. " alt="" coords="512,211,621,237"/>
+<area shape="rect" id="node10" href="$class_peer_ui.html" title="PeerUi" alt="" coords="785,321,847,346"/>
+<area shape="rect" id="node15" href="$class_pimp_look_and_feel.html" title="PimpLookAndFeel" alt="" coords="502,469,632,494"/>
+<area shape="rect" id="node17" href="$class_peer_file.html" title="Holds information about a file owned by one or several peers. " alt="" coords="238,359,309,385"/>
+</map>

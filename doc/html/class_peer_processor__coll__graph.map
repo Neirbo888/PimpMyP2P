@@ -1,0 +1,6 @@
+<map id="PeerProcessor" name="PeerProcessor">
+<area shape="rect" id="node6" href="$class_peer_ui.html" title="PeerUi" alt="" coords="621,137,683,162"/>
+<area shape="rect" id="node14" href="$class_peer_file_manager.html" title="Handles the list of shared files,. " alt="" coords="590,302,714,327"/>
+<area shape="rect" id="node11" href="$class_pimp_look_and_feel.html" title="PimpLookAndFeel" alt="" coords="307,5,437,30"/>
+<area shape="rect" id="node13" href="$class_peer_file.html" title="Holds information about a file owned by one or several peers. " alt="" coords="49,162,119,187"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$class_peer_processor.html" title="Heart of the pimp client. " alt="" coords="205,127,315,153"/>
+<area shape="rect" id="node3" href="$class_tracker_processor.html" title="Heart of the pimp server. " alt="" coords="197,78,323,103"/>
+<area shape="rect" id="node5" href="$class_message_handler.html" title="Abstract class spawning threads when TCP requests are received, must be derived and customize by eith..." alt="" coords="199,29,321,54"/>
+<area shape="rect" id="node6" href="$class_peer_message_handler.html" title="Specific handler for peers related requests. " alt="" coords="382,5,532,30"/>
+<area shape="rect" id="node7" href="$class_tracker_message_handler.html" title="Specific handler for tracker related requests. " alt="" coords="374,54,541,79"/>
+<area shape="rect" id="node9" href="$class_peer_ui.html" title="PeerUi" alt="" coords="229,466,291,491"/>
+<area shape="rect" id="node11" href="$class_pimp_table.html" title="Displays a search result received from the Tracker, double clicking on a file starts a transfer betwe..." alt="" coords="218,374,302,399"/>
+<area shape="rect" id="node17" href="$class_peer_file_manager.html" title="Handles the list of shared files,. " alt="" coords="198,325,322,350"/>
+<area shape="rect" id="node18" href="$class_peer_job_thread.html" title="Thread handling the different requests a peer can receive. " alt="" coords="203,177,317,202"/>
+<area shape="rect" id="node19" href="$class_socket_thread.html" title="Thread handling TCP requests from network and spawning handlers thread each time a new request is rec..." alt="" coords="208,226,312,251"/>
+<area shape="rect" id="node20" href="$class_tracker_job_thread.html" title="Thread handling the different requests a tracker can receive. " alt="" coords="195,275,325,301"/>
+</map>

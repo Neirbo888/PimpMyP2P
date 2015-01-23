@@ -1,0 +1,5 @@
+<map id="TrackerMessageHandler" name="TrackerMessageHandler">
+<area shape="rect" id="node2" href="$class_message_handler.html" title="Abstract class spawning threads when TCP requests are received, must be derived and customize by eith..." alt="" coords="12,83,133,109"/>
+<area shape="rect" id="node4" href="$class_tracker_file_manager.html" title="Handles files shared accross different peers. " alt="" coords="159,83,299,109"/>
+<area shape="rect" id="node5" href="$class_tracker_processor.html" title="Heart of the pimp server. " alt="" coords="346,171,472,197"/>
+</map>
