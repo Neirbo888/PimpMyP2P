@@ -66,10 +66,10 @@
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" binaryPath="../bin/osx/"
-                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+                       headerPath="../../../../;../../../../externals/juce_git/"/>
         <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        isDebug="0" optimisation="2" targetName="PimpMyP2PClient" binaryPath="bin/osx"
-                       headerPath="../../../../;../../../../externals/juce_3.0.4/"/>
+                       headerPath="../../../../;../../../../externals/juce_git/"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
@@ -81,32 +81,13 @@
         <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
-    <VS2013 targetFolder="../projects/win32">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       binaryPath="../bin/win32/"/>
-        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_3.0.4/"
-                       binaryPath="../bin/win32"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
-        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
-      </MODULEPATHS>
-    </VS2013>
     <LINUX_MAKE targetFolder="../projects/linux">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
-                       targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_git/"
                        binaryPath="../bin/linux" linuxArchitecture="-m64"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
-                       targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_3.0.4/"
+                       targetName="PimpMyP2PClient" headerPath="../../../../;../../../../externals/juce_git/"
                        binaryPath="../bin/linux"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -119,6 +100,25 @@
         <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
+    <VS2010 targetFolder="../projects/win32">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="PimpMyP2PClient_d" headerPath="../../../../;../../../../externals/juce_git/"
+                       binaryPath="../bin/win32/"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="PimpMyP2PClient" binaryPath="../bin/win32/"
+                       headerPath="../../../../;../../../../externals/juce_git/"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_events" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../externals/juce_git/modules"/>
+        <MODULEPATH id="juce_core" path="../../../externals/juce_git/modules"/>
+      </MODULEPATHS>
+    </VS2010>
   </EXPORTFORMATS>
   <MODULES>
     <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>

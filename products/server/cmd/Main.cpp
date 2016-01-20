@@ -8,6 +8,7 @@
   ==============================================================================
 */
 
+#include <unistd.h>
 #include "JuceHeader.h"
 #include "products/server/src/core/tracker_processor.h"
 
